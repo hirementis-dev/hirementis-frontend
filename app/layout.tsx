@@ -19,7 +19,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={outfit.className}>
-      <body className={`antialiased`}>{children}</body>
+      <body className={`antialiased`}>
+        <div className="max-w-7xl mx-auto">{children}</div>
+      </body>
     </html>
   );
 }
