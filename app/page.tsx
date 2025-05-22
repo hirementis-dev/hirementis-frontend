@@ -1,13 +1,21 @@
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
+import CTASection from "@/components/CTASection";
+import FeatureSection from "@/components/FeatureSection";
+import Footer from "@/components/Footer";
+import HeroSection from "@/components/HeroSection";
+import HowItWorks from "@/components/HowItWorks";
+import PricingSection from "@/components/PricingSection";
+import TestimonialSection from "@/components/TestimonialSection";
 
 export default function Home() {
   return (
-    <div>
-      <h1 className="font-bold text-xl">Hello world</h1>
-      <Link href={`/interviews/12345`}>
-        <Button>Take interview</Button>
-      </Link>
+    <div className="min-h-screen">
+      <HeroSection />
+      <HowItWorks />
+      <FeatureSection />
+      <PricingSection />
+      <TestimonialSection />
+      <CTASection />
+      <Footer />
     </div>
   );
 }
