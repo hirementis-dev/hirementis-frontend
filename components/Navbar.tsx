@@ -1,14 +1,28 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "./ui/button";
 import { Menu } from "lucide-react";
 import Link from "next/link";
+import { auth } from "@/firebase/client";
+import { onAuthStateChanged, signOut, User } from "firebase/auth";
 
 const Navbar: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [user, setUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
+      setUser(firebaseUser);
+    });
+    return () => unsubscribe();
+  }, []);
 
   const handleNavlinkClick = () => {
     setIsMenuOpen(false);
+  };
+
+  const handleLogout = async () => {
+    await signOut(auth);
   };
 
   return (
@@ -77,14 +91,22 @@ const Navbar: React.FC = () => {
 
           {/* CTA Buttons */}
           <div className="hidden md:flex items-center gap-4">
-            <Link onClick={handleNavlinkClick} href="/login">
-              <Button variant="ghost">Login</Button>
-            </Link>
-            <Link onClick={handleNavlinkClick} href="/signup">
-              <Button className="bg-emerald-500 hover:bg-emerald-600 text-white">
-                Sign Up Free
+            {!user ? (
+              <>
+                <Link onClick={handleNavlinkClick} href="/login">
+                  <Button variant="ghost">Login</Button>
+                </Link>
+                <Link onClick={handleNavlinkClick} href="/signup">
+                  <Button className="bg-emerald-500 hover:bg-emerald-600 text-white">
+                    Sign Up Free
+                  </Button>
+                </Link>
+              </>
+            ) : (
+              <Button variant="outline" onClick={handleLogout}>
+                Logout
               </Button>
-            </Link>
+            )}
           </div>
 
           {/* Mobile Menu Button */}
@@ -146,24 +168,36 @@ const Navbar: React.FC = () => {
                 Testimonials
               </Link>
               <div className="flex flex-col gap-2 pt-4 border-t border-gray-100">
-                <Link
-                  onClick={handleNavlinkClick}
-                  href="/login"
-                  className="w-full"
-                >
-                  <Button variant="outline" className="w-full justify-center">
-                    Login
+                {!user ? (
+                  <>
+                    <Link
+                      onClick={handleNavlinkClick}
+                      href="/login"
+                      className="w-full"
+                    >
+                      <Button variant="outline" className="w-full justify-center">
+                        Login
+                      </Button>
+                    </Link>
+                    <Link
+                      onClick={handleNavlinkClick}
+                      href="/signup"
+                      className="w-full"
+                    >
+                      <Button className="w-full justify-center bg-emerald-500 hover:bg-emerald-600 text-white">
+                        Sign Up Free
+                      </Button>
+                    </Link>
+                  </>
+                ) : (
+                  <Button
+                    variant="outline"
+                    className="w-full justify-center"
+                    onClick={handleLogout}
+                  >
+                    Logout
                   </Button>
-                </Link>
-                <Link
-                  onClick={handleNavlinkClick}
-                  href="/signup"
-                  className="w-full"
-                >
-                  <Button className="w-full justify-center bg-emerald-500 hover:bg-emerald-600 text-white">
-                    Sign Up Free
-                  </Button>
-                </Link>
+                )}
               </div>
             </div>
           </div>
