@@ -4,7 +4,7 @@ import Link from "next/link";
 
 const HeroSection: React.FC = () => {
   return (
-    <section className="bg-hero-gradient min-h-screen flex items-center justify-center section-padding pt-28">
+    <section className="bg-hero-gradient min-h-screen flex items-center justify-center section-padding pt-32">
       <div className="max-w-[950px] mx-auto px-4">
         <div className="flex flex-col items-center text-center pb-44 py-16">
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
@@ -35,7 +35,7 @@ const HeroSection: React.FC = () => {
             </Link>
           </div>
 
-          {/* <div className="mt-8 flex items-center justify-center gap-2">
+          <div className="mt-8 flex items-center justify-center gap-2">
             <div className="flex -space-x-4">
               <div className="w-10 h-10 rounded-full bg-gradient-to-r from-blue-400 to-blue-500 border-2 border-white flex items-center justify-center text-xs text-white font-medium">
                 JD
@@ -51,10 +51,9 @@ const HeroSection: React.FC = () => {
               </div>
             </div>
             <p className="text-sm text-gray-500">
-              Trusted by <span className="font-semibold">10,000+</span> job
-              seekers
+              Trusted by <span className="font-semibold">10+</span> job seekers
             </p>
-          </div> */}
+          </div>
         </div>
       </div>
     </section>
