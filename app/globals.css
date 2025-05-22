@@ -139,6 +139,10 @@
     background-image: linear-gradient(to bottom right, #c3f0d4, #fff);
   }
 
+  .ring-offset-background {
+    --tw-ring-offset-color: hsl(var(--background));
+  }
+
   .section-padding {
     padding-top: 4rem; /* py-16 => 4rem */
     padding-bottom: 4rem;

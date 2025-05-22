@@ -22,8 +22,8 @@ const PricingSection: React.FC = () => {
         "Limited question bank",
       ],
       buttonText: "Start Free",
-      buttonVariant: "outline" as const,
-      popular: false,
+      buttonVariant: "default" as const,
+      popular: true,
     },
     // {
     //   name: "Pro",
@@ -84,11 +84,11 @@ const PricingSection: React.FC = () => {
                   : "border-gray-200"
               } rounded-xl relative`}
             >
-              {plan.popular && (
-                <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-emerald-500 text-white px-4 py-1 rounded-full text-sm font-medium">
-                  Most Popular
-                </div>
-              )}
+              {plan.popular &&
+                // <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-emerald-500 text-white px-4 py-1 rounded-full text-sm font-medium">
+                //   Most Popular
+                // </div>
+                null}
               <CardHeader className="pt-8 pb-4">
                 <h3 className="text-2xl font-bold">{plan.name}</h3>
                 <p className="text-gray-600">{plan.description}</p>

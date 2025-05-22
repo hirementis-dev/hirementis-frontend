@@ -132,7 +132,7 @@ const Navbar: React.FC = () => {
                   </Button>
                 </Link>
                 <Link href="/signup" className="w-full">
-                  <Button className="w-full justify-center bg-emerald-500 hover:bg-emerald-600">
+                  <Button className="w-full justify-center bg-emerald-500 hover:bg-emerald-600 text-white">
                     Sign Up Free
                   </Button>
                 </Link>
