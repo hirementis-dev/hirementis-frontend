@@ -33,7 +33,7 @@ interface SavedMessage {
   content: string;
 }
 
-const page = () => {
+const Page = () => {
   const [isInterviewStarted, setIsInterviewStarted] = useState(false);
   const [interviewQuestions, setInterviewQuestions] = useState<string[]>([]);
   const [loading, setLoading] = useState<LoaderState>({
@@ -443,4 +443,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

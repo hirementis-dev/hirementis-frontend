@@ -8,7 +8,7 @@ function JobNotFound() {
       <div className="text-center">
         <h1 className="text-2xl font-bold mb-4">Job Not Found</h1>
         <p className="mb-6">
-          The job you're looking for doesn't exist or has been removed.
+          The job you&apos;re looking for doesn&apos;t exist or has been removed.
         </p>
         <Link href="/jobs">
           <Button variant="outline">Back to Jobs</Button>
