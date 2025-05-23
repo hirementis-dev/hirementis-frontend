@@ -6,13 +6,18 @@ import { jobs } from "@/data/jobs";
 import { redirect, useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { auth } from "@/firebase/client";
+import { useEffect } from 'react';
 
 const JobDetails = () => {
   const params = useParams();
-  const id = params?.id as string;
+const id = params?.id as string;
+  
+useEffect(() => {
   if (!id) {
     redirect("/jobs");
   }
+  }, [])
+
 
   const jobId = Number(id);
 
