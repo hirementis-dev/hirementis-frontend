@@ -388,54 +388,69 @@ const Page = () => {
           </div>
 
           <div className="lg:w-1/3">
-            <Card className="bg-white shadow-md border border-gray-200">
-              <CardContent className="p-6">
-                <h3 className="text-xl font-bold mb-4">Instructions</h3>
-                {isInterviewStarted ? (
-                  <div className="space-y-4">
-                    <p className="text-gray-700">
-                      You are now in an interview for the{" "}
-                      <strong>{job.title}</strong> position at{" "}
-                      <strong>{job.company}</strong>.
-                    </p>
-                    <ul className="list-disc pl-5 space-y-2 text-gray-700">
-                      <li>Speak clearly and at a moderate pace</li>
-                      <li>
-                        Structure your answers using the STAR method (Situation,
-                        Task, Action, Result)
-                      </li>
-                      <li>
-                        Emphasize skills and experiences relevant to the{" "}
-                        {job.title} role
-                      </li>
-                      <li>
-                        Prepare examples that highlight your achievements
-                        related to {job.industry}
-                      </li>
-                      <li>
-                        Ask thoughtful questions about the company and role
-                      </li>
-                    </ul>
-                  </div>
-                ) : (
-                  <div className="text-gray-700">
-                    <p className="mb-4">
-                      Welcome to your interview practice session for the{" "}
-                      <strong>{job.title}</strong> position at{" "}
-                      <strong>{job.company}</strong>.
-                    </p>
-                    <p className="mb-4">
-                      Our AI interviewer will ask you questions relevant to this
-                      role. Click "Start Interview" when you're ready to begin.
-                    </p>
-                    <p>
-                      Make sure your microphone and camera are properly set up
-                      before starting.
-                    </p>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
+<Card className="bg-white shadow-md border border-gray-200">
+  <CardContent className="p-6">
+    <h3 className="text-xl font-bold mb-4">Please read these instructions before beginning your interview.</h3>
+    {isInterviewStarted ? (
+      <div className="space-y-4">
+        <p className="text-gray-700">
+          You are now in an interview for the{" "}
+          <strong>{job.title}</strong> position at{" "}
+          <strong>{job.company}</strong>.
+        </p>
+        <ol className="list-decimal pl-5 space-y-2 text-gray-700">
+          <li>Ensure your device microphone and camera are working properly for clear audio and video quality.</li>
+          <li>Speak clearly and at a moderate pace, maintaining good eye contact with the camera.</li>
+          <li>Position yourself in a well-lit, quiet environment with minimal background distractions.</li>
+          <li>Have a glass of water nearby and take brief pauses if needed to collect your thoughts.</li>
+          <li>Listen carefully to each question and take a moment to think before responding.</li>
+          <li>Structure your answers using the STAR method (Situation, Task, Action, Result) for behavioral questions.</li>
+          <li>Emphasize skills and experiences directly relevant to the {job.title} role and {job.industry} industry.</li>
+          <li>Ask thoughtful questions about the company culture, team dynamics, and growth opportunities.</li>
+          <li>Maintain professional body language and dress appropriately for the role.</li>
+          <li>If you don't understand a question, politely ask for clarification rather than guessing.</li>
+          <li>End each answer with confidence and be prepared to elaborate if asked follow-up questions.</li>
+        </ol>
+        <div className="mt-4 p-3 bg-blue-50 rounded-lg border border-blue-200">
+          <p className="text-sm text-blue-800">
+            <strong>Tip:</strong> This is a practice session. Use it to refine your responses and build confidence for your actual interview.
+          </p>
+        </div>
+      </div>
+    ) : (
+      <div className="text-gray-700">
+        <p className="mb-4">
+          Welcome to your interview practice session for the{" "}
+          <strong>{job.title}</strong> position at{" "}
+          <strong>{job.company}</strong>.
+        </p>
+        <p className="mb-4">
+          Our AI interviewer will ask you questions relevant to this role and evaluate your responses. 
+          Click "Start Interview" when you're ready to begin.
+        </p>
+        <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-4">
+          <h4 className="font-semibold text-yellow-800 mb-2">Before You Start:</h4>
+          <ol className="list-decimal pl-5 space-y-1 text-sm text-yellow-700">
+            <li>Test your microphone and camera functionality</li>
+            <li>Find a quiet, well-lit space with stable internet connection</li>
+            <li>Have your resume and job description readily available</li>
+            <li>Prepare examples of your key achievements and experiences</li>
+            <li>Research the company and role thoroughly</li>
+          </ol>
+        </div>
+        <div className="bg-white rounded-lg p-6 border border-gray-200 hover:shadow-md transition-shadow">
+            <div className="flex items-center justify-center space-x-3">
+                <p className="text-gray-700 font-medium">
+                    All the best for your Interview. 
+                    <span className="text-gray-500 font-normal ml-2">by Team HireMentis</span>
+                </p>
+            </div>
+        </div>
+
+      </div>
+    )}
+  </CardContent>
+</Card>
           </div>
         </div>
       </div>
