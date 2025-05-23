@@ -5,10 +5,13 @@ import { Menu } from "lucide-react";
 import Link from "next/link";
 import { auth } from "@/firebase/client";
 import { onAuthStateChanged, signOut, User } from "firebase/auth";
+import { usePathname } from "next/navigation";
 
 const Navbar: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [user, setUser] = useState<User | null>(null);
+  const pathname = usePathname();
+  const isLoginOrSignuporInterviewPage = pathname?.startsWith("/interview");
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
@@ -24,6 +27,12 @@ const Navbar: React.FC = () => {
   const handleLogout = async () => {
     await signOut(auth);
   };
+
+  if (isLoginOrSignuporInterviewPage) {
+    return null;
+  }
+
+  console.log("User:", user);
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-sm border-b border-gray-100">
@@ -175,7 +184,10 @@ const Navbar: React.FC = () => {
                       href="/login"
                       className="w-full"
                     >
-                      <Button variant="outline" className="w-full justify-center">
+                      <Button
+                        variant="outline"
+                        className="w-full justify-center"
+                      >
                         Login
                       </Button>
                     </Link>

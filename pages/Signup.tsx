@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React, { useState } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -14,6 +14,9 @@ import {
 import { Label } from "@/components/ui/label";
 import { auth } from "@/firebase/client";
 import { createUserWithEmailAndPassword } from "firebase/auth";
+import { doc, setDoc } from "firebase/firestore";
+import { db } from "@/firebase/client";
+import { useRouter } from "next/navigation";
 
 const Signup = () => {
   const [firstName, setFirstName] = useState("");
@@ -23,6 +26,7 @@ const Signup = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
+  const router = useRouter();
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -36,7 +40,7 @@ const Signup = () => {
       await createUserWithEmailAndPassword(auth, email, password);
       setSuccess("Account created successfully! You can now log in.");
       setError(null);
-      // Optionally: Save firstName/lastName to Firestore here
+      router.push("/login");
     } catch (err: any) {
       setError(err?.message || "An error occurred during signup.");
       setSuccess(null);

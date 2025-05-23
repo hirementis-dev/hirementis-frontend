@@ -7,6 +7,7 @@ import {
   CardHeader,
 } from "@/components/ui/card";
 import { Check } from "lucide-react";
+import Link from "next/link";
 
 const PricingSection: React.FC = () => {
   const pricingPlans = [
@@ -108,16 +109,18 @@ const PricingSection: React.FC = () => {
                 </ul>
               </CardContent>
               <CardFooter>
-                <Button
-                  variant={plan.buttonVariant}
-                  className={`w-full  ${
-                    plan.popular
-                      ? "bg-emerald-500 hover:bg-emerald-600 text-white"
-                      : ""
-                  }`}
-                >
-                  {plan.buttonText}
-                </Button>
+                <Link href="/jobs">
+                  <Button
+                    variant={plan.buttonVariant}
+                    className={`w-full  ${
+                      plan.popular
+                        ? "bg-emerald-500 hover:bg-emerald-600 text-white"
+                        : ""
+                    }`}
+                  >
+                    {plan.buttonText}
+                  </Button>
+                </Link>
               </CardFooter>
             </Card>
           ))}

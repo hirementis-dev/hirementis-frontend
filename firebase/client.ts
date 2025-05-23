@@ -3,8 +3,6 @@ import { initializeApp, getApp, getApps } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 
-
-
 const firebaseConfig = {
   apiKey: "AIzaSyCHwwnSyiZPtAvypzRjecE9QUrLU15kNYo",
   authDomain: "hirementis-c0429.firebaseapp.com",
@@ -12,7 +10,7 @@ const firebaseConfig = {
   storageBucket: "hirementis-c0429.firebasestorage.app",
   messagingSenderId: "462892169133",
   appId: "1:462892169133:web:58521090c3962ed8025324",
-  measurementId: "G-1H4GF96LSG"
+  measurementId: "G-1H4GF96LSG",
 };
 
 // Initialize Firebase

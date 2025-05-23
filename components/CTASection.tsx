@@ -1,5 +1,6 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 const CTASection: React.FC = () => {
   return (
@@ -15,12 +16,14 @@ const CTASection: React.FC = () => {
             interview skills with HireMentis
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button
-              size="lg"
-              className="bg-emerald-500 hover:bg-emerald-600 text-white px-8"
-            >
-              Get Started Free
-            </Button>
+            <Link href="/jobs">
+              <Button
+                size="lg"
+                className="bg-emerald-500 hover:bg-emerald-600 text-white px-8"
+              >
+                Get Started Free
+              </Button>
+            </Link>
           </div>
           <p className="mt-6 text-gray-500">
             No credit card required. Try now.

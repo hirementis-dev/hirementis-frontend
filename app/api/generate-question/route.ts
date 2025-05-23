@@ -5,14 +5,20 @@ const ai = new OpenAI({
   baseURL: process.env.NEXT_PUBLIC_GEMINI_API_BASE_URL,
 });
 
+// const QUESTION_GENERATION_PROMPT =
+
 export async function POST(request: Request) {
-  const { question_amonut, job_desc } = await request.json();
-  if (!question_amonut || !job_desc) {
-    return Response.json({
-      success: false,
-      message: "question_amonut and job_desc are required",
-    });
-  }
+  const {
+    question_amonut,
+    title,
+    level,
+    type,
+    company,
+    industry,
+    description,
+    requirements = [],
+    responsibilities = [],
+  } = await request.json();
 
   try {
     const result = await ai.chat.completions.create({
@@ -20,22 +26,44 @@ export async function POST(request: Request) {
       messages: [
         {
           role: "user",
-          content: `You are an expert HR interviewer and assessment designer. Your task is to generate thoughtful, relevant, and clear interview questions based on a given Job Description (JD).
+          content: `
+You are an expert HR interviewer and assessment designer. Your task is to generate thoughtful, specific, and relevant interview questions based on a given job description and its structured details.
 
-Instructions:
-- Read and understand the JD provided by to you.
-- Generate exactly ${question_amonut} questions tailored to assess a candidate's skills, experience, and suitability for the role described.
-- Focus on key aspects such as required skills, responsibilities, tools/technologies, and behavioral traits mentioned in the job description.
-- Avoid generic questions — make each question specific to the job description.
+🎯 Objective:
+Generate exactly {{question_amount}} high-quality questions to evaluate a candidate’s readiness and fit for the role.
 
-Output Format:
-Return only the list of questions as a JSON array of strings, like:
+📌 Focus Areas:
+- Role Title: ${title}
+- Experience Level: ${level}
+- Employment Type: ${type}
+- Company: ${company}
+- Industry: ${industry}
+- Core Job Description: ${description}
+
+- Key Requirements: 
+${requirements.map((item: string) => `- ${item}`).join("\n")}
+
+- Key Responsibilities: 
+${responsibilities.map((item: string) => `- ${item}`).join("\n")} 
+
+✅ Guidelines:
+- Use the provided job data to craft questions that assess:
+  - Required technical skills and tools (from “requirements”)
+  - Practical understanding of the role’s responsibilities
+  - Candidate’s experience level and fit
+  - Behavioral and situational responses relevant to the role
+- Questions should feel realistic, like those asked in actual interviews for this role.
+- Phrase questions professionally and clearly.
+- Do not include duplicate or generic questions.
+
+🚫 Avoid:
+- Vague or unrelated questions
+- Repetition
+- Hypothetical tech that’s not mentioned in the job description
+
+📤 Output Format:
+Return only the questions in a valid JSON array of strings, like:
 ["Question 1", "Question 2", "Question 3", "Question 4"]
-
-Do not include any explanation or preamble. Only return the array.
-
-Job Description:
-${job_desc}
 `,
         },
       ],
