@@ -14,8 +14,15 @@ const Navbar: React.FC = () => {
   const isLoginOrSignuporInterviewPage = pathname?.startsWith("/interview");
 
   useEffect(() => {
+    // Only listen for auth state changes after the component mounts
+    // and do not update user state on sign up, only on successful login/provider login
     const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
-      setUser(firebaseUser);
+      // Only set user if the user is actually logged in (not just registered)
+      if (firebaseUser && firebaseUser.emailVerified) {
+        setUser(firebaseUser);
+      } else {
+        setUser(null);
+      }
     });
     return () => unsubscribe();
   }, []);
