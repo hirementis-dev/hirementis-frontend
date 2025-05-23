@@ -1,4 +1,4 @@
-import OpenAI from "openai";
+// import OpenAI from "openai";
 
 export async function POST(request: Request) {
   const { transcript, job_desc } = await request.json();
@@ -10,6 +10,8 @@ export async function POST(request: Request) {
           `- ${sentence.role}: ${sentence.content}\n`
       )
       .join("");
-    Response.json({ formattedTranscript });
-  } catch (error) {}
+    return Response.json({ formattedTranscript });
+  } catch (error) {
+    console.error("Error formatting transcript:", error);
+  }
 }
