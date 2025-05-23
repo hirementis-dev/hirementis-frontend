@@ -3,7 +3,7 @@ import { AssistantOverrides } from "@vapi-ai/web/dist/api";
 export const interviewer: AssistantOverrides = {
   name: "Interviewer",
   firstMessage:
-    "Hello! Thank you for taking the time to speak with me today. I'm excited to learn more about you and your experience.",
+    "Hello, I'm Reva! Thank you for taking the time to speak with me today. I'm excited to learn more about you and your experience.",
   transcriber: {
     provider: "deepgram",
     model: "nova-2",
@@ -33,7 +33,7 @@ QUESTIONS:
 - {{questions}}
 
 JOB DESCRIPTION:
-- {{job_description}}
+- {{job_desc}}
 
 Context Awareness:
 - Use only the questions provided in {{questions}}. Do not generate your own questions.
