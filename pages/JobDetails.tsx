@@ -3,8 +3,9 @@ import React from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { jobs } from "@/data/jobs";
-import { redirect, useParams } from "next/navigation";
+import { redirect, useParams, useRouter } from "next/navigation";
 import Link from "next/link";
+import { auth } from "@/firebase/client";
 
 const JobDetails = () => {
   const params = useParams();
@@ -33,8 +34,15 @@ const JobDetails = () => {
     );
   }
 
+  const router = useRouter();
+
   const handleStartInterview = () => {
-    redirect(`/interview/${job.id}`);
+    const user = auth.currentUser;
+    if (user && user.emailVerified) {
+      router.push(`/interview/${job.id}`);
+    } else {
+      router.push("/login");
+    }
   };
 
   return (
