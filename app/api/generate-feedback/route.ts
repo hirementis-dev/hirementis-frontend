@@ -152,7 +152,8 @@ STRICT JSON OUTPUT SCHEMA FORMAT:
           createdAt: new Date(),
         });
     }
-
+    console.log(interviewId);
+    console.log(userId);
     return Response.json({
       success: true,
       feedback: parsedFeedback,
