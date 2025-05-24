@@ -15,6 +15,7 @@ const VAPI_PUBLIC_KEY = process.env.NEXT_PUBLIC_VAPI_PUBLIC_KEY;
 const vapi = new Vapi(VAPI_PUBLIC_KEY!);
 import { interviewer } from "@/utils/vapi/prompt";
 import { AssistantOverrides } from "@vapi-ai/web/dist/api";
+import { toast } from "sonner";
 
 interface LoaderState {
   state: boolean;
@@ -40,7 +41,7 @@ const Page = () => {
     state: false,
     message: "Setting up interview...",
   });
-  const [micActive, setMicActive] = useState(false);
+  const [micActive, setMicActive] = useState(true);
   const [cameraActive, setCameraActive] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
   const [callStatus, setCallStatus] = useState<CallStatus>(CallStatus.INACTIVE);
@@ -67,16 +68,22 @@ const Page = () => {
       setMicActive(true);
     };
 
-    const onCallEnd = async () => {
+    const interviewQs = interviewQuestions
+      .map((item: string) => `- ${item}`)
+      .join("\n");
+
+    const onCallEnd = () => {
       setCallStatus(CallStatus.FINISHED);
-      const res = await axios.post("/generate-feedback", {
-        transcript: messages,
-      });
-      console.log(res.data);
+      // const res = await axios.post("/generate-feedback", {
+      //   transcript: messages,
+      //   job,
+      //   interviewQs,
+      // });
+      console.log(messages);
     };
 
     const onMessage = (message: any) => {
-      if (message.type === "transcript" && message.transcriptType === "final") {
+      if (message.type == "transcript" && message.transcriptType == "final") {
         const newMessage = { role: message.role, content: message.transcript };
         setMessages((prev) => [...prev, newMessage]);
       }
@@ -92,8 +99,9 @@ const Page = () => {
       setIsSpeaking(false);
     };
 
-    const onError = (error: Error) => {
+    const onError = (error: any) => {
       console.log("Error:", error);
+      toast.info(error?.error?.msg || "intreview ended");
     };
 
     vapi.on("call-start", onCallStart);
@@ -144,22 +152,10 @@ const Page = () => {
       message: "Reva is getting ready to take your interview..",
     });
     const VAPI_ASSISTANT_ID = process.env.NEXT_PUBLIC_VAPI_ASSISTANT_ID!;
-    const basePrompt = interviewer.model?.messages?.[0]?.content;
-
-    if (!basePrompt) {
-      console.error("Base prompt is missing");
-      return;
-    }
 
     const interviewQs = interviewQuestions
       .map((item: string) => `- ${item}`)
       .join("\n");
-
-    const customizedPrompt = basePrompt
-      .replace("{{questions}}", interviewQs)
-      .replace("{{job_description}}", job.description);
-
-    console.log(customizedPrompt);
 
     await vapi.start(VAPI_ASSISTANT_ID, {
       ...interviewer,
@@ -172,9 +168,18 @@ const Page = () => {
     setIsInterviewStarted(true);
   };
 
-  const endInterview = () => {
+  const endInterview = async () => {
     setIsInterviewStarted(false);
     vapi.stop();
+    console.log("\n\n------ Messages state ------\n\n");
+    console.log(messages);
+    console.log("\n\n------ Messages state ------\n\n");
+    const result = await axios.post("/api/generate-feedback", {
+      transcript: messages,
+      job,
+      interviewQs: interviewQuestions,
+    });
+    console.log("Feedback result:", result.data);
   };
 
   useEffect(() => {
@@ -223,7 +228,10 @@ const Page = () => {
         });
         audioStreamRef.current = stream;
 
-        console.log("Microphone stream active");
+        console.log("Microphone stream active", audioStreamRef.current);
+        if (audioStreamRef.current.active) {
+          setMicActive(true);
+        }
       } catch (err) {
         console.error("Error accessing microphone:", err);
       }
@@ -245,7 +253,10 @@ const Page = () => {
   const toggleCamera = () => {
     setCameraActive(!cameraActive);
   };
-  console.log(videoRef);
+
+  useEffect(() => {
+    console.log("Messages updated:", messages);
+  }, [messages]);
 
   return loading.state ? (
     <Loader loading={loading.state} message={loading.message} />
@@ -274,7 +285,7 @@ const Page = () => {
             <Card className="shadow-lg border border-emerald-100 overflow-hidden max-h-screen">
               <CardContent className="p-6">
                 <div className="flex flex-col md:flex-row gap-6">
-                  <div className="w-[500px] h-[350px] flex-1 flex flex-col items-center justify-center border border-gray-200 rounded-lg p-4 bg-white shadow-sm">
+                  <div className="h-[350px] flex-1 flex flex-col items-center justify-center border border-gray-200 rounded-lg p-4 bg-white shadow-sm">
                     <h3 className="text-xl mb-4 text-center font-medium">
                       Reva
                     </h3>
@@ -388,69 +399,119 @@ const Page = () => {
           </div>
 
           <div className="lg:w-1/3">
-<Card className="bg-white shadow-md border border-gray-200">
-  <CardContent className="p-6">
-    <h3 className="text-xl font-bold mb-4">Please read these instructions before beginning your interview.</h3>
-    {isInterviewStarted ? (
-      <div className="space-y-4">
-        <p className="text-gray-700">
-          You are now in an interview for the{" "}
-          <strong>{job.title}</strong> position at{" "}
-          <strong>{job.company}</strong>.
-        </p>
-        <ol className="list-decimal pl-5 space-y-2 text-gray-700">
-          <li>Ensure your device microphone and camera are working properly for clear audio and video quality.</li>
-          <li>Speak clearly and at a moderate pace, maintaining good eye contact with the camera.</li>
-          <li>Position yourself in a well-lit, quiet environment with minimal background distractions.</li>
-          <li>Have a glass of water nearby and take brief pauses if needed to collect your thoughts.</li>
-          <li>Listen carefully to each question and take a moment to think before responding.</li>
-          <li>Structure your answers using the STAR method (Situation, Task, Action, Result) for behavioral questions.</li>
-          <li>Emphasize skills and experiences directly relevant to the {job.title} role and {job.industry} industry.</li>
-          <li>Ask thoughtful questions about the company culture, team dynamics, and growth opportunities.</li>
-          <li>Maintain professional body language and dress appropriately for the role.</li>
-          <li>If you don't understand a question, politely ask for clarification rather than guessing.</li>
-          <li>End each answer with confidence and be prepared to elaborate if asked follow-up questions.</li>
-        </ol>
-        <div className="mt-4 p-3 bg-blue-50 rounded-lg border border-blue-200">
-          <p className="text-sm text-blue-800">
-            <strong>Tip:</strong> This is a practice session. Use it to refine your responses and build confidence for your actual interview.
-          </p>
-        </div>
-      </div>
-    ) : (
-      <div className="text-gray-700">
-        <p className="mb-4">
-          Welcome to your interview practice session for the{" "}
-          <strong>{job.title}</strong> position at{" "}
-          <strong>{job.company}</strong>.
-        </p>
-        <p className="mb-4">
-          Our AI interviewer will ask you questions relevant to this role and evaluate your responses. 
-          Click "Start Interview" when you're ready to begin.
-        </p>
-        <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-4">
-          <h4 className="font-semibold text-yellow-800 mb-2">Before You Start:</h4>
-          <ol className="list-decimal pl-5 space-y-1 text-sm text-yellow-700">
-            <li>Test your microphone and camera functionality</li>
-            <li>Find a quiet, well-lit space with stable internet connection</li>
-            <li>Have your resume and job description readily available</li>
-            <li>Prepare examples of your key achievements and experiences</li>
-            <li>Research the company and role thoroughly</li>
-          </ol>
-        </div>
-        <div className="bg-white rounded-lg p-6 border border-gray-200 hover:shadow-md transition-shadow">
-            <div className="flex items-center justify-center space-x-3">
-                <p className="text-gray-700 font-medium">
-                    All the best for your Interview. 
-                    <span className="text-gray-500 font-normal ml-2">by Team HireMentis</span>
-                </p>
-            </div>
-        </div>
-
-      </div>
-    )}
-  </CardContent>
-</Card>
+            <Card className="bg-white shadow-md border border-gray-200">
+              <CardContent className="p-6">
+                <h3 className="text-xl font-bold mb-4">
+                  Please read these instructions before beginning your
+                  interview.
+                </h3>
+                {isInterviewStarted ? (
+                  <div className="space-y-4">
+                    <p className="text-gray-700">
+                      You are now in an interview for the{" "}
+                      <strong>{job.title}</strong> position at{" "}
+                      <strong>{job.company}</strong>.
+                    </p>
+                    <ol className="list-decimal pl-5 space-y-2 text-gray-700">
+                      <li>
+                        Ensure your device microphone and camera are working
+                        properly for clear audio and video quality.
+                      </li>
+                      <li>
+                        Speak clearly and at a moderate pace, maintaining good
+                        eye contact with the camera.
+                      </li>
+                      <li>
+                        Position yourself in a well-lit, quiet environment with
+                        minimal background distractions.
+                      </li>
+                      <li>
+                        Have a glass of water nearby and take brief pauses if
+                        needed to collect your thoughts.
+                      </li>
+                      <li>
+                        Listen carefully to each question and take a moment to
+                        think before responding.
+                      </li>
+                      <li>
+                        Structure your answers using the STAR method (Situation,
+                        Task, Action, Result) for behavioral questions.
+                      </li>
+                      <li>
+                        Emphasize skills and experiences directly relevant to
+                        the {job.title} role and {job.industry} industry.
+                      </li>
+                      <li>
+                        Ask thoughtful questions about the company culture, team
+                        dynamics, and growth opportunities.
+                      </li>
+                      <li>
+                        Maintain professional body language and dress
+                        appropriately for the role.
+                      </li>
+                      <li>
+                        If you don't understand a question, politely ask for
+                        clarification rather than guessing.
+                      </li>
+                      <li>
+                        End each answer with confidence and be prepared to
+                        elaborate if asked follow-up questions.
+                      </li>
+                    </ol>
+                    <div className="mt-4 p-3 bg-blue-50 rounded-lg border border-blue-200">
+                      <p className="text-sm text-blue-800">
+                        <strong>Tip:</strong> This is a practice session. Use it
+                        to refine your responses and build confidence for your
+                        actual interview.
+                      </p>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="text-gray-700">
+                    <p className="mb-4">
+                      Welcome to your interview practice session for the{" "}
+                      <strong>{job.title}</strong> position at{" "}
+                      <strong>{job.company}</strong>.
+                    </p>
+                    <p className="mb-4">
+                      Our AI interviewer will ask you questions relevant to this
+                      role and evaluate your responses. Click "Start Interview"
+                      when you're ready to begin.
+                    </p>
+                    <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-4">
+                      <h4 className="font-semibold text-yellow-800 mb-2">
+                        Before You Start:
+                      </h4>
+                      <ol className="list-decimal pl-5 space-y-1 text-sm text-yellow-700">
+                        <li>Test your microphone and camera functionality</li>
+                        <li>
+                          Find a quiet, well-lit space with stable internet
+                          connection
+                        </li>
+                        <li>
+                          Have your resume and job description readily available
+                        </li>
+                        <li>
+                          Prepare examples of your key achievements and
+                          experiences
+                        </li>
+                        <li>Research the company and role thoroughly</li>
+                      </ol>
+                    </div>
+                    <div className="bg-white rounded-lg p-6 border border-gray-200 hover:shadow-md transition-shadow">
+                      <div className="flex items-center justify-center space-x-3">
+                        <p className="text-gray-700 font-medium">
+                          All the best for your Interview.
+                          <span className="text-gray-500 font-normal ml-2">
+                            by Team HireMentis
+                          </span>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
           </div>
         </div>
       </div>
