@@ -16,6 +16,8 @@ const vapi = new Vapi(VAPI_PUBLIC_KEY!);
 import { interviewer } from "@/utils/vapi/prompt";
 import { AssistantOverrides } from "@vapi-ai/web/dist/api";
 import { toast } from "sonner";
+import { nanoid } from "nanoid";
+import { auth } from "@/firebase/client";
 
 interface LoaderState {
   state: boolean;
@@ -49,6 +51,7 @@ const Page = () => {
   const [isSpeaking, setIsSpeaking] = useState(false);
   const videoStreamRef = useRef<MediaStream | null>(null);
   const audioStreamRef = useRef<MediaStream | null>(null);
+  const [interviewId, setInterviewId] = useState<string | null>();
 
   const params = useParams();
   const id = params?.id;
@@ -74,12 +77,6 @@ const Page = () => {
 
     const onCallEnd = () => {
       setCallStatus(CallStatus.FINISHED);
-      // const res = await axios.post("/generate-feedback", {
-      //   transcript: messages,
-      //   job,
-      //   interviewQs,
-      // });
-      console.log(messages);
     };
 
     const onMessage = (message: any) => {
@@ -146,6 +143,7 @@ const Page = () => {
   };
 
   const startInterview = async () => {
+    setInterviewId(nanoid());
     await setupInterview();
     setLoading({
       state: true,
@@ -171,15 +169,22 @@ const Page = () => {
   const endInterview = async () => {
     setIsInterviewStarted(false);
     vapi.stop();
-    console.log("\n\n------ Messages state ------\n\n");
-    console.log(messages);
-    console.log("\n\n------ Messages state ------\n\n");
+    setLoading({
+      state: true,
+      message: "Generating feedback for your interview...",
+    });
+    const user = auth.currentUser;
     const result = await axios.post("/api/generate-feedback", {
       transcript: messages,
       job,
       interviewQs: interviewQuestions,
+      interviewId,
+      userId: user?.uid,
     });
-    console.log("Feedback result:", result.data);
+    setLoading({
+      state: false,
+    });
+    redirect(`/feedback/${interviewId}`);
   };
 
   useEffect(() => {
@@ -253,10 +258,6 @@ const Page = () => {
   const toggleCamera = () => {
     setCameraActive(!cameraActive);
   };
-
-  useEffect(() => {
-    console.log("Messages updated:", messages);
-  }, [messages]);
 
   return loading.state ? (
     <Loader loading={loading.state} message={loading.message} />

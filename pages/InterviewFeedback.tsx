@@ -13,21 +13,17 @@ import FeedbackActions from "@/components/interview-feedback/FeedbackActions";
 import { Badge } from "@/components/ui/badge";
 import { useFeedback } from "@/hooks/useFeedback";
 
-const InterviewFeedback = () => {
-  const params = useParams();
-
-  const id = params?.id;
+const InterviewFeedback = ({ id }: { id: string }) => {
   if (!id) {
     redirect("/");
   }
-  const { isLoading, feedbackData, getScoreValue, scoreColor } = useFeedback(
-    String(id)
-  );
+  const { isLoading, feedbackData, getScoreValue, scoreColor } =
+    useFeedback(id);
 
   if (isLoading) {
     return <Loader loading={true} message="Loading interview feedback..." />;
   }
-
+  console.log("Feedback Data:", feedbackData);
   if (!feedbackData || !feedbackData.success) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-emerald-50/50 to-white">

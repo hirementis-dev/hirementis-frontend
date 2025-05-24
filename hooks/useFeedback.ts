@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { FeedbackData } from "@/types/feedback";
+import { getInterviewById } from "@/firebase/actions";
 
 const mockFeedbackData: FeedbackData = {
   success: true,
@@ -115,12 +116,28 @@ export const useFeedback = (id: string | undefined) => {
   const [feedbackData, setFeedbackData] = useState<FeedbackData | null>(null);
 
   useEffect(() => {
-    // Simulate API
-    setIsLoading(true);
-    setTimeout(() => {
-      setFeedbackData(mockFeedbackData);
-      setIsLoading(false);
-    }, 1000);
+    async function getFeedback() {
+      setIsLoading(true);
+      try {
+        const result = await getInterviewById(id || "");
+        if (!result.success) {
+          setFeedbackData(mockFeedbackData);
+          return;
+        }
+        setFeedbackData({
+          success: true,
+          feedback: result.data?.data.feedback,
+        });
+        setIsLoading(false);
+      } catch (error) {
+        console.error("Error fetching feedback:", error);
+        setFeedbackData(mockFeedbackData);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    getFeedback();
   }, [id]);
 
   const getScoreValue = (score: number): number => {

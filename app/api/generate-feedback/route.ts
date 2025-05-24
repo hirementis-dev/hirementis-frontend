@@ -13,7 +13,6 @@ import { db } from "@/firebase/admin";
 //     }),
 //   });
 // }
-const adminDb = getFirestore();
 
 const client = new OpenAI({
   apiKey: process.env.NEXT_PUBLIC_GEMINI_API_KEY,
@@ -21,7 +20,8 @@ const client = new OpenAI({
 });
 
 export async function POST(request: Request) {
-  const { transcript, job, userId, interviewId } = await request.json();
+  const { transcript, job, userId, interviewId, interviewQs } =
+    await request.json();
 
   if (!transcript || !job) {
     return Response.json({
@@ -44,11 +44,12 @@ export async function POST(request: Request) {
         {
           role: "user",
           content: `
-        You are a senior interview coach and hiring advisor. Your task is to analyze a mock interview transcript between a candidate and a voice interviewer ("Reva" from HireMentis), and provide structured, professional feedback to help the candidate improve.
+       You are a senior interview coach and hiring advisor. Your role is to evaluate a mock interview conducted between a candidate and a voice-based AI interviewer ("Reva" from HireMentis). Your goal is to deliver clear, structured, and actionable feedback to help the candidate improve their performance.
 
-You are given two inputs:
-1. Job Data – Includes title, company, responsibilities, requirements, and other role-specific info.
-2. Interview Transcript – Includes a list of interview questions asked and the candidate’s exact answers.
+You are given three inputs:
+1. Job Data: Includes title, company, responsibilities, requirements, and other role-specific info.
+2. Interview Transcript: Includes a whole conversation between Reva(AI interviwer) and candidate
+3. Questions: a list of question that is asked during the interview by Reva.
 
 JOB DATA:
 - title: ${job.title}
@@ -66,9 +67,19 @@ JOB DATA:
 TRANSCRIPT:
 ${formattedTranscript}
 
+QUESTIONS:
+${interviewQs.map((item: string) => `- ${item}`).join("\n")}
 
-Based on these, generate a detailed feedback JSON with the following structure:
+Rules:
+- Only use the candidate’s actual answers as provided — do not reword or expand them.
+- Feedback should be based strictly on the job description and conversation content.
+- Be honest, professional, and helpful — this will be shown to the user.
+- The question_feedback must be an array of objects, each with the exact structure above.
+- Avoid generic feedback — personalize it based on each answer.
+- As transcript is a raw converstaion, you have to find out the exact question asked by Reva(AI interviewr) and exact answer given by candidate, and you do not have to change the candidate answer, after finding out question you have anlyze and and give your feedback on it as above suggested with proper JSON format, you also have the all the question provided to you, so it will be easy to find out the questions.
+- The question above provided to you is the questions, on that you have to give feedback and if candidate did not give answer of any question, add a relevant message
 
+Based on above data, you have to generate a detailed feedback JSON with the following structure:
 STRICT JSON OUTPUT SCHEMA FORMAT:
 {
   "interview_summary": {
@@ -100,6 +111,7 @@ STRICT JSON OUTPUT SCHEMA FORMAT:
       "question_id": "number",
       "question": "string (verbatim question text)",
       "candidate_answer_summary": "string (short recap of the candidate's response)",
+      "actual_answer": "The actual answer for the question, that will be perfect for the question to reply with"
       "expected_ideal_points": ["string(key concepts expected in the answer)"],
       "evaluation": {
         "score": "number (0 to 10)",
@@ -116,14 +128,6 @@ STRICT JSON OUTPUT SCHEMA FORMAT:
     "final_tip": "string (motivational or actionable closing tip)"
   }
 }
-
-
-Rules:
-- Only use the candidate’s actual answers as provided — do not reword or expand them.
-- Feedback should be based strictly on the job description and conversation content.
-- Be honest, professional, and helpful — this will be shown to the user.
-- The question_feedback must be an array of objects, each with the exact structure above.
-- Avoid generic feedback — personalize it based on each answer.
         `,
         },
       ],
@@ -134,10 +138,9 @@ Rules:
       result.choices[0].message.content || "[]"
     );
 
-    // Save feedback to Firestore
-    // You must provide userId and interviewId in the request body
+    let res;
     if (userId && interviewId) {
-      await db
+      res = await db
         .collection("users")
         .doc(userId)
         .collection("interviews")
@@ -149,11 +152,11 @@ Rules:
           createdAt: new Date(),
         });
     }
-console.log(interviewId)
-console.log(userId)
+
     return Response.json({
       success: true,
       feedback: parsedFeedback,
+      res,
     });
   } catch (error) {
     console.error("Error formatting transcript:", error);

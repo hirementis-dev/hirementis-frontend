@@ -9,7 +9,7 @@ const ai = new OpenAI({
 
 export async function POST(request: Request) {
   const {
-    question_amonut,
+    question_amount = 5,
     title,
     level,
     type,
@@ -30,7 +30,7 @@ export async function POST(request: Request) {
 You are an expert HR interviewer and assessment designer. Your task is to generate thoughtful, specific, and relevant interview questions based on a given job description and its structured details.
 
 🎯 Objective:
-Generate exactly {{question_amount}} high-quality questions to evaluate a candidate’s readiness and fit for the role.
+Generate exactly ${question_amount} high-quality questions to evaluate a candidate’s readiness and fit for the role.
 
 📌 Focus Areas:
 - Role Title: ${title}

@@ -1,4 +1,3 @@
-
 export interface QuestionEvaluation {
   score: number;
   coverage: string;
@@ -13,6 +12,7 @@ export interface QuestionFeedback {
   expected_ideal_points: string[];
   evaluation: QuestionEvaluation;
   recommendation: string;
+  actual_answer?: string;
 }
 
 export interface ScoreItem {

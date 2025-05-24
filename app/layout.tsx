@@ -41,7 +41,7 @@ export default function RootLayout({
         />
         <link rel="manifest" href="/site.webmanifest" />
       </head>
-      <body className={`antialiased`}>
+      <body suppressHydrationWarning className={`antialiased`}>
         <Navbar />
         <div>{children}</div>
         <Toaster />
