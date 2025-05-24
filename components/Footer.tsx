@@ -1,5 +1,8 @@
+"use client"
 import React from "react";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
+
 
 const Footer: React.FC = () => {
   return (
@@ -52,17 +55,17 @@ const Footer: React.FC = () => {
             <h3 className="font-semibold text-lg mb-4">Product</h3>
             <ul className="space-y-3">
               <li>
-                <a href="#" className="text-gray-600 hover:text-emerald-600">
+                <a href="/#features" className="text-gray-600 hover:text-emerald-600">
                   Features
                 </a>
               </li>
               <li>
-                <a href="#" className="text-gray-600 hover:text-emerald-600">
+                <a href="/#pricing" className="text-gray-600 hover:text-emerald-600">
                   Pricing
                 </a>
               </li>
               <li>
-                <a href="#" className="text-gray-600 hover:text-emerald-600">
+                <a href="/#testimonials" className="text-gray-600 hover:text-emerald-600">
                   Testimonials
                 </a>
               </li>
@@ -135,22 +138,16 @@ const Footer: React.FC = () => {
           </div>
           <div className="flex gap-6">
             <a
-              href="#"
+              href="/privacytermspages"
               className="text-gray-500 text-sm hover:text-emerald-600"
             >
               Privacy Policy
             </a>
             <a
-              href="#"
+              href="/privacytermspages"
               className="text-gray-500 text-sm hover:text-emerald-600"
             >
               Terms of Service
-            </a>
-            <a
-              href="#"
-              className="text-gray-500 text-sm hover:text-emerald-600"
-            >
-              Cookie Policy
             </a>
           </div>
         </div>

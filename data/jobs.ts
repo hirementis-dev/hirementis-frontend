@@ -19,8 +19,8 @@ export const jobs: Job[] = [
   {
     id: 1,
     title: 'Frontend Developer',
-    company: 'TechCorp',
-    location: 'San Francisco, CA',
+    company: 'HireMentis',
+    location: 'Meerut, India',
     type: 'Full-time',
     level: 'Mid',
     description: 'We are looking for a skilled Frontend Developer to join our dynamic team. You will be responsible for developing and implementing user interface components using React.js concepts and workflows.',
@@ -38,7 +38,7 @@ export const jobs: Job[] = [
       'Optimize components for maximum performance across devices and browsers',
       'Collaborate with backend developers and designers to improve usability'
     ],
-    salary: '$100,000 - $130,000',
+    salary: '₹12,00,000 – ₹18,00,000',
     posted: '2025-05-10',
     logo: 'https://via.placeholder.com/150',
     industry: 'Technology'
@@ -46,8 +46,8 @@ export const jobs: Job[] = [
   {
     id: 2,
     title: 'Backend Engineer',
-    company: 'DataSystems Inc',
-    location: 'New York, NY',
+    company: 'ChaiCode',
+    location: 'Jaipur, India',
     type: 'Full-time',
     level: 'Senior',
     description: 'Join our backend team to build scalable and resilient systems that power our enterprise applications.',
@@ -65,7 +65,7 @@ export const jobs: Job[] = [
       'Implement security and data protection measures',
       'Write clean, maintainable code with proper documentation'
     ],
-    salary: '$130,000 - $160,000',
+    salary: '₹18,00,000 – ₹25,00,000',
     posted: '2025-05-12',
     logo: 'https://via.placeholder.com/150',
     industry: 'Technology'
@@ -73,8 +73,8 @@ export const jobs: Job[] = [
   {
     id: 3,
     title: 'Product Manager',
-    company: 'InnovateX',
-    location: 'Austin, TX',
+    company: 'NeuraWave Systems',
+    location: 'Noida, India',
     type: 'Full-time',
     level: 'Mid',
     description: 'We are seeking an experienced Product Manager to join our team and help shape our product vision and roadmap.',
@@ -92,7 +92,7 @@ export const jobs: Job[] = [
       'Analyze market trends and competitor activities',
       'Lead the product development lifecycle from conception to launch'
     ],
-    salary: '$110,000 - $140,000',
+    salary: '₹30,00,000 – ₹45,00,000',
     posted: '2025-05-05',
     logo: 'https://via.placeholder.com/150',
     industry: 'Technology'
@@ -100,9 +100,9 @@ export const jobs: Job[] = [
   {
     id: 4,
     title: 'UX/UI Designer',
-    company: 'DesignWorks',
+    company: 'KodeKshetra',
     location: 'Remote',
-    type: 'Remote',
+    type: 'Full-time',
     level: 'Mid',
     description: 'DesignWorks is looking for a talented UX/UI Designer to craft beautiful and intuitive interfaces for our clients.',
     requirements: [
@@ -119,7 +119,7 @@ export const jobs: Job[] = [
       'Establish design guidelines and systems',
       'Stay updated on latest design trends and technologies'
     ],
-    salary: '$90,000 - $120,000',
+    salary: '₹10,00,000 – ₹15,00,000',
     posted: '2025-05-08',
     logo: 'https://via.placeholder.com/150',
     industry: 'Design'
@@ -127,8 +127,8 @@ export const jobs: Job[] = [
   {
     id: 5,
     title: 'Data Scientist',
-    company: 'AnalyticsAI',
-    location: 'Chicago, IL',
+    company: 'Aetherial Intelligence',
+    location: 'Bengaluru, India',
     type: 'Full-time',
     level: 'Senior',
     description: 'Looking for a skilled Data Scientist to analyze large datasets and provide actionable insights to improve our products.',
@@ -146,7 +146,7 @@ export const jobs: Job[] = [
       'Collaborate with engineering and product teams',
       'Stay current with latest advancements in AI and machine learning'
     ],
-    salary: '$140,000 - $180,000',
+    salary: '₹50,00,000 – ₹75,00,000',
     posted: '2025-05-15',
     logo: 'https://via.placeholder.com/150',
     industry: 'Data Science'
@@ -154,8 +154,8 @@ export const jobs: Job[] = [
   {
     id: 6,
     title: 'DevOps Engineer',
-    company: 'CloudSolutions',
-    location: 'Seattle, WA',
+    company: 'KodeKshetra',
+    location: 'Remote',
     type: 'Full-time',
     level: 'Mid',
     description: 'We are looking for a DevOps Engineer to help us build and maintain our cloud infrastructure and deployment pipelines.',
@@ -173,7 +173,7 @@ export const jobs: Job[] = [
       'Implement security best practices',
       'Collaborate with development teams to optimize workflows'
     ],
-    salary: '$120,000 - $150,000',
+    salary: '₹25,00,000 – ₹35,00,000',
     posted: '2025-05-07',
     logo: 'https://via.placeholder.com/150',
     industry: 'Technology'
@@ -181,8 +181,8 @@ export const jobs: Job[] = [
   {
     id: 7,
     title: 'Marketing Manager',
-    company: 'BrandBoost',
-    location: 'Boston, MA',
+    company: 'Physics Wallah',
+    location: 'Delhi, India',
     type: 'Full-time',
     level: 'Senior',
     description: 'Seeking an experienced Marketing Manager to lead our digital marketing strategies and campaigns.',
@@ -200,7 +200,7 @@ export const jobs: Job[] = [
       'Oversee content creation and distribution',
       'Collaborate with sales and product teams'
     ],
-    salary: '$100,000 - $130,000',
+    salary: '₹45,00,000 – ₹65,00,000',
     posted: '2025-05-09',
     logo: 'https://via.placeholder.com/150',
     industry: 'Marketing'
@@ -208,8 +208,8 @@ export const jobs: Job[] = [
   {
     id: 8,
     title: 'Software QA Engineer',
-    company: 'QualityTech',
-    location: 'Denver, CO',
+    company: 'CryptoVista Innovations',
+    location: 'Gurugram, India',
     type: 'Full-time',
     level: 'Entry',
     description: 'Join our QA team to ensure the quality and reliability of our software products through comprehensive testing.',
@@ -227,7 +227,7 @@ export const jobs: Job[] = [
       'Collaborate with developers to resolve issues',
       'Participate in code reviews and product discussions'
     ],
-    salary: '$70,000 - $90,000',
+    salary: '₹25,00,000 – ₹35,00,000',
     posted: '2025-05-14',
     logo: 'https://via.placeholder.com/150',
     industry: 'Technology'
@@ -235,8 +235,8 @@ export const jobs: Job[] = [
   {
     id: 9,
     title: 'Project Manager',
-    company: 'TechSolutions',
-    location: 'Portland, OR',
+    company: 'Teachyst',
+    location: 'Patiala, India',
     type: 'Contract',
     level: 'Mid',
     description: 'We are looking for a skilled Project Manager to oversee our software development projects from initiation to completion.',
@@ -254,7 +254,7 @@ export const jobs: Job[] = [
       'Identify and mitigate project risks',
       'Report project status to stakeholders'
     ],
-    salary: '$90,000 - $120,000',
+    salary: '₹30,00,000 – ₹45,00,000',
     posted: '2025-05-11',
     logo: 'https://via.placeholder.com/150',
     industry: 'Project Management'
@@ -262,8 +262,8 @@ export const jobs: Job[] = [
   {
     id: 10,
     title: 'Network Security Specialist',
-    company: 'SecureTech',
-    location: 'Washington, DC',
+    company: 'Learnyst',
+    location: 'Bengaluru, India',
     type: 'Full-time',
     level: 'Senior',
     description: 'Join our security team to protect our network infrastructure from cyber threats and ensure data integrity.',
@@ -281,7 +281,7 @@ export const jobs: Job[] = [
       'Respond to security incidents and breaches',
       'Provide security training and awareness'
     ],
-    salary: '$140,000 - $170,000',
+    salary: '₹60,00,000 – ₹1,00,00,000',
     posted: '2025-05-06',
     logo: 'https://via.placeholder.com/150',
     industry: 'Cybersecurity'
