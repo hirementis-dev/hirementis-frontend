@@ -1,4 +1,19 @@
 import OpenAI from "openai";
+import { getFirestore } from "firebase-admin/firestore";
+import { getApps, initializeApp, cert } from "firebase-admin/app";
+import { db } from "@/firebase/admin";
+
+// Initialize Firebase Admin if not already initialized
+// if (!getApps().length) {
+//   initializeApp({
+//     credential: cert({
+//       projectId: process.env.FIREBASE_PROJECT_ID,
+//       clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+//       privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, "\n"),
+//     }),
+//   });
+// }
+const adminDb = getFirestore();
 
 const client = new OpenAI({
   apiKey: process.env.NEXT_PUBLIC_GEMINI_API_KEY,
@@ -6,7 +21,7 @@ const client = new OpenAI({
 });
 
 export async function POST(request: Request) {
-  const { transcript, job } = await request.json();
+  const { transcript, job, userId, interviewId } = await request.json();
 
   if (!transcript || !job) {
     return Response.json({
@@ -119,12 +134,33 @@ Rules:
       result.choices[0].message.content || "[]"
     );
 
+    // Save feedback to Firestore
+    // You must provide userId and interviewId in the request body
+    if (userId && interviewId) {
+      await db
+        .collection("users")
+        .doc(userId)
+        .collection("interviews")
+        .doc(interviewId)
+        .set({
+          job,
+          transcript,
+          feedback: parsedFeedback,
+          createdAt: new Date(),
+        });
+    }
+console.log(interviewId)
+console.log(userId)
     return Response.json({
       success: true,
       feedback: parsedFeedback,
     });
   } catch (error) {
     console.error("Error formatting transcript:", error);
+    return Response.json({
+      success: false,
+      message: "Failed to generate or save feedback.",
+    });
   }
 }
 
