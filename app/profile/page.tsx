@@ -1,3 +1,4 @@
+"use client";
 import UserProfile from "@/pages/userProfile";
 import React from "react";
 

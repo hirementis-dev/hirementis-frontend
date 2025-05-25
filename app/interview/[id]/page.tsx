@@ -171,7 +171,7 @@ const Page = () => {
     vapi.stop();
     setLoading({
       state: true,
-      message: "Generating feedback for your interview...",
+      message: "Generating feedback for you...",
     });
     const user = auth.currentUser;
     const result = await axios.post("/api/generate-feedback", {

@@ -21,7 +21,7 @@ const FeedbackActions: React.FC<FeedbackActionsProps> = ({ id }) => {
         Interview date: {new Date().toLocaleDateString()}
       </div>
 
-      <div className="flex gap-3">
+      {/* <div className="flex gap-3">
         <Dialog>
           <DialogTrigger asChild>
             <Button
@@ -50,7 +50,7 @@ const FeedbackActions: React.FC<FeedbackActionsProps> = ({ id }) => {
             </div>
           </DialogContent>
         </Dialog>
-      </div>
+      </div> */}
     </div>
   );
 };

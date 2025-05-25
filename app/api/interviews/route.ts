@@ -2,12 +2,8 @@ import { db } from "@/firebase/admin";
 import { NextResponse } from "next/server";
 import { auth } from "@/firebase/client";
 
-async function getCurrentUser() {
-  return await auth.currentUser;
-}
-
 export async function POST(req: Request) {
-  const { id } = await req.json();
+  const { id, userId } = await req.json();
 
   if (!id) {
     return NextResponse.json(
@@ -15,22 +11,18 @@ export async function POST(req: Request) {
       { status: 400 }
     );
   }
-
-  const user = await getCurrentUser();
-  // const userId = "tZ3lYZd7qHV5t56V1LmGSWf6t9w1";
-  console.log("Current user:", user);
-  if (!user) {
+  if (!userId) {
     return NextResponse.json(
       { success: false, error: "User not authenticated" },
       { status: 401 }
     );
   }
 
-  console.log("Fetching interview with ID:", id, "for user:", user?.uid);
+  console.log("Fetching interview with ID:", id, "for user:", userId);
   try {
     const interviewRef = db
       .collection("users")
-      .doc(user?.uid)
+      .doc(userId)
       .collection("interviews")
       .doc(id);
 

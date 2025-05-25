@@ -3,7 +3,7 @@ import { Outfit } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import { Toaster } from "sonner";
-
+import { UserProvider } from "@/context/userContext";
 const outfit = Outfit({
   subsets: ["latin"],
   variable: "--font-outfit",
@@ -42,8 +42,10 @@ export default function RootLayout({
         <link rel="manifest" href="/site.webmanifest" />
       </head>
       <body suppressHydrationWarning className={`antialiased`}>
-        <Navbar />
-        <div>{children}</div>
+        <UserProvider>
+          <Navbar />
+          <div>{children}</div>
+        </UserProvider>
         <Toaster />
       </body>
     </html>

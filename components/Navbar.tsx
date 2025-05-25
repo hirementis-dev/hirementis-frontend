@@ -6,12 +6,14 @@ import Link from "next/link";
 import { auth } from "@/firebase/client";
 import { onAuthStateChanged, signOut, User } from "firebase/auth";
 import { usePathname } from "next/navigation";
+import { useUser } from "@/context/userContext";
 
 const Navbar: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [user, setUser] = useState<User | null>(null);
   const pathname = usePathname();
-  const isLoginOrSignuporInterviewPage = pathname?.startsWith("/interview");
+  const isInterviewPage = pathname?.startsWith("/interview");
+  const { setLoggedInUser } = useUser();
 
   useEffect(() => {
     // Only listen for auth state changes after the component mounts
@@ -20,6 +22,7 @@ const Navbar: React.FC = () => {
       // Only set user if the user is actually logged in (not just registered)
       if (firebaseUser && firebaseUser.emailVerified) {
         setUser(firebaseUser);
+        setLoggedInUser(firebaseUser);
       } else {
         setUser(null);
       }
@@ -33,9 +36,10 @@ const Navbar: React.FC = () => {
 
   const handleLogout = async () => {
     await signOut(auth);
+    setLoggedInUser(null);
   };
 
-  if (isLoginOrSignuporInterviewPage) {
+  if (isInterviewPage) {
     return null;
   }
 
