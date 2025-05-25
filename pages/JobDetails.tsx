@@ -1,23 +1,26 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { jobs } from "@/data/jobs";
 import { redirect, useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { auth } from "@/firebase/client";
-import { useEffect } from 'react';
 
 const JobDetails = () => {
   const params = useParams();
-const id = params?.id as string;
-  
-useEffect(() => {
-  if (!id) {
-    redirect("/jobs");
-  }
-  }, [])
+  const id = params?.id as string;
 
+  const [showKeyPrompt, setShowKeyPrompt] = useState(false);
+  const [secretKey, setSecretKey] = useState("");
+  const [keyError, setKeyError] = useState("");
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!id) {
+      redirect("/jobs");
+    }
+  }, []);
 
   const jobId = Number(id);
 
@@ -39,14 +42,25 @@ useEffect(() => {
     );
   }
 
-  const router = useRouter();
-
   const handleStartInterview = () => {
     const user = auth.currentUser;
-    if (user && user.emailVerified) {
+    if (!user || !user.emailVerified) {
+      router.push("/login");
+    } else {
+      setShowKeyPrompt(true);
+      setKeyError("");
+      setSecretKey("");
+    }
+  };
+
+  const handleKeySubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (secretKey === "onecupchai") {
+      setShowKeyPrompt(false);
+      setKeyError("");
       router.push(`/interview/${job.id}`);
     } else {
-      router.push("/login");
+      setKeyError("Invalid key. Please try again.");
     }
   };
 
@@ -167,6 +181,49 @@ useEffect(() => {
           </div>
         </div>
       </div>
+
+      {/* Secret Key Popup */}
+      {showKeyPrompt && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+          <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-xs">
+            <div>
+              <h3 className="text-lg font-semibold mb-4 text-center">
+              Enter Secret Key
+            </h3>
+            <p className="mb-2 text-sm text-neutral-500">We're currently in beta and access is limited. A secret key is required to start the interview. If you don't have one, please wait 1–2 weeks until we open access to all users.</p>
+            </div>
+            <form onSubmit={handleKeySubmit} className="space-y-3">
+              <input
+                type="password"
+                className="w-full border rounded px-3 py-2"
+                placeholder="Secret Key"
+                value={secretKey}
+                onChange={(e) => setSecretKey(e.target.value)}
+                autoFocus
+              />
+              {keyError && (
+                <div className="text-red-500 text-sm text-center">{keyError}</div>
+              )}
+              <div className="flex gap-2">
+                <Button
+                  type="submit"
+                  className="flex-1 bg-emerald-500 text-white hover:bg-emerald-600"
+                >
+                  Submit
+                </Button>
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="flex-1"
+                  onClick={() => setShowKeyPrompt(false)}
+                >
+                  Cancel
+                </Button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
