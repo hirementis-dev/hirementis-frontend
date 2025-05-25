@@ -4,8 +4,15 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Briefcase, Calendar, ChevronRight, Star, Loader2 } from 'lucide-react';
-import { getFirestore, collection, query, orderBy, getDocs } from 'firebase/firestore';
 import { auth, db } from '@/firebase/client';
+import {
+  collection,
+  query,
+  orderBy,
+  getDocs,
+  DocumentData,
+  Timestamp,
+} from "firebase/firestore";
 
 interface Interview {
   id: string;
@@ -21,14 +28,14 @@ interface InterviewHistoryCardProps {
   getScoreColor?: (score: number) => string;
 }
 
-const InterviewHistoryCard = ({ 
+const InterviewHistoryCard = ({
   formatDate = (dateString: string) => new Date(dateString).toLocaleDateString(),
   getScoreColor = (score: number) => {
     if (score >= 80) return 'bg-green-100 text-green-800';
     if (score >= 60) return 'bg-yellow-100 text-yellow-800';
     return 'bg-red-100 text-red-800';
   }
-}: InterviewHistoryCardProps) => {
+}: InterviewHistoryCardProps = {}) => {
   const [interviews, setInterviews] = useState<Interview[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -38,28 +45,29 @@ const InterviewHistoryCard = ({
       setLoading(true);
       setError(null);
 
-      // Use getFirestore to get the database instance
-      const firestore = getFirestore();
-      
-      // Query the nested collection: users/{userId}/interviews
-      const interviewsRef = collection(firestore, 'users', userId, 'interviews');
-      const q = query(interviewsRef, orderBy('createdAt', 'desc'));
-      
+      // Firestore V9+ modular syntax
+      const interviewsRef = collection(db, "users", userId, "interviews");
+      const q = query(interviewsRef, orderBy("createdAt", "desc"));
       const querySnapshot = await getDocs(q);
-      const interviewsData: Interview[] = [];
 
-      querySnapshot.forEach((doc) => {
-        const data = doc.data();
-        
-        // Extract job information and feedback score
+      const interviewsData: Interview[] = [];
+      querySnapshot.forEach((docSnap) => {
+        const data = docSnap.data() as DocumentData;
         const jobData = data.job || {};
         const feedbackData = data.feedback || {};
-        
+        let dateStr = "";
+        if (data.createdAt instanceof Timestamp) {
+          dateStr = data.createdAt.toDate().toISOString();
+        } else if (typeof data.createdAt === "string") {
+          dateStr = data.createdAt;
+        } else {
+          dateStr = new Date().toISOString();
+        }
         interviewsData.push({
-          id: doc.id,
+          id: docSnap.id,
           position: jobData.title || jobData.position || 'Unknown Position',
           company: jobData.company || 'Unknown Company',
-          date: data.createdAt?.toDate()?.toISOString() || new Date().toISOString(),
+          date: dateStr,
           score: feedbackData.overallScore || feedbackData.score || 0,
           status: 'completed'
         });
@@ -74,11 +82,14 @@ const InterviewHistoryCard = ({
     }
   };
 
-  // You'll need to call fetchInterviews with the current user's ID
-  // This depends on how you handle authentication in your app
   useEffect(() => {
-    // Example: You'll need to get the current user ID from your auth system
-    // and call fetchInterviews(userId)
+    const currentUser = auth.currentUser;
+    if (currentUser) {
+      fetchInterviews(currentUser.uid);
+    } else {
+      setLoading(false);
+      setError("User not found.");
+    }
   }, []);
 
   if (loading) {
