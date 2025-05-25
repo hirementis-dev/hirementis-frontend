@@ -239,7 +239,7 @@ const Navbar: React.FC = () => {
                       className="w-full flex justify-center mt-2"
                       onClick={() => {
                         setIsMenuOpen(false);
-                        router.push("/userprofile");
+                        router.push("/profile");
                       }}
                     >
                       <div
