@@ -55,7 +55,8 @@ const JobDetails = () => {
 
   const handleKeySubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (secretKey === "onecupchai") {
+    console.log(process.env.NEXT_PUBLIC_SECRET_KEY)
+    if (secretKey === process.env.NEXT_PUBLIC_SECRET_KEY) {
       setShowKeyPrompt(false);
       setKeyError("");
       router.push(`/interview/${job.id}`);

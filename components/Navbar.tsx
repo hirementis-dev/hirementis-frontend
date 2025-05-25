@@ -229,7 +229,7 @@ const Navbar: React.FC = () => {
                   <>
                     <Button
                       variant="outline"
-                      className="w-full justify-center"
+                      className="w-full justify-center border border-red-700 bg-red-500"
                       onClick={handleLogout}
                     >
                       Logout
