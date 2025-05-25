@@ -5,13 +5,14 @@ import { Menu } from "lucide-react";
 import Link from "next/link";
 import { auth } from "@/firebase/client";
 import { onAuthStateChanged, signOut, User } from "firebase/auth";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 const Navbar: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [user, setUser] = useState<User | null>(null);
   const pathname = usePathname();
-  const isLoginOrSignuporInterviewPage = pathname?.startsWith("/interview");
+  const isInterviewPage = pathname?.startsWith("/interview");
+  const router = useRouter();
 
   useEffect(() => {
     // Only listen for auth state changes after the component mounts
@@ -35,11 +36,9 @@ const Navbar: React.FC = () => {
     await signOut(auth);
   };
 
-  if (isLoginOrSignuporInterviewPage) {
+  if (isInterviewPage) {
     return null;
   }
-
-  console.log("User:", user);
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-sm border-b border-gray-100">
@@ -105,7 +104,7 @@ const Navbar: React.FC = () => {
             </Link>
           </div>
 
-          {/* CTA Buttons */}
+          {/* CTA Buttons and User Profile */}
           <div className="hidden md:flex items-center gap-4">
             {!user ? (
               <>
@@ -119,9 +118,31 @@ const Navbar: React.FC = () => {
                 </Link>
               </>
             ) : (
-              <Button variant="outline" onClick={handleLogout}>
-                Logout
-              </Button>
+              <>
+                <Button
+                  variant="outline"
+                  onClick={handleLogout}
+                  className="border border-red-500 text-red-400 hover:bg-red-50 hover:text-red-300 hover:border-red-400"
+                >
+                  Logout
+                </Button>
+                {/* User Profile Avatar */}
+                <div
+                  className="ml-2 cursor-pointer"
+                  onClick={() => router.push("/profile")}
+                  title="Profile"
+                >
+                  <div className="w-9 h-9 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-700 font-bold text-lg border border-emerald-300 hover:bg-emerald-200 transition">
+                    {user.displayName
+                      ? user.displayName
+                          .split(" ")
+                          .map((n) => n[0])
+                          .join("")
+                          .toUpperCase()
+                      : user.email?.[0]?.toUpperCase() || "U"}
+                  </div>
+                </div>
+              </>
             )}
           </div>
 
@@ -209,13 +230,36 @@ const Navbar: React.FC = () => {
                     </Link>
                   </>
                 ) : (
-                  <Button
-                    variant="outline"
-                    className="w-full justify-center"
-                    onClick={handleLogout}
-                  >
-                    Logout
-                  </Button>
+                  <>
+                    <Button
+                      variant="outline"
+                      className="w-full justify-center border-red-500 text-red-400 hover:bg-red-50 hover:text-red-300 hover:border-red-400"
+                      onClick={handleLogout}
+                    >
+                      Logout
+                    </Button>
+                    {/* User Profile Avatar (Mobile) */}
+                    <div
+                      className="w-full flex justify-center mt-2"
+                      onClick={() => {
+                        setIsMenuOpen(false);
+                        router.push("/profile");
+                      }}
+                    >
+                      <div
+                        className="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-700 font-bold text-lg border border-emerald-300 hover:bg-emerald-200 transition cursor-pointer"
+                        title="Profile"
+                      >
+                        {user.displayName
+                          ? user.displayName
+                              .split(" ")
+                              .map((n) => n[0])
+                              .join("")
+                              .toUpperCase()
+                          : user.email?.[0]?.toUpperCase() || "U"}
+                      </div>
+                    </div>
+                  </>
                 )}
               </div>
             </div>
