@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import Link from "next/link";
 import { redirect, useParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
@@ -12,11 +12,17 @@ import FinalRecommendations from "@/components/interview-feedback/FinalRecommend
 import FeedbackActions from "@/components/interview-feedback/FeedbackActions";
 import { Badge } from "@/components/ui/badge";
 import { useFeedback } from "@/hooks/useFeedback";
+import { useRouter } from "next/router";
 
 const InterviewFeedback = ({ id }: { id: string }) => {
-  if (!id) {
-    redirect("/");
-  }
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!id) {
+      router.push("/");
+    }
+  }, [id, router]);
+
   const { isLoading, feedbackData, getScoreValue, scoreColor } =
     useFeedback(id);
 
