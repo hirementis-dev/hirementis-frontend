@@ -76,14 +76,14 @@ const InterviewHistoryCard = ({
   console.log("Interviews fetched:", interviews);
   if (loading) {
     return (
-      <Card className="border-mint-100">
+      <Card className="border-emerald-100">
         <CardHeader className="pb-2">
           <CardTitle className="flex justify-between items-center">
             <span>Interview History</span>
             <Link href="/jobs">
               <Button
                 size="sm"
-                className="bg-mint-500 hover:bg-mint-600 text-xs"
+                className="bg-emerald-500 hover:bg-emerald-600 text-xs"
               >
                 Practice New Interview
               </Button>
@@ -95,7 +95,7 @@ const InterviewHistoryCard = ({
         </CardHeader>
         <CardContent>
           <div className="flex items-center justify-center py-8">
-            <Loader2 className="h-6 w-6 animate-spin text-mint-500 mr-2" />
+            <Loader2 className="h-6 w-6 animate-spin text-emerald-500 mr-2" />
             <span className="text-gray-500">Loading interview history...</span>
           </div>
         </CardContent>
@@ -105,14 +105,14 @@ const InterviewHistoryCard = ({
 
   if (error) {
     return (
-      <Card className="border-mint-100">
+      <Card className="border-emerald-100">
         <CardHeader className="pb-2">
           <CardTitle className="flex justify-between items-center">
             <span>Interview History</span>
             <Link href="/jobs">
               <Button
                 size="sm"
-                className="bg-mint-500 hover:bg-mint-600 text-xs"
+                className="bg-emerald-500 hover:bg-emerald-600 text-xs"
               >
                 Practice New Interview
               </Button>
@@ -142,12 +142,15 @@ const InterviewHistoryCard = ({
   }
 
   return (
-    <Card className="border-mint-100">
+    <Card className="border-emerald-100">
       <CardHeader className="pb-2">
         <CardTitle className="flex justify-between items-center">
           <span>Interview History</span>
           <Link href="/jobs">
-            <Button size="sm" className="bg-mint-500 hover:bg-mint-600 text-xs">
+            <Button
+              size="sm"
+              className="bg-emerald-500 hover:bg-emerald-600 text-xs"
+            >
               Practice New Interview
             </Button>
           </Link>
@@ -177,7 +180,7 @@ const InterviewHistoryCard = ({
                 key={interview.id}
                 className="block"
               >
-                <Card className="overflow-hidden hover:border-mint-300 transition-colors hover:shadow-md cursor-pointer">
+                <Card className="overflow-hidden hover:border-emerald-300 transition-colors hover:shadow-md cursor-pointer">
                   <div className="p-4 flex items-center justify-between">
                     <div>
                       <div className="flex items-center mb-1">
