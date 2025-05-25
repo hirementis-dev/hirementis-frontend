@@ -2,7 +2,6 @@
 import { useState, useEffect } from "react";
 import { FeedbackData } from "@/types/feedback";
 import { getInterviewById } from "@/firebase/actions";
-import { useUser } from "@/context/userContext";
 import { auth } from "@/firebase/client";
 
 const mockFeedbackData: FeedbackData = {
@@ -117,7 +116,6 @@ const mockFeedbackData: FeedbackData = {
 export const useFeedback = (id: string | undefined) => {
   const [isLoading, setIsLoading] = useState(true);
   const [feedbackData, setFeedbackData] = useState<FeedbackData | null>(null);
-  const { loggedInUser } = useUser();
 
   useEffect(() => {
     async function getFeedback() {

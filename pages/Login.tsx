@@ -22,14 +22,11 @@ import {
 } from "firebase/auth";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { db } from "@/firebase/client";
-import { useUser } from "@/context/userContext";
-
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
-  const { setLoggedInUser } = useUser();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -61,7 +58,6 @@ const Login = () => {
           // Add more fields if needed
         });
       }
-      setLoggedInUser(userSnap); // Update user context
       router.push("/");
     } catch (err: any) {
       // Handle Firebase Auth errors with user-friendly messages
