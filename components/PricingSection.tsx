@@ -17,7 +17,7 @@ const PricingSection: React.FC = () => {
       price: "$0",
       period: "forever",
       features: [
-        "5 AI mock interviews per month",
+        "3 AI mock interviews per month",
         "Basic job roles library",
         "Standard AI feedback",
         "Limited question bank",
@@ -124,16 +124,6 @@ const PricingSection: React.FC = () => {
               </CardFooter>
             </Card>
           ))}
-        </div>
-
-        <div className="text-center mt-16">
-          <p className="text-gray-600 mb-4">Need a custom solution?</p>
-          <Button
-            variant="link"
-            className="text-emerald-600 hover:text-emerald-700"
-          >
-            Contact our sales team
-          </Button>
         </div>
       </div>
     </section>
