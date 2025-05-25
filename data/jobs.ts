@@ -70,35 +70,119 @@ export const jobs: Job[] = [
     logo: 'https://via.placeholder.com/150',
     industry: 'Technology'
   },
+{
+  id: 3,
+  title: "Full Stack Developer",
+  company: "Learnyst",
+  location: "Bengaluru, India",
+  type: "Full-time",
+  level: "Mid",
+  description: "We are looking for a talented Full Stack Developer to join our innovative team. You will be responsible for developing scalable web applications using both frontend and backend technologies.",
+  requirements: [
+    "3+ years of experience with JavaScript, React.js, and Node.js",
+    "Strong understanding of HTML5, CSS3, and modern frontend libraries",
+    "Proficient with backend frameworks like Express.js or Django",
+    "Experience with RESTful APIs, GraphQL, and database systems like MongoDB or PostgreSQL",
+    "Familiarity with DevOps practices and version control (Git)"
+  ],
+  responsibilities: [
+    "Develop and maintain both frontend and backend components of web applications",
+    "Translate UI/UX designs into high-quality, responsive web interfaces",
+    "Design robust APIs and integrate with third-party services",
+    "Ensure optimal performance and scalability of web applications",
+    "Collaborate with cross-functional teams to deliver new features"
+  ],
+  salary: "₹12-18 LPA",
+  posted: "2025-05-25",
+  logo: "https://example.com/logo.png",
+  industry: "Technology"
+},
+{
+  id: 4,
+  title: "Software Engineer",
+  company: "ChaiCode",
+  location: "Jaipur, India",
+  type: "Full-time",
+  level: "Mid",
+  description: "Join our dynamic engineering team as a Software Engineer. You'll be involved in the full software development lifecycle to build high-quality software solutions.",
+  requirements: [
+    "Strong programming skills in C++, Java, or Python",
+    "Solid understanding of data structures and algorithms",
+    "Experience with version control systems like Git",
+    "Familiarity with software development methodologies (Agile/Scrum)",
+    "Ability to write clean, maintainable, and scalable code"
+  ],
+  responsibilities: [
+    "Design, develop, and test software applications",
+    "Participate in code reviews and technical discussions",
+    "Debug and resolve technical issues",
+    "Collaborate with product managers and designers",
+    "Contribute to continuous improvement of development processes"
+  ],
+  salary: "₹10-16 LPA",
+  posted: "2025-05-25",
+  logo: "https://example.com/logo.png",
+  industry: "Technology"
+},
+
+{
+  id: 5,
+  title: "JavaScript Developer",
+  company: "Teachyst",
+  location: "Patiala, India",
+  type: "Full-time",
+  level: "Mid",
+  description: "We are looking for a JavaScript Developer to build dynamic and interactive web applications. You'll be responsible for delivering high-quality code and improving user experience.",
+  requirements: [
+    "Strong proficiency in JavaScript and ES6+",
+    "Experience with React.js, Vue.js, or Angular",
+    "Understanding of HTML5, CSS3, and responsive design",
+    "Familiarity with modern development tools (Webpack, Babel, etc.)",
+    "Experience integrating APIs and managing state (Redux, Vuex)"
+  ],
+  responsibilities: [
+    "Develop and maintain frontend components using JavaScript frameworks",
+    "Convert wireframes and designs into functional applications",
+    "Optimize application for speed and scalability",
+    "Write reusable and maintainable code",
+    "Collaborate with UI/UX designers and backend developers"
+  ],
+  salary: "₹9-14 LPA",
+  posted: "2025-05-25",
+  logo: "https://example.com/logo.png",
+  industry: "Technology"
+},
+
+{
+  id: 6,
+  title: "Python Developer",
+  company: "HireMentis",
+  location: "Meerut, India",
+  type: "Full-time",
+  level: "Mid",
+  description: "We are seeking a Python Developer to build scalable backend services and automation solutions. The ideal candidate will have a strong foundation in Python and web technologies.",
+  requirements: [
+    "3+ years experience in Python development",
+    "Experience with web frameworks such as Django or Flask",
+    "Good understanding of RESTful APIs and data formats like JSON",
+    "Proficient with SQL and NoSQL databases",
+    "Familiarity with cloud platforms and deployment pipelines"
+  ],
+  responsibilities: [
+    "Develop backend logic for web and enterprise applications",
+    "Build and integrate RESTful APIs with frontend systems",
+    "Write efficient and reusable code for automation and services",
+    "Maintain code quality through testing and documentation",
+    "Collaborate with DevOps and frontend teams for integration"
+  ],
+  salary: "₹11-17 LPA",
+  posted: "2025-05-25",
+  logo: "https://example.com/logo.png",
+  industry: "Technology"
+},
+
   {
-    id: 3,
-    title: 'Product Manager',
-    company: 'NeuraWave Systems',
-    location: 'Noida, India',
-    type: 'Full-time',
-    level: 'Mid',
-    description: 'We are seeking an experienced Product Manager to join our team and help shape our product vision and roadmap.',
-    requirements: [
-      '3+ years of product management experience',
-      'Strong analytical and problem-solving skills',
-      'Excellent communication and presentation abilities',
-      'Experience with agile methodologies',
-      'Technical background preferred'
-    ],
-    responsibilities: [
-      'Define product vision, strategy, and roadmap',
-      'Gather and prioritize product requirements',
-      'Work closely with engineering, design, and marketing teams',
-      'Analyze market trends and competitor activities',
-      'Lead the product development lifecycle from conception to launch'
-    ],
-    salary: '₹30,00,000 – ₹45,00,000',
-    posted: '2025-05-05',
-    logo: 'https://via.placeholder.com/150',
-    industry: 'Technology'
-  },
-  {
-    id: 4,
+    id: 7,
     title: 'UX/UI Designer',
     company: 'KodeKshetra',
     location: 'Remote',
@@ -124,10 +208,11 @@ export const jobs: Job[] = [
     logo: 'https://via.placeholder.com/150',
     industry: 'Design'
   },
+
   {
-    id: 5,
+    id: 8,
     title: 'Data Scientist',
-    company: 'Aetherial Intelligence',
+    company: 'Super Live',
     location: 'Bengaluru, India',
     type: 'Full-time',
     level: 'Senior',
@@ -151,8 +236,9 @@ export const jobs: Job[] = [
     logo: 'https://via.placeholder.com/150',
     industry: 'Data Science'
   },
-  {
-    id: 6,
+
+ {
+    id: 9,
     title: 'DevOps Engineer',
     company: 'KodeKshetra',
     location: 'Remote',
@@ -178,8 +264,37 @@ export const jobs: Job[] = [
     logo: 'https://via.placeholder.com/150',
     industry: 'Technology'
   },
+
   {
-    id: 7,
+    id: 10,
+    title: 'Product Manager',
+    company: 'Learn Code Online',
+    location: 'Noida, India',
+    type: 'Full-time',
+    level: 'Mid',
+    description: 'We are seeking an experienced Product Manager to join our team and help shape our product vision and roadmap.',
+    requirements: [
+      '3+ years of product management experience',
+      'Strong analytical and problem-solving skills',
+      'Excellent communication and presentation abilities',
+      'Experience with agile methodologies',
+      'Technical background preferred'
+    ],
+    responsibilities: [
+      'Define product vision, strategy, and roadmap',
+      'Gather and prioritize product requirements',
+      'Work closely with engineering, design, and marketing teams',
+      'Analyze market trends and competitor activities',
+      'Lead the product development lifecycle from conception to launch'
+    ],
+    salary: '₹30,00,000 – ₹45,00,000',
+    posted: '2025-05-05',
+    logo: 'https://via.placeholder.com/150',
+    industry: 'Technology'
+  },
+
+  {
+    id: 11,
     title: 'Marketing Manager',
     company: 'Physics Wallah',
     location: 'Delhi, India',
@@ -206,10 +321,10 @@ export const jobs: Job[] = [
     industry: 'Marketing'
   },
   {
-    id: 8,
+    id: 12,
     title: 'Software QA Engineer',
-    company: 'CryptoVista Innovations',
-    location: 'Gurugram, India',
+    company: 'Learnyst',
+    location: 'Pune, India',
     type: 'Full-time',
     level: 'Entry',
     description: 'Join our QA team to ensure the quality and reliability of our software products through comprehensive testing.',
@@ -233,7 +348,7 @@ export const jobs: Job[] = [
     industry: 'Technology'
   },
   {
-    id: 9,
+    id: 13,
     title: 'Project Manager',
     company: 'Teachyst',
     location: 'Patiala, India',
@@ -260,7 +375,7 @@ export const jobs: Job[] = [
     industry: 'Project Management'
   },
   {
-    id: 10,
+    id: 14,
     title: 'Network Security Specialist',
     company: 'Learnyst',
     location: 'Bengaluru, India',
@@ -285,5 +400,34 @@ export const jobs: Job[] = [
     posted: '2025-05-06',
     logo: 'https://via.placeholder.com/150',
     industry: 'Cybersecurity'
-  }
+  },
+
+ {
+  id: 15,
+  title: "Sales Manager",
+  company: "HireMentis",
+  location: "Meerut, India",
+  type: "Full-time",
+  level: "Mid",
+  description: "We are seeking a Sales Manager to lead our business development efforts. You will be responsible for driving sales growth, building client relationships, and achieving revenue targets.",
+  requirements: [
+    "3+ years of experience in B2B/B2C sales or business development",
+    "Strong communication, negotiation, and leadership skills",
+    "Proven track record of achieving sales targets",
+    "Knowledge of CRM tools and sales analytics",
+    "Ability to work in a fast-paced and target-driven environment"
+  ],
+  responsibilities: [
+    "Identify and pursue new sales opportunities and markets",
+    "Build and maintain strong client relationships",
+    "Lead and mentor the sales team to achieve KPIs",
+    "Prepare reports and forecasts for upper management",
+    "Coordinate with marketing to implement promotional strategies"
+  ],
+  salary: "₹8-12 LPA + incentives",
+  posted: "2025-05-25",
+  logo: "https://example.com/logo.png",
+  industry: "Sales"
+}
+ 
 ];
