@@ -52,7 +52,6 @@ const InterviewHistoryCard = ({
 
         const data = snapshot.docs.map((doc) => {
           const d = doc.data();
-          console.log("Fetched interview data:", d);
           return {
             id: doc.id,
             position: d.job.title || "",
@@ -73,7 +72,7 @@ const InterviewHistoryCard = ({
 
     fetchInterviews();
   }, [auth.currentUser]);
-  console.log("Interviews fetched:", interviews);
+
   if (loading) {
     return (
       <Card className="border-emerald-100">

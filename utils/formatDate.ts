@@ -103,35 +103,3 @@ export function getRelativeTime(date: any) {
   const diffInYears = Math.floor(diffInDays / 365);
   return `${diffInYears} year${diffInYears === 1 ? "" : "s"} ago`;
 }
-
-// Example usage:
-const firebaseTimestamp = { seconds: 1748156130, nanoseconds: 410000000 };
-
-console.log("Default:", formatFirebaseTimestamp(firebaseTimestamp));
-console.log("Short:", formatFirebaseTimestamp(firebaseTimestamp, "short"));
-console.log("Long:", formatFirebaseTimestamp(firebaseTimestamp, "long"));
-console.log("ISO:", formatFirebaseTimestamp(firebaseTimestamp, "iso"));
-console.log(
-  "Relative:",
-  formatFirebaseTimestamp(firebaseTimestamp, "relative")
-);
-console.log(
-  "Date only:",
-  formatFirebaseTimestamp(firebaseTimestamp, "date-only")
-);
-console.log(
-  "Time only:",
-  formatFirebaseTimestamp(firebaseTimestamp, "time-only")
-);
-
-// For arrays of timestamps
-const timestamps = [
-  { seconds: 1748156130, nanoseconds: 410000000 },
-  { seconds: 1748152530, nanoseconds: 0 },
-  { seconds: 1748149000, nanoseconds: 500000000 },
-];
-
-console.log("\nFormatted array:");
-timestamps.forEach((timestamp, index) => {
-  console.log(`${index + 1}: ${formatFirebaseTimestamp(timestamp, "long")}`);
-});

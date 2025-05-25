@@ -9,7 +9,6 @@ export async function getInterviewById(
   success?: boolean;
   error?: string;
 }> {
-  console.log("getting interview by id", id);
   const res = await axios.post("/api/interviews", {
     id,
     userId,

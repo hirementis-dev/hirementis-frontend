@@ -55,7 +55,6 @@ const JobDetails = () => {
 
   const handleKeySubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log(process.env.NEXT_PUBLIC_SECRET_KEY)
     if (secretKey === process.env.NEXT_PUBLIC_SECRET_KEY) {
       setShowKeyPrompt(false);
       setKeyError("");
@@ -189,9 +188,13 @@ const JobDetails = () => {
           <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-xs">
             <div>
               <h3 className="text-lg font-semibold mb-4 text-center">
-              Enter Secret Key
-            </h3>
-            <p className="mb-2 text-sm text-neutral-500">We're currently in beta and access is limited. A secret key is required to start the interview. If you don't have one, please wait 1–2 weeks until we open access to all users.</p>
+                Enter Secret Key
+              </h3>
+              <p className="mb-2 text-sm text-neutral-500">
+                We're currently in beta and access is limited. A secret key is
+                required to start the interview. If you don't have one, please
+                wait 1–2 weeks until we open access to all users.
+              </p>
             </div>
             <form onSubmit={handleKeySubmit} className="space-y-3">
               <input
@@ -203,7 +206,9 @@ const JobDetails = () => {
                 autoFocus
               />
               {keyError && (
-                <div className="text-red-500 text-sm text-center">{keyError}</div>
+                <div className="text-red-500 text-sm text-center">
+                  {keyError}
+                </div>
               )}
               <div className="flex gap-2">
                 <Button
