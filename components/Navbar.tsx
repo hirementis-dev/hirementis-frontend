@@ -119,7 +119,11 @@ const Navbar: React.FC = () => {
               </>
             ) : (
               <>
-                <Button variant="outline" onClick={handleLogout}>
+                <Button
+                  variant="outline"
+                  onClick={handleLogout}
+                  className="border border-red-500 text-red-400 hover:bg-red-50 hover:text-red-300 hover:border-red-400"
+                >
                   Logout
                 </Button>
                 {/* User Profile Avatar */}
@@ -229,7 +233,7 @@ const Navbar: React.FC = () => {
                   <>
                     <Button
                       variant="outline"
-                      className="w-full justify-center border border-red-700 bg-red-500"
+                      className="w-full justify-center border-red-500 text-red-400 hover:bg-red-50 hover:text-red-300 hover:border-red-400"
                       onClick={handleLogout}
                     >
                       Logout
