@@ -8,7 +8,7 @@ export interface QuestionEvaluation {
 export interface QuestionFeedback {
   question_id: number;
   question: string;
-  candidate_answer_summary: string;
+  candidate_answer: string;
   expected_ideal_points: string[];
   evaluation: QuestionEvaluation;
   recommendation: string;
@@ -43,6 +43,7 @@ export interface FinalRecommendations {
 
 export interface FeedbackData {
   success: boolean;
+  job: any;
   feedback: {
     interview_summary: InterviewSummary;
     scorecard: Scorecard;

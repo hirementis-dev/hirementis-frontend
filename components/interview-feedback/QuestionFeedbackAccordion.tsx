@@ -60,14 +60,14 @@ const QuestionFeedbackAccordion: React.FC<QuestionFeedbackAccordionProps> = ({
                       Your Answer Summary:
                     </h4>
                     <p className="text-gray-700 bg-gray-50 p-3 rounded-md border border-gray-100">
-                      {question.candidate_answer_summary}
+                      {question.candidate_answer}
                     </p>
                     <h4 className="text-sm font-semibold text-gray-500">
                       Actual Answer:
                     </h4>
-                    <p className="text-gray-700 bg-gray-50 p-3 rounded-md border border-gray-100">
+                    <div className="text-gray-700 bg-gray-50 p-3 rounded-md border border-gray-100">
                       <Markdown>{question.actual_answer}</Markdown>
-                    </p>
+                    </div>
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

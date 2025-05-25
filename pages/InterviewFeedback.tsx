@@ -47,7 +47,7 @@ const InterviewFeedback = ({ id }: { id: string }) => {
     );
   }
 
-  const { feedback } = feedbackData;
+  const { feedback, job } = feedbackData;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-emerald-50/50 to-white">
@@ -65,7 +65,7 @@ const InterviewFeedback = ({ id }: { id: string }) => {
                 Interview Feedback
               </h1>
               <p className="text-gray-600 mt-1">
-                Backend Developer Position - Interview #{id}
+                {job?.title || "Position"} - Interview #{id}
               </p>
             </div>
             <Badge className="bg-emerald-500 hover:bg-emerald-600 text-white">
