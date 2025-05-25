@@ -110,7 +110,7 @@ STRICT JSON OUTPUT SCHEMA FORMAT:
     {
       "question_id": "number",
       "question": "string (verbatim question text)",
-      "candidate_answer_summary": "string (short recap of the candidate's response)",
+      "candidate_answer": "string (short recap of the candidate's response)",
       "actual_answer": "The actual answer for the question, that will be perfect for the question to reply with"
       "expected_ideal_points": ["string(key concepts expected in the answer)"],
       "evaluation": {
