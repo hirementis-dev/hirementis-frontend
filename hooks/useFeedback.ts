@@ -3,6 +3,8 @@ import { useState, useEffect } from "react";
 import { FeedbackData } from "@/types/feedback";
 import { getInterviewById } from "@/firebase/actions";
 import { auth } from "@/firebase/client";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 const mockFeedbackData: FeedbackData = {
   success: true,
@@ -116,6 +118,7 @@ const mockFeedbackData: FeedbackData = {
 export const useFeedback = (id: string | undefined) => {
   const [isLoading, setIsLoading] = useState(true);
   const [feedbackData, setFeedbackData] = useState<FeedbackData | null>(null);
+  const router = useRouter();
 
   useEffect(() => {
     async function getFeedback() {
@@ -126,13 +129,16 @@ export const useFeedback = (id: string | undefined) => {
           auth.currentUser?.uid || ""
         );
         if (!result.success) {
-          setFeedbackData(mockFeedbackData);
+          setFeedbackData(null);
+          router.push("/profile");
+          toast.success("You can see all your feedbacks on your profile");
           return;
         }
         setFeedbackData({
           success: true,
           feedback: result.data?.data.feedback,
         });
+        toast.success("You can see your feedbacks on your profile");
         setIsLoading(false);
       } catch (error) {
         console.error("Error fetching feedback:", error);
