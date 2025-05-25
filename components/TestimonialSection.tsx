@@ -5,25 +5,25 @@ import { Star } from "lucide-react";
 const TestimonialSection: React.FC = () => {
   const testimonials = [
     {
-      name: "Sarah Johnson",
-      position: "Product Manager at TechCorp",
+      name: "Priya Sharma",
+      position: "Product Manager at BharatCore Labs",
       image: "https://avatar.iran.liara.run/public/80",
       stars: 5,
-      text: "HireMentis helped me secure my dream job at a top tech company! The AI feedback was incredibly detailed and helped me improve my responses. I felt so much more confident during my actual interview.",
+      text: "HireMentis prepared me thoroughly for the Product Manager role at BharatCore Labs. The AI-driven feedback was so detailed that my responses became far more impactful and structured. I walked into the real interview brimming with confidence, It's really help me,Thanks to HireMentis.",
     },
     {
-      name: "Michael Chen",
-      position: "Software Engineer",
+      name: "Rohit Gupta",
+      position: "Software Engineer at InnoVista Systems",
       image: "https://avatar.iran.liara.run/public/48",
-      stars: 5,
-      text: "After practicing with HireMentis for just two weeks, I noticed a dramatic improvement in my interview skills. The technical questions were spot-on for my industry, and the feedback was invaluable.",
+      stars: 4,
+      text: "After just two weeks on HireMentis, my technical interview performance shot up. The platform’s data-structures and system-design questions were exactly what I faced in my InnoVista Systems campus drive, and the AI tips helped me articulate answers clearly. I couldn’t have been more ready",
     },
     {
-      name: "Jessica Patel",
-      position: "Marketing Specialist",
+      name: "Ananya Singh",
+      position: " Marketing Specialist at UrbanPalate Innovations",
       image: "https://avatar.iran.liara.run/public/88",
-      stars: 4,
-      text: "As someone who gets nervous during interviews, this platform was a game-changer for me. The realistic AI interviews helped me build confidence and prepare for tough questions. Highly recommend!",
+      stars: 5,
+      text: "I used to get nervous in interviews, but HireMentis’s realistic mock sessions completely changed my game. Practicing HR drills—like explaining my strengths and weaknesses—helped me express myself with clarity. It's really help me, Thanks to HireMentis.",
     },
   ];
 
