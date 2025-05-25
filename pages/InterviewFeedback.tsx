@@ -12,7 +12,7 @@ import FinalRecommendations from "@/components/interview-feedback/FinalRecommend
 import FeedbackActions from "@/components/interview-feedback/FeedbackActions";
 import { Badge } from "@/components/ui/badge";
 import { useFeedback } from "@/hooks/useFeedback";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 
 const InterviewFeedback = ({ id }: { id: string }) => {
   const router = useRouter();
@@ -21,7 +21,7 @@ const InterviewFeedback = ({ id }: { id: string }) => {
     if (!id) {
       router.push("/");
     }
-  }, [id, router]);
+  }, [id]);
 
   const { isLoading, feedbackData, getScoreValue, scoreColor } =
     useFeedback(id);
