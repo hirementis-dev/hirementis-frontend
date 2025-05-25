@@ -18,13 +18,14 @@ const HowItWorks: React.FC = () => {
 
         <div className="max-w-4xl mx-auto">
           <div className="relative aspect-video rounded-2xl overflow-hidden shadow-xl border border-gray-100 mb-16">
-            <div className="absolute inset-0 bg-gray-900/10 flex items-center justify-center cursor-pointer group">
-              <div className="w-20 h-20 rounded-full bg-white/90 flex items-center justify-center group-hover:scale-110 transition-all duration-300">
+            {/* <div className="absolute inset-0 bg-gray-900/10 flex items-center justify-center cursor-pointer group"> */}
+            {/* <div className="w-20 h-20 rounded-full bg-white/90 flex items-center justify-center group-hover:scale-110 transition-all duration-300">
                 <Play className="h-10 w-10 text-emerald-600 ml-1" />
-              </div>
-            </div>
+              </div> */}
+            {/* </div> */}
             <div className="w-full h-full bg-emerald-50 flex items-center justify-center">
-              <p className="text-gray-400">Video showcase placeholder</p>
+              {/* <p className="text-gray-400">Video showcase placeholder</p> */}
+              <video controls autoPlay muted src={"/intro.mp4"} />
             </div>
           </div>
 

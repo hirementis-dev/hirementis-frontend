@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/accordion";
 import { QuestionFeedback } from "@/types/feedback";
 import { Badge } from "@/components/ui/badge";
+import Markdown from "react-markdown";
 
 interface QuestionFeedbackAccordionProps {
   questions: QuestionFeedback[];
@@ -65,7 +66,7 @@ const QuestionFeedbackAccordion: React.FC<QuestionFeedbackAccordionProps> = ({
                       Actual Answer:
                     </h4>
                     <p className="text-gray-700 bg-gray-50 p-3 rounded-md border border-gray-100">
-                      {question.actual_answer}
+                      <Markdown>{question.actual_answer}</Markdown>
                     </p>
                   </div>
 
