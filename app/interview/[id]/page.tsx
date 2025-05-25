@@ -233,7 +233,6 @@ const Page = () => {
         });
         audioStreamRef.current = stream;
 
-        console.log("Microphone stream active", audioStreamRef.current);
         if (audioStreamRef.current.active) {
           setMicActive(true);
         }

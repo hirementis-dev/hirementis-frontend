@@ -6,7 +6,6 @@ import { useParams } from "next/navigation";
 function page() {
   const params = useParams();
   const id = params?.id;
-  // console.log("Feedback ID:", id);
   return (
     <div>
       <InterviewFeedback id={String(id)} />

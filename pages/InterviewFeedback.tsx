@@ -29,7 +29,6 @@ const InterviewFeedback = ({ id }: { id: string }) => {
   if (isLoading) {
     return <Loader loading={true} message="Loading interview feedback..." />;
   }
-  console.log("Feedback Data:", feedbackData);
   if (!feedbackData || !feedbackData.success) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-emerald-50/50 to-white">

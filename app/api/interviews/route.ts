@@ -18,7 +18,6 @@ export async function POST(req: Request) {
     );
   }
 
-  console.log("Fetching interview with ID:", id, "for user:", userId);
   try {
     const interviewRef = db
       .collection("users")
