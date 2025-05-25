@@ -80,7 +80,7 @@ const UserProfileCard = () => {
       <CardContent>
         <div className="flex flex-col items-center mb-6">
           <div className="w-24 h-24 bg-mint-100 rounded-full flex items-center justify-center text-3xl font-medium text-mint-600 mb-4">
-            {user.name?.split(' ').map(n => n[0]).join('')}
+            {user.displayName?.split(' ').map(n => n[0]).join('')}
           </div>
           <h2 className="text-xl font-semibold">{user.displayName}</h2>
           <p className="text-gray-500">{user.email}</p>
