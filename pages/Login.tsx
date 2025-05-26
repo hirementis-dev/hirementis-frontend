@@ -22,6 +22,7 @@ import {
 } from "firebase/auth";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { db } from "@/firebase/client";
+import { toast } from "sonner";
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -59,6 +60,7 @@ const Login = () => {
         });
       }
       router.push("/");
+      toast.success("Login successful!");
     } catch (err: any) {
       // Handle Firebase Auth errors with user-friendly messages
       let message = "Please Signup first.";
@@ -72,6 +74,7 @@ const Login = () => {
         message = "Too many failed attempts. Please try again later.";
       }
       setError(message);
+      toast.error(message);
     }
   };
 
@@ -101,6 +104,7 @@ const Login = () => {
       );
 
       router.push("/");
+      toast.success("Login successful!");
     } catch (err: any) {
       // Show Firestore permission errors more clearly
       if (

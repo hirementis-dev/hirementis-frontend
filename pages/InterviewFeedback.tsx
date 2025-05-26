@@ -31,7 +31,7 @@ const InterviewFeedback = ({ id }: { id: string }) => {
   }
   if (!feedbackData || !feedbackData.success) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-emerald-50/50 to-white">
+      <div className="min-h-screen flex flex-col justify-center bg-gradient-to-br from-emerald-50/50 to-white">
         <div className="container mx-auto px-4 py-24">
           <div className="text-center">
             <h1 className="text-2xl font-bold mb-4">Feedback Not Found</h1>
@@ -39,7 +39,9 @@ const InterviewFeedback = ({ id }: { id: string }) => {
               We couldn't find the interview feedback you're looking for.
             </p>
             <Link href="/jobs">
-              <Button>Back to Jobs</Button>
+              <Button className="bg-emerald-500 hover:bg-emerald-600">
+                Back to Jobs
+              </Button>
             </Link>
           </div>
         </div>
@@ -47,8 +49,8 @@ const InterviewFeedback = ({ id }: { id: string }) => {
     );
   }
 
-  const { feedback, job } = feedbackData;
-
+  const { feedback, job, createdAt } = feedbackData;
+  console.log("Feedback Data:", feedbackData);
   return (
     <div className="min-h-screen bg-gradient-to-br from-emerald-50/50 to-white">
       <div className="container mx-auto px-4 py-16 md:py-24">
@@ -95,7 +97,7 @@ const InterviewFeedback = ({ id }: { id: string }) => {
           recommendations={feedback.final_recommendations}
         />
 
-        <FeedbackActions id={String(id)} />
+        <FeedbackActions createdAt={createdAt} id={String(id)} />
       </div>
     </div>
   );

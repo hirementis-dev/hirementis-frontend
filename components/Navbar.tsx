@@ -6,6 +6,7 @@ import Link from "next/link";
 import { auth } from "@/firebase/client";
 import { onAuthStateChanged, signOut, User } from "firebase/auth";
 import { usePathname, useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 const Navbar: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -34,6 +35,8 @@ const Navbar: React.FC = () => {
 
   const handleLogout = async () => {
     await signOut(auth);
+    router.push("/");
+    toast.success("Logged out successfully");
   };
 
   if (isInterviewPage) {
@@ -132,14 +135,24 @@ const Navbar: React.FC = () => {
                   onClick={() => router.push("/profile")}
                   title="Profile"
                 >
-                  <div className="w-9 h-9 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-700 font-bold text-lg border border-emerald-300 hover:bg-emerald-200 transition">
-                    {user.displayName
-                      ? user.displayName
-                          .split(" ")
-                          .map((n) => n[0])
-                          .join("")
-                          .toUpperCase()
-                      : user.email?.[0]?.toUpperCase() || "U"}
+                  <div className="w-10 h-10 rounded-full text-xs bg-emerald-100 flex items-center justify-center text-emerald-700 font-bold border border-emerald-300 hover:bg-emerald-200 transition">
+                    {user?.photoURL ? (
+                      <div>
+                        <img
+                          src={user.photoURL}
+                          alt="User Avatar"
+                          className="w-full h-full rounded-full object-cover"
+                        />
+                      </div>
+                    ) : user.displayName ? (
+                      user.displayName
+                        .split(" ")
+                        .map((n) => n[0])
+                        .join("")
+                        .toUpperCase()
+                    ) : (
+                      user.email?.[0]?.toUpperCase() || "U"
+                    )}
                   </div>
                 </div>
               </>
@@ -247,16 +260,26 @@ const Navbar: React.FC = () => {
                       }}
                     >
                       <div
-                        className="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-700 font-bold text-lg border border-emerald-300 hover:bg-emerald-200 transition cursor-pointer"
+                        className="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-700 font-bold text-xs border border-emerald-300 hover:bg-emerald-200 transition cursor-pointer"
                         title="Profile"
                       >
-                        {user.displayName
-                          ? user.displayName
-                              .split(" ")
-                              .map((n) => n[0])
-                              .join("")
-                              .toUpperCase()
-                          : user.email?.[0]?.toUpperCase() || "U"}
+                        {user?.photoURL ? (
+                          <div>
+                            <img
+                              src={user.photoURL}
+                              alt="User Avatar"
+                              className="w-full h-full rounded-full object-cover"
+                            />
+                          </div>
+                        ) : user.displayName ? (
+                          user.displayName
+                            .split(" ")
+                            .map((n) => n[0])
+                            .join("")
+                            .toUpperCase()
+                        ) : (
+                          user.email?.[0]?.toUpperCase() || "U"
+                        )}
                       </div>
                     </div>
                   </>

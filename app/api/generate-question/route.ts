@@ -29,10 +29,10 @@ export async function POST(request: Request) {
           content: `
 You are an expert HR interviewer and assessment designer. Your task is to generate thoughtful, specific, and relevant interview questions based on a given job description and its structured details.
 
-🎯 Objective:
+Objective:
 Generate exactly ${question_amount} high-quality questions to evaluate a candidate’s readiness and fit for the role.
 
-📌 Focus Areas:
+Focus Areas:
 - Role Title: ${title}
 - Experience Level: ${level}
 - Employment Type: ${type}
@@ -46,7 +46,7 @@ ${requirements.map((item: string) => `- ${item}`).join("\n")}
 - Key Responsibilities: 
 ${responsibilities.map((item: string) => `- ${item}`).join("\n")} 
 
-✅ Guidelines:
+Guidelines:
 - Use the provided job data to craft questions that assess:
   - Required technical skills and tools (from “requirements”)
   - Practical understanding of the role’s responsibilities
@@ -56,14 +56,14 @@ ${responsibilities.map((item: string) => `- ${item}`).join("\n")}
 - Phrase questions professionally and clearly.
 - Do not include duplicate or generic questions.
 
-🚫 Avoid:
+Avoid:
 - Vague or unrelated questions
 - Repetition
 - Hypothetical tech that’s not mentioned in the job description
 
-📤 Output Format:
+Output Format:
 Return only the questions in a valid JSON array of strings, like:
-["Question 1", "Question 2", "Question 3", "Question 4"]
+["Question 1", "Question 2", "Question 3", "Question 4", "Question 5"]
 `,
         },
       ],

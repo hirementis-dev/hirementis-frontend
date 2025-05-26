@@ -9,8 +9,9 @@ import {
 } from "@/components/ui/card";
 import { auth, db } from "@/firebase/client";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { User } from "firebase/auth";
 
-interface UserData {
+interface UserData extends User {
   displayName: string;
   email: string;
   bio: string;
@@ -37,6 +38,7 @@ const UserProfileCard = () => {
           const data = userSnap.data() as UserData;
           setUser({
             ...data,
+            photoURL: data.photoURL || currentUser.photoURL || "",
             bio: typeof data.bio === "string" ? data.bio : "",
           });
           setBio(typeof data.bio === "string" ? data.bio : "");
@@ -78,7 +80,7 @@ const UserProfileCard = () => {
   }
 
   return (
-    <Card className="lg:col-span-1 border-mint-100">
+    <Card className="lg:col-span-1 border-emerald-100">
       <CardHeader className="pb-2">
         <CardTitle>Profile Information</CardTitle>
         <CardDescription>Your personal details</CardDescription>
@@ -86,10 +88,20 @@ const UserProfileCard = () => {
       <CardContent>
         <div className="flex flex-col items-center mb-6">
           <div className="w-24 h-24 bg-emerald-100 rounded-full flex items-center justify-center text-3xl font-medium text-mint-600 mb-4">
-            {user.displayName
-              ?.split(" ")
-              .map((n) => n[0])
-              .join("")}
+            {user?.photoURL ? (
+              <div>
+                <img
+                  src={user.photoURL}
+                  alt="User Avatar"
+                  className="w-full h-full rounded-full object-cover"
+                />
+              </div>
+            ) : (
+              user.displayName
+                ?.split(" ")
+                .map((n) => n[0])
+                .join("")
+            )}
           </div>
           <h2 className="text-xl font-semibold">{user.displayName}</h2>
           <p className="text-gray-500">{user.email}</p>

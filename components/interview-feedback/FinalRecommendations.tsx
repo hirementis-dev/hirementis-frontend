@@ -21,8 +21,8 @@ const FinalRecommendations: React.FC<FinalRecommendationsProps> = ({
             <h3 className="font-semibold text-lg mb-3">Practice Focus Areas</h3>
             <ul className="space-y-2">
               {recommendations.practice_focus_areas.map((area, i) => (
-                <li key={i} className="flex items-start gap-3">
-                  <div className="h-6 w-6 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center flex-shrink-0 mt-0.5">
+                <li key={i} className="flex items-center gap-3">
+                  <div className="h-8 w-8 text-sm font-semibold rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center flex-shrink-0 mt-0.5">
                     {i + 1}
                   </div>
                   <span className="text-gray-700">{area}</span>

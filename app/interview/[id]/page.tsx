@@ -3,7 +3,7 @@ import { Loader } from "@/components/Loader";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { jobs } from "@/data/jobs";
-import { Camera, CodeSquare, Mic, MicOff, Video, X } from "lucide-react";
+import { Camera, CameraOff, CircleUserRound, Mic, MicOff } from "lucide-react";
 import { redirect } from "next/navigation";
 import { useParams } from "next/navigation";
 import React, { useEffect, useRef, useState } from "react";
@@ -14,10 +14,11 @@ import Vapi from "@vapi-ai/web";
 const VAPI_PUBLIC_KEY = process.env.NEXT_PUBLIC_VAPI_PUBLIC_KEY;
 const vapi = new Vapi(VAPI_PUBLIC_KEY!);
 import { interviewer } from "@/utils/vapi/prompt";
-import { AssistantOverrides } from "@vapi-ai/web/dist/api";
 import { toast } from "sonner";
 import { nanoid } from "nanoid";
 import { auth } from "@/firebase/client";
+import { onAuthStateChanged, User } from "firebase/auth";
+import Image from "next/image";
 
 interface LoaderState {
   state: boolean;
@@ -52,6 +53,7 @@ const Page = () => {
   const videoStreamRef = useRef<MediaStream | null>(null);
   const audioStreamRef = useRef<MediaStream | null>(null);
   const [interviewId, setInterviewId] = useState<string | null>();
+  const [user, setUser] = useState<User | null>(null);
 
   const params = useParams();
   const id = params?.id;
@@ -159,7 +161,14 @@ const Page = () => {
       ...interviewer,
       variableValues: {
         questions: interviewQs,
-        job_desc: job.description,
+        job_desc: job.description || "",
+        job_title: job.title || "",
+        job_company: job.company || "",
+        job_location: job.location || "",
+        job_type: job.type || "",
+        job_level: job.level || "",
+        job_industry: job.industry || "",
+        userName: user?.displayName || "",
       },
     });
     setLoading({ state: false });
@@ -217,6 +226,17 @@ const Page = () => {
       }
     };
   }, [cameraActive]);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
+      if (firebaseUser && firebaseUser.emailVerified) {
+        setUser(firebaseUser);
+      } else {
+        setUser(null);
+      }
+    });
+    return () => unsubscribe();
+  }, []);
 
   useEffect(() => {
     const setupMic = async () => {
@@ -293,7 +313,7 @@ const Page = () => {
                       {isSpeaking && (
                         <div className="absolute inset-0 rounded-full bg-emerald-400 opacity-75 animate-ping"></div>
                       )}
-                      <div className="relative w-28 h-28 rounded-full bg-emerald-50 flex items-center justify-center text-4xl border border-emerald-200 text-emerald-600 shadow-inner">
+                      <div className="relative w-24 h-24 font-semibold rounded-full bg-emerald-50 flex items-center justify-center text-4xl border border-emerald-200 text-emerald-600 shadow-inner">
                         AI
                       </div>
                     </div>
@@ -311,20 +331,24 @@ const Page = () => {
                     ) : (
                       <div>
                         <h3 className="text-xl mb-4 text-center font-medium">
-                          Candidate
+                          You
                         </h3>
-                        <div className="w-28 h-28 rounded-full bg-gray-100 flex items-center justify-center border border-gray-200 shadow-inner">
-                          <svg
-                            width="64"
-                            height="64"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="1.5"
-                          >
-                            <circle cx="12" cy="8" r="5" />
-                            <path d="M20 21a8 8 0 1 0-16 0" />
-                          </svg>
+                        <div className="w-24 h-24 rounded-full bg-gray-100 flex items-center justify-center border border-gray-200 shadow-inner">
+                          {user?.photoURL ? (
+                            <div className="w-full h-full rounded-full overflow-hidden">
+                              <Image
+                                src={user.photoURL}
+                                alt={user.displayName || "User Avatar"}
+                                width={100}
+                                height={100}
+                              />
+                            </div>
+                          ) : (
+                            <CircleUserRound
+                              size={"54"}
+                              className="text-zinc-500"
+                            />
+                          )}
                         </div>
                       </div>
                     )}
@@ -334,45 +358,27 @@ const Page = () => {
 
               <CardFooter className="border-t bg-gray-50 p-4 flex justify-center gap-4">
                 <Button
-                  variant="outline"
-                  size="lg"
-                  className={`${
+                  className={`rounded-full ${
                     micActive
-                      ? "bg-emerald-100 border-emerald-400 text-emerald-700"
-                      : "border-gray-300 bg-emerald-50"
-                  } hover:bg-emerald-100 transition-all`}
+                      ? "bg-emerald-100 hover:bg-emerald-200 text-neutral-500-400"
+                      : "bg-red-500 hover:bg-red-600 text-white"
+                  }`}
+                  size="lg"
                   onClick={toggleMic}
                 >
-                  {!micActive ? (
-                    <MicOff
-                      className={`h-6 w-6 ${
-                        micActive ? "text-emerald-600" : ""
-                      }`}
-                    />
-                  ) : (
-                    <Mic
-                      className={`h-6 w-6 ${
-                        micActive ? "text-emerald-600" : ""
-                      }`}
-                    />
-                  )}
+                  {micActive ? <Mic /> : <MicOff />}
                 </Button>
 
                 <Button
-                  variant="outline"
-                  size="lg"
-                  className={`${
+                  className={`rounded-full ${
                     cameraActive
-                      ? "bg-emerald-50 border-emerald-400 text-emerald-700"
-                      : "border-gray-300"
-                  } hover:bg-emerald-100 transition-all`}
+                      ? "bg-emerald-100 hover:bg-emerald-200 text-neutral-500-400"
+                      : "bg-red-500 hover:bg-red-600 text-white"
+                  }`}
+                  size="lg"
                   onClick={toggleCamera}
                 >
-                  <Camera
-                    className={`h-6 w-6 ${
-                      cameraActive ? "text-emerald-600" : ""
-                    }`}
-                  />
+                  {!cameraActive ? <CameraOff /> : <Camera />}
                 </Button>
 
                 {isInterviewStarted ? (
@@ -380,9 +386,8 @@ const Page = () => {
                     variant="destructive"
                     size="lg"
                     onClick={endInterview}
-                    className="px-6"
+                    className="px-6 text-slate-200 hover:bg-red-500"
                   >
-                    <X className="mr-1" />
                     End Interview
                   </Button>
                 ) : (

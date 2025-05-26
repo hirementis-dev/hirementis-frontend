@@ -1,12 +1,20 @@
 export function formatFirebaseTimestamp(timestamp: any, format = "default") {
-  // Convert Firebase timestamp to JavaScript Date
-  const milliseconds =
-    timestamp.seconds * 1000 + Math.floor(timestamp.nanoseconds / 1000000);
+  if (!timestamp || typeof timestamp !== "object") {
+    return "Invalid timestamp";
+  }
+
+  const seconds = timestamp.seconds || timestamp._seconds || 0;
+  const nanoseconds = timestamp.nanoseconds || timestamp.nanoseconds || 0;
+
+  if (typeof seconds !== "number") {
+    return "Invalid timestamp format";
+  }
+
+  const milliseconds = seconds * 1000 + Math.floor(nanoseconds / 1000000);
   const date = new Date(milliseconds);
 
   switch (format) {
     case "short":
-      // MM/DD/YYYY HH:MM AM/PM
       return date.toLocaleString("en-US", {
         month: "2-digit",
         day: "2-digit",
@@ -17,7 +25,6 @@ export function formatFirebaseTimestamp(timestamp: any, format = "default") {
       });
 
     case "long":
-      // January 25, 2025 at 10:35:30 AM
       return date.toLocaleString("en-US", {
         month: "long",
         day: "numeric",
@@ -29,15 +36,12 @@ export function formatFirebaseTimestamp(timestamp: any, format = "default") {
       });
 
     case "iso":
-      // 2025-01-25T10:35:30.410Z
       return date.toISOString();
 
     case "relative":
-      // "2 hours ago", "yesterday", etc.
       return getRelativeTime(date);
 
     case "date-only":
-      // January 25, 2025
       return date.toLocaleDateString("en-US", {
         month: "long",
         day: "numeric",
@@ -45,7 +49,6 @@ export function formatFirebaseTimestamp(timestamp: any, format = "default") {
       });
 
     case "time-only":
-      // 10:35:30 AM
       return date.toLocaleTimeString("en-US", {
         hour: "numeric",
         minute: "2-digit",
@@ -54,7 +57,6 @@ export function formatFirebaseTimestamp(timestamp: any, format = "default") {
       });
 
     default:
-      // Jan 25, 2025, 10:35:30 AM
       return date.toLocaleString("en-US", {
         month: "short",
         day: "numeric",

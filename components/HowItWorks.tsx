@@ -25,7 +25,7 @@ const HowItWorks: React.FC = () => {
             {/* </div> */}
             <div className="w-full h-full bg-emerald-50 flex items-center justify-center">
               {/* <p className="text-gray-400">Video showcase placeholder</p> */}
-              <video controls autoPlay muted src={"/intro.mp4"} />
+              <video controls autoPlay loop muted src={"/intro.mp4"} />
             </div>
           </div>
 

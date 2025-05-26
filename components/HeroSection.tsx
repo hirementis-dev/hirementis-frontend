@@ -53,7 +53,7 @@ const HeroSection: React.FC = () => {
               </div>
             </div>
             <p className="text-sm text-gray-500">
-              Trusted by <span className="font-semibold">10+</span> job seekers
+              Trusted by <span className="font-semibold">100+</span> job seekers
             </p>
           </div>
         </div>
