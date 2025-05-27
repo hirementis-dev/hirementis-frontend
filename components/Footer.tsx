@@ -86,7 +86,7 @@ const Footer: React.FC = () => {
                 </a>
               </li>
               <li>
-                <a href="#" className="text-gray-600 hover:text-emerald-600">
+                <a href="/enterprise" className="text-gray-600 hover:text-emerald-600">
                   Enterprise
                 </a>
               </li>
@@ -102,12 +102,12 @@ const Footer: React.FC = () => {
                 </a>
               </li>
               <li>
-                <a href="#" className="text-gray-600 hover:text-emerald-600">
+                <a href="/documentation" className="text-gray-600 hover:text-emerald-600">
                   Documentation
                 </a>
               </li>
               <li>
-                <a href="#" className="text-gray-600 hover:text-emerald-600">
+                <a href="mailto:suprabhat.work@gmail.com" className="text-gray-600 hover:text-emerald-600">
                   Contact Us
                 </a>
               </li>
