@@ -73,10 +73,6 @@ const Page = () => {
       setMicActive(true);
     };
 
-    const interviewQs = interviewQuestions
-      .map((item: string) => `- ${item}`)
-      .join("\n");
-
     const onCallEnd = () => {
       setCallStatus(CallStatus.FINISHED);
     };

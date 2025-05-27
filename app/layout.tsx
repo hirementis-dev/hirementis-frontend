@@ -44,7 +44,7 @@ export default function RootLayout({
         <Navbar />
         <div>{children}</div>
 
-        <Toaster richColors closeButton position="top-center" />
+        <Toaster richColors closeButton position="top-left" />
       </body>
     </html>
   );

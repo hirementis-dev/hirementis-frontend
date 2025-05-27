@@ -4,7 +4,7 @@ import { Play } from "lucide-react";
 
 const HowItWorks: React.FC = () => {
   return (
-    <section id="how-it-works" className="section-padding bg-white">
+    <section id="how-it-works" className="pb-16 bg-white">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
@@ -33,7 +33,7 @@ const HowItWorks: React.FC = () => {
             <Card className="border-emerald-100">
               <CardContent className="pt-6">
                 <div className="w-12 h-12 rounded-full bg-emerald-100 flex items-center justify-center mb-4">
-                  <span className="text-mint-600 font-bold text-xl">1</span>
+                  <span className="text-emerald-600 font-bold text-xl">1</span>
                 </div>
                 <h3 className="text-xl font-bold mb-2">Select Your Job Role</h3>
                 <p className="text-gray-600">

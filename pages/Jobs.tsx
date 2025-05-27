@@ -6,16 +6,15 @@ import { jobs } from "@/data/jobs";
 const Jobs = () => {
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Note after navbar */}
       <div className="container mx-auto px-4 py-24">
-        <div className="w-full bg-green-50 border-b border-green-200 py-3">
-        <div className="container mx-auto px-4">
-          <p className="text-black-800 text-sm font-medium">
-            Note :- These are the dummy jobs created by Team HireMentis for Your
-            Practice.
-          </p>
+        <div className="w-full bg-green-50 border-b border-green-200 text-neutral-500 py-3 mb-4">
+          <div className="container mx-auto px-4">
+            <p className="text-black-800 text-sm font-medium">
+              Note :- These are the dummy jobs created by Team HireMentis for
+              Your Practice.
+            </p>
+          </div>
         </div>
-      </div>
         <div className="mb-10">
           <h1 className="text-3xl font-bold mb-2">Available Jobs</h1>
           <p className="text-gray-600">
@@ -26,7 +25,7 @@ const Jobs = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {jobs.map((job) => (
             <Link key={job.id} href={`/jobs/${job.id}`}>
-              <Card className="h-full hover:shadow-lg transition-shadow border border-gray-100 hover:border-gray-200 bg-white">
+              <Card className="h-full hover:shadow-lg shadow-emerald-50 transition-shadow border border-gray-100 hover:border-gray-200 bg-white">
                 <CardContent className="p-6">
                   <div className="mb-4 flex items-start justify-between">
                     <div>

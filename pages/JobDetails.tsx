@@ -6,6 +6,7 @@ import { jobs } from "@/data/jobs";
 import { redirect, useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { auth } from "@/firebase/client";
+import { toast } from "sonner";
 
 const JobDetails = () => {
   const params = useParams();
@@ -13,7 +14,6 @@ const JobDetails = () => {
 
   const [showKeyPrompt, setShowKeyPrompt] = useState(false);
   const [secretKey, setSecretKey] = useState("");
-  const [keyError, setKeyError] = useState("");
   const router = useRouter();
 
   useEffect(() => {
@@ -48,7 +48,6 @@ const JobDetails = () => {
       router.push("/login");
     } else {
       setShowKeyPrompt(true);
-      setKeyError("");
       setSecretKey("");
     }
   };
@@ -57,10 +56,9 @@ const JobDetails = () => {
     e.preventDefault();
     if (secretKey === process.env.NEXT_PUBLIC_SECRET_KEY) {
       setShowKeyPrompt(false);
-      setKeyError("");
       router.push(`/interview/${job.id}`);
     } else {
-      setKeyError("Invalid key. Please try again.");
+      toast.error("Invalid secret key.");
     }
   };
 
@@ -205,11 +203,7 @@ const JobDetails = () => {
                 onChange={(e) => setSecretKey(e.target.value)}
                 autoFocus
               />
-              {keyError && (
-                <div className="text-red-500 text-sm text-center">
-                  {keyError}
-                </div>
-              )}
+
               <div className="flex gap-2">
                 <Button
                   type="submit"

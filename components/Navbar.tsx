@@ -16,10 +16,7 @@ const Navbar: React.FC = () => {
   const router = useRouter();
 
   useEffect(() => {
-    // Only listen for auth state changes after the component mounts
-    // and do not update user state on sign up, only on successful login/provider login
     const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
-      // Only set user if the user is actually logged in (not just registered)
       if (firebaseUser && firebaseUser.emailVerified) {
         setUser(firebaseUser);
       } else {
@@ -47,15 +44,14 @@ const Navbar: React.FC = () => {
     <nav className="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-sm border-b border-gray-100">
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
-          {/* Logo */}
-          <div className="flex items-center">
+          <div className="flex items-center select-none">
             <Link
               onClick={handleNavlinkClick}
               href="/"
               className="flex items-center gap-2"
             >
-              <div className="w-8 h-8 bg-gradient-to-r from-emerald-400 to-emerald-600 rounded-lg flex items-center justify-center text-white font-bold">
-                H
+              <div className="w-8 h-8 bg-gradient-to-r from-emerald-400 to-emerald-600 rounded-lg flex items-center justify-center text-white font-extrabold ">
+                <span className="inline-block">H</span>
               </div>
               <span className="text-lg font-bold">HireMentis</span>
             </Link>
@@ -135,7 +131,7 @@ const Navbar: React.FC = () => {
                   onClick={() => router.push("/profile")}
                   title="Profile"
                 >
-                  <div className="w-10 h-10 rounded-full text-xs bg-emerald-100 flex items-center justify-center text-emerald-700 font-bold border border-emerald-300 hover:bg-emerald-200 transition">
+                  <div className="w-10 h-10 select-none rounded-full text-xs bg-emerald-100 flex items-center justify-center text-emerald-700 font-bold border border-emerald-300 hover:bg-emerald-200 transition">
                     {user?.photoURL ? (
                       <div>
                         <img
@@ -260,7 +256,7 @@ const Navbar: React.FC = () => {
                       }}
                     >
                       <div
-                        className="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-700 font-bold text-xs border border-emerald-300 hover:bg-emerald-200 transition cursor-pointer"
+                        className="w-10 h-10 select-none rounded-full bg-emerald-100 flex items-center justify-center text-emerald-700 font-bold text-xs border border-emerald-300 hover:bg-emerald-200 transition cursor-pointer"
                         title="Profile"
                       >
                         {user?.photoURL ? (
