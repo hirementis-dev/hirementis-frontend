@@ -7,6 +7,7 @@ import { auth } from "@/firebase/client";
 import { onAuthStateChanged, signOut, User } from "firebase/auth";
 import { usePathname, useRouter } from "next/navigation";
 import { toast } from "sonner";
+import Image from "next/image";
 
 const Navbar: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -24,7 +25,7 @@ const Navbar: React.FC = () => {
       }
     });
     return () => unsubscribe();
-  }, []);
+  }, [user]);
 
   const handleNavlinkClick = () => {
     setIsMenuOpen(false);
@@ -262,8 +263,7 @@ const Navbar: React.FC = () => {
                         {user?.photoURL ? (
                           <div>
                             <img
-                              src={user.photoURL}
-                              alt="User Avatar"
+                              src={user?.photoURL || ""}
                               className="w-full h-full rounded-full object-cover"
                             />
                           </div>

@@ -282,7 +282,6 @@ const Page = () => {
 
     const lastMessage = messages[messages.length - 1];
     if (lastMessage.role === "assistant") {
-      console.log("Assistant message received:", lastMessage);
       if (
         lastMessage.content.includes("I'll go ahead and end the interview now.")
       ) {

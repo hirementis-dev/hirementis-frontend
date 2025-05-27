@@ -134,7 +134,7 @@ export const useFeedback = (id: string | undefined) => {
           toast.success("You can see all your feedbacks on your profile");
           return;
         }
-        console.log("result", result.data);
+
         setFeedbackData({
           success: true,
           feedback: result.data?.data.feedback,

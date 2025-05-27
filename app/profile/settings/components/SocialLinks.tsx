@@ -29,7 +29,7 @@ interface SocialLinksProps {
     twitter: string;
     linkedin: string;
     instagram: string;
-    GitHub: string;
+    github: string;
   };
   onSocialLinksChange: (links: any) => void;
 }
@@ -73,7 +73,7 @@ const SocialLinks = ({
       icon: Instagram,
       placeholder: "https://instagram.com/username",
       color: "text-pink-500",
-    }
+    },
   ];
 
   return (

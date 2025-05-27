@@ -11,7 +11,7 @@ import { auth, db } from "@/firebase/client";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { User } from "firebase/auth";
 
-interface UserData {
+interface UserData extends User {
   displayName: string;
   email: string;
   bio: string;

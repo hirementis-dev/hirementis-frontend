@@ -50,7 +50,6 @@ const InterviewFeedback = ({ id }: { id: string }) => {
   }
 
   const { feedback, job, createdAt } = feedbackData;
-  console.log("Feedback Data:", feedbackData);
   return (
     <div className="min-h-screen bg-gradient-to-br from-emerald-50/50 to-white">
       <div className="container mx-auto px-4 py-16 md:py-24">

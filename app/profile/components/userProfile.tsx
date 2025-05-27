@@ -107,9 +107,7 @@ const ProfileView = () => {
                 <div>
                   <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
                     {(profileData.firstName || "") +
-                      (profileData.lastName
-                        ? " " + profileData.lastName
-                        : "")}
+                      (profileData.lastName ? " " + profileData.lastName : "")}
                   </h1>
                   {profileData.pronouns && (
                     <p className="text-gray-600 dark:text-gray-400 font-medium">
@@ -230,7 +228,11 @@ const ProfileView = () => {
                 asChild
               >
                 <a
-                  href={typeof profileData.resume === "string" ? profileData.resume : "#"}
+                  href={
+                    typeof profileData.resume === "string"
+                      ? profileData.resume
+                      : "#"
+                  }
                   target="_blank"
                   rel="noopener noreferrer"
                 >

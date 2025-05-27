@@ -39,6 +39,7 @@ const ProfileBuilder = () => {
       linkedin: "",
       instagram: "",
       figma: "",
+      github: "",
     },
   });
 
