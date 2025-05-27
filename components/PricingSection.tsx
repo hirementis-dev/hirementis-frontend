@@ -17,7 +17,7 @@ const PricingSection: React.FC = () => {
       price: "$0",
       period: "forever",
       features: [
-        "3 AI mock interviews per month",
+        "1 AI mock interviews per month",
         "Basic job roles library",
         "Standard AI feedback",
         "Limited question bank",
@@ -25,41 +25,63 @@ const PricingSection: React.FC = () => {
       buttonText: "Start Free",
       buttonVariant: "default" as const,
       popular: true,
+      isContactSales: false,
     },
-    // {
-    //   name: "Pro",
-    //   description: "For serious job seekers",
-    //   price: "$19",
-    //   period: "per month",
-    //   features: [
-    //     "Unlimited AI mock interviews",
-    //     "Full job roles library",
-    //     "Advanced AI feedback",
-    //     "Complete question bank",
-    //     "Interview recordings",
-    //     "Progress tracking",
-    //   ],
-    //   buttonText: "Get Pro",
-    //   buttonVariant: "default" as const,
-    //   popular: true,
-    // },
-    // {
-    //   name: "Teams",
-    //   description: "For career coaches & organizations",
-    //   price: "$49",
-    //   period: "per user/month",
-    //   features: [
-    //     "Everything in Pro",
-    //     "Team management dashboard",
-    //     "Custom interview scenarios",
-    //     "Branded experience",
-    //     "Analytics & reporting",
-    //     "Dedicated support",
-    //   ],
-    //   buttonText: "Contact Sales",
-    //   buttonVariant: "outline" as const,
-    //   popular: false,
-    // },
+    {
+      name: "Student",
+      description: "For serious job seekers",
+      price: "$7",
+      period: "per month",
+      features: [
+        "Apply to actual Jobs",
+        "5 AI mock interviews per month",
+        "Full job roles library",
+        "Advanced AI feedback",
+        "Complete question bank",
+        "Progress tracking",
+      ],
+      buttonText: "Get Pro",
+      buttonVariant: "default" as const,
+      popular: true,
+      isContactSales: false,
+    },
+    {
+      name: "Pro",
+      description: "For serious job seekers",
+      price: "$13",
+      period: "per month",
+      features: [
+        "Apply to actual Jobs",
+        "10 AI mock interviews per month",
+        "Full job roles library",
+        "Advanced AI feedback",
+        "Complete question bank",
+        "Progress tracking",
+      ],
+      buttonText: "Get Pro",
+      buttonVariant: "default" as const,
+      popular: true,
+      isContactSales: false,
+    },
+    {
+      name: "Enterprise",
+      description: "For large organizations",
+      price: "$99",
+      period: "per month",
+      features: [
+        "100 Candidate interview",
+        "Advanced analytics & insights",
+        "Custom integrations",
+        "White-label solution",
+        "Priority support",
+        "Training & onboarding",
+        "SLA guarantees",
+      ],
+      buttonText: "Contact Sales",
+      buttonVariant: "secondary" as const,
+      popular: true,
+      isContactSales: true,
+    },
   ];
 
   return (
@@ -75,26 +97,22 @@ const PricingSection: React.FC = () => {
           </p>
         </div>
 
-        <div className="max-w-sm mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-7xl mx-auto ">
           {pricingPlans.map((plan, index) => (
             <Card
               key={index}
               className={`border ${
                 plan.popular
-                  ? "border-emerald-400 shadow-lg"
+                  ? "border-emerald-400 shadow-lg scale-105"
                   : "border-gray-200"
-              } rounded-xl relative`}
+              } rounded-xl relative flex flex-col hover:scale-[1.1] transition`}
             >
-              {plan.popular &&
-                // <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-emerald-500 text-white px-4 py-1 rounded-full text-sm font-medium">
-                //   Most Popular
-                // </div>
-                null}
+
               <CardHeader className="pt-8 pb-4">
                 <h3 className="text-2xl font-bold">{plan.name}</h3>
                 <p className="text-gray-600">{plan.description}</p>
               </CardHeader>
-              <CardContent className="pb-4">
+              <CardContent className="pb-4 flex-1">
                 <div className="mb-6">
                   <span className="text-4xl font-bold">{plan.price}</span>
                   <span className="text-gray-500 ml-2">{plan.period}</span>
@@ -108,19 +126,30 @@ const PricingSection: React.FC = () => {
                   ))}
                 </ul>
               </CardContent>
-              <CardFooter>
-                <Link href="/jobs">
-                  <Button
-                    variant={plan.buttonVariant}
-                    className={`w-full  ${
-                      plan.popular
-                        ? "bg-emerald-500 hover:bg-emerald-600 text-white"
-                        : ""
-                    }`}
-                  >
-                    {plan.buttonText}
-                  </Button>
-                </Link>
+              <CardFooter className="mt-auto">
+                {plan.isContactSales ? (
+                  <a href="mailto:suprabhat.work@gmail.com" className="w-full">
+                    <Button
+                      variant={plan.buttonVariant}
+                      className="w-full bg-emerald-500 hover:bg-emerald-600 text-white"
+                    >
+                      {plan.buttonText}
+                    </Button>
+                  </a>
+                ) : (
+                  <Link href="/jobs" className="w-full">
+                    <Button
+                      variant={plan.buttonVariant}
+                      className={`w-full ${
+                        plan.popular
+                          ? "bg-emerald-500 hover:bg-emerald-600 text-white"
+                          : ""
+                      }`}
+                    >
+                      {plan.buttonText}
+                    </Button>
+                  </Link>
+                )}
               </CardFooter>
             </Card>
           ))}
