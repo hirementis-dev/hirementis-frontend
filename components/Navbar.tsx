@@ -35,7 +35,7 @@ const Navbar: React.FC = () => {
     router.push("/");
     toast.success("Logged out successfully");
   };
-  console.log("User:", user);
+
   if (isInterviewPage) {
     return null;
   }

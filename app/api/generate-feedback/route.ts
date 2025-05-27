@@ -23,10 +23,10 @@ export async function POST(request: Request) {
   const { transcript, job, userId, interviewId, interviewQs } =
     await request.json();
 
-  if (!transcript || !job) {
+  if (!transcript || !job || !interviewId) {
     return Response.json({
       success: false,
-      message: "interview transcript and job data is required",
+      message: "interview transcript, job data and interview id is required",
     });
   }
 

@@ -19,6 +19,7 @@ import { nanoid } from "nanoid";
 import { auth } from "@/firebase/client";
 import { onAuthStateChanged, User } from "firebase/auth";
 import Image from "next/image";
+import ConfirmationDialog from "./components/ConfiramtionDialog";
 
 interface LoaderState {
   state: boolean;
@@ -54,6 +55,8 @@ const Page = () => {
   const audioStreamRef = useRef<MediaStream | null>(null);
   const [interviewId, setInterviewId] = useState<string | null>();
   const [user, setUser] = useState<User | null>(null);
+  const [showConfirmationDialog, setShowConfirmationDialog] =
+    useState<boolean>(false);
 
   const params = useParams();
   const id = params?.id;
@@ -274,10 +277,50 @@ const Page = () => {
     setCameraActive(!cameraActive);
   };
 
+  useEffect(() => {
+    if (messages.length === 0) return;
+
+    const lastMessage = messages[messages.length - 1];
+    if (lastMessage.role === "assistant") {
+      console.log("Assistant message received:", lastMessage);
+      if (
+        lastMessage.content.includes("I'll go ahead and end the interview now.")
+      ) {
+        setShowConfirmationDialog(true);
+      }
+    }
+  }, [messages]);
+
+  async function handleEndInterview() {
+    setShowConfirmationDialog(false);
+    await vapi.send({
+      type: "add-message",
+      message: {
+        role: "system",
+        content: "The interview has ended.",
+      },
+    });
+    endInterview();
+    console.log("Ending interview...");
+  }
+
+  function handleCancel() {
+    setShowConfirmationDialog(false);
+    vapi.say("Let's continue the interview.", false);
+  }
+
   return loading.state ? (
     <Loader loading={loading.state} message={loading.message} />
   ) : (
     <div className="min-h-screen bg-gradient-to-br from-emerald-50/50 to-white">
+      <div>
+        <ConfirmationDialog
+          open={showConfirmationDialog}
+          message="Are you sure you want to end the interview?"
+          onSubmit={handleEndInterview}
+          onCancel={handleCancel}
+        />
+      </div>
       <div className="container mx-auto px-4 py-16 md:py-24">
         <div className="mb-6 flex items-center justify-between">
           <div>
