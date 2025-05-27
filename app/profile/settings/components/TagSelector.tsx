@@ -12,28 +12,39 @@ interface TagSelectorProps {
 const TagSelector = ({ selectedTags, onTagsChange }: TagSelectorProps) => {
   const [inputValue, setInputValue] = useState("");
 
-  const suggestedTags = [
-    "JavaScript",
-    "React",
-    "Python",
-    "TypeScript",
-    "Node.js",
-    "SQL",
-    "AWS",
-    "Docker",
-    "Git",
-    "MongoDB",
-    "GraphQL",
-    "Vue.js",
-    "Product Management",
-    "UX Design",
-    "Data Analysis",
-    "Machine Learning",
-    "Project Management",
-    "Agile",
-    "Scrum",
-    "Leadership",
-  ];
+const suggestedTags = [ 
+  "React",
+  "HTML",
+  "Next.js",
+  "Node.js",
+  "Python",
+  "C++",
+  "Docker",
+  "Kubernetes",
+  "Git",
+  "GitHub",
+  "Linux",
+  "MySQL",
+  "MongoDB",
+  "TypeScript",
+  "Express.js",
+  "Java",
+  "Spring Boot",
+  "Flutter",
+  "TensorFlow",
+  "Firebase",
+  "Angular",
+  "Vue.js",
+  "Rust",
+  "PostgreSQL",
+  "Django",
+  "Laravel",
+  "Redis",
+  "GraphQL",
+  "LLMs",
+  "Swift",
+];
+
 
   const addTag = (tag: string) => {
     const trimmedTag = tag.trim();

@@ -96,6 +96,7 @@ const Signup = () => {
           email: user.email,
           displayName: user.displayName || "",
           provider: providerType,
+          profilePicture: user.photoURL || "",
         },
         { merge: true }
       );

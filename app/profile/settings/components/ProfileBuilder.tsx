@@ -18,6 +18,9 @@ import TagSelector from "./TagSelector";
 import ResumeUpload from "./ResumeUpload";
 import SocialLinks from "./SocialLinks";
 import Link from "next/link";
+import { auth, db } from "@/firebase/client";
+import { doc, setDoc } from "firebase/firestore";
+import axios from "axios";
 
 const ProfileBuilder = () => {
   const [formData, setFormData] = useState({
@@ -63,8 +66,53 @@ const ProfileBuilder = () => {
     }));
   };
 
-  const handleSaveProfile = () => {
-    console.log("Saving profile:", formData);
+  const handleSaveProfile = async () => {
+    const currentUser = auth.currentUser;
+    if (!currentUser) return;
+
+    let profilePictureUrl = "";
+    let resumeUrl = "";
+
+    // Upload profile picture to ImageKit if selected
+    if (formData.profilePicture) {
+      const picForm = new FormData();
+      picForm.append("file", formData.profilePicture);
+      picForm.append("fileName", formData.profilePicture.name);
+      picForm.append("folder", `/profile-pictures/${currentUser.uid}`);
+      const picRes = await axios.post("/api/upload-imagekit", picForm);
+      profilePictureUrl = picRes.data.url;
+    }
+
+    // Upload resume to ImageKit if selected
+    if (formData.resume) {
+      const resumeForm = new FormData();
+      resumeForm.append("file", formData.resume);
+      resumeForm.append("fileName", formData.resume.name);
+      resumeForm.append("folder", `/resumes/${currentUser.uid}`);
+      const resumeRes = await axios.post("/api/upload-imagekit", resumeForm);
+      resumeUrl = resumeRes.data.url;
+    }
+
+    // Save all profile data to Firestore
+    await setDoc(
+      doc(db, "users", currentUser.uid),
+      {
+        displayName: `${formData.firstName} ${formData.lastName}`.trim(),
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        bio: formData.bio,
+        location: formData.location,
+        pronouns: formData.pronouns,
+        website: formData.website,
+        calendar: formData.calendar,
+        profilePicture: profilePictureUrl,
+        resume: resumeUrl,
+        tags: formData.tags,
+        socialLinks: formData.socialLinks,
+        email: currentUser.email,
+      },
+      { merge: true }
+    );
   };
 
   return (

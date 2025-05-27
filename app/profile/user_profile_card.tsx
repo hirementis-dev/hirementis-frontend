@@ -11,11 +11,12 @@ import { auth, db } from "@/firebase/client";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { User } from "firebase/auth";
 
-interface UserData extends User {
+interface UserData {
   displayName: string;
   email: string;
   bio: string;
-  resumeURL?: string;
+  profilePicture?: string;
+  resume?: string;
   interviews: any[];
 }
 
@@ -84,15 +85,13 @@ const UserProfileCard = () => {
       </CardHeader>
       <CardContent>
         <div className="flex flex-col items-center mb-6">
-          <div className="w-24 h-24 bg-emerald-100 rounded-full flex items-center justify-center text-3xl font-medium text-emerald-600 mb-4">
-            {user?.photoURL ? (
-              <div>
-                <img
-                  src={user.photoURL}
-                  alt="User Avatar"
-                  className="w-full h-full rounded-full object-cover"
-                />
-              </div>
+          <div className="w-24 h-24 bg-emerald-100 rounded-full flex items-center justify-center text-3xl font-medium text-emerald-600 mb-4 overflow-hidden">
+            {user?.profilePicture ? (
+              <img
+                src={user.profilePicture}
+                alt="User Avatar"
+                className="w-full h-full rounded-full object-cover"
+              />
             ) : (
               user.displayName
                 ?.split(" ")
@@ -147,6 +146,19 @@ const UserProfileCard = () => {
               </div>
             )}
           </div>
+          {user.resume && (
+            <div>
+              <h3 className="text-sm font-medium text-gray-500">Resume</h3>
+              <a
+                href={user.resume}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-emerald-600 underline text-xs"
+              >
+                View Resume
+              </a>
+            </div>
+          )}
           {/* <div>
             <h3 className="text-sm font-medium text-gray-500">Stats</h3>
             <div className="mt-1 grid grid-cols-2 gap-2">

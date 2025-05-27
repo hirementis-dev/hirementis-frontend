@@ -91,7 +91,6 @@ const Login = () => {
       // Save user info to Firestore if not exists
       const userRef = doc(db, "users", user.uid);
 
-      // Fix: Use setDoc with { merge: true } to avoid permission errors on missing doc
       await setDoc(
         userRef,
         {
@@ -99,6 +98,7 @@ const Login = () => {
           email: user.email,
           displayName: user.displayName || "",
           provider: providerType,
+          profilePicture: user.photoURL || "",
         },
         { merge: true }
       );
