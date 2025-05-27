@@ -45,14 +45,12 @@ const UserProfileCard = () => {
         }
       } catch (err) {
         console.error("Error fetching user:", err);
-        // Handle error (e.g., show notification)
       }
     };
 
     fetchUser();
   }, []);
 
-  // Save bio to Firestore
   const handleSaveBio = async () => {
     const currentUser = auth.currentUser;
     if (!currentUser) return;
@@ -64,13 +62,12 @@ const UserProfileCard = () => {
       setUser((prev) => (prev ? { ...prev, bio } : prev));
     } catch (err) {
       console.error("Error updating bio:", err);
-      // Optionally show error to user
     }
   };
 
   if (!user) {
     return (
-      <Card className="lg:col-span-1 border-mint-100">
+      <Card className="lg:col-span-1 border-emerald-100">
         <CardHeader className="pb-2">
           <CardTitle>Profile Information</CardTitle>
           <CardDescription>Loading...</CardDescription>
@@ -87,7 +84,7 @@ const UserProfileCard = () => {
       </CardHeader>
       <CardContent>
         <div className="flex flex-col items-center mb-6">
-          <div className="w-24 h-24 bg-emerald-100 rounded-full flex items-center justify-center text-3xl font-medium text-mint-600 mb-4">
+          <div className="w-24 h-24 bg-emerald-100 rounded-full flex items-center justify-center text-3xl font-medium text-emerald-600 mb-4">
             {user?.photoURL ? (
               <div>
                 <img
