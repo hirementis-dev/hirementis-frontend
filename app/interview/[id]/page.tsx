@@ -150,8 +150,9 @@ const Page = () => {
       state: true,
       message: "Reva is getting ready to take your interview..",
     });
+  
     const VAPI_ASSISTANT_ID = process.env.NEXT_PUBLIC_VAPI_ASSISTANT_ID!;
-
+console.log(VAPI_ASSISTANT_ID,VAPI_PUBLIC_KEY)
     const interviewQs = interviewQuestions
       .map((item: string) => `- ${item}`)
       .join("\n");
