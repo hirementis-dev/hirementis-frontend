@@ -22,7 +22,7 @@ import SocialLinks from "./SocialLinks";
 import Link from "next/link";
 import { useUserStore } from "@/hooks/userUser";
 import { useRouter } from "next/navigation";
-import InterviewHistoryCard from "./InterviewHistoryCard";
+import InterviewHistoryCard from "./interviewhistorycard";
 
 // Twitter icon component since it's not in lucide-react
 const TwitterIcon = ({ className }: { className?: string }) => (
