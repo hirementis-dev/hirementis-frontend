@@ -45,7 +45,6 @@ const ProfileView = () => {
   }
 
   useEffect(() => {
-    console.log(isAuthenticated);
     if (!isAuthenticated) {
       router.replace("/login");
     }
@@ -100,7 +99,7 @@ const ProfileView = () => {
         "",
     },
   ];
-  console.log("profileData", profileData, "user", user);
+
   return (
     <div className="space-y-6 pb-20 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 section-padding">
       <Card className="shadow-md border rounded-2xl dark:bg-gray-900/50 dark:border-gray-800">
@@ -220,7 +219,7 @@ const ProfileView = () => {
           <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
             Resume
           </h2>
-          {profileData.resume || user?.resume ? (
+          {user?.resume || profileData.resume ? (
             <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800/50 rounded-lg border border-gray-200 dark:border-gray-700">
               <div className="flex items-center gap-3">
                 <div className="p-2 bg-red-100 dark:bg-red-900/30 rounded-lg">

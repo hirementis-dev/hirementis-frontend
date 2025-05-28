@@ -25,6 +25,7 @@ import { useUserStore } from "@/hooks/userUser";
 import { getUserDocument } from "@/firebase/actions";
 import { UserProfile } from "@/types";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 type FormDataType = {
   firstName: string;
@@ -34,8 +35,8 @@ type FormDataType = {
   pronouns: string;
   website: string;
   calendar: string;
-  profilePicture: File | string;
-  resume: File | string;
+  profilePicture: File | string | null;
+  resume: File | string | null;
   tags: string[];
   socialLinks: {
     twitter: string;
@@ -105,7 +106,7 @@ const ProfileBuilder = () => {
       if (formData?.profilePicture instanceof File) {
         const picForm = new FormData();
         picForm.append("file", formData.profilePicture);
-        picForm.append("fileName", `${currentUser?.displayName}'s picture`);
+        picForm.append("fileName", `${user?.displayName}'s picture`);
         picForm.append("folder", `/profile-pictures/${currentUser.uid}`);
         const picRes = await axios.post("/api/upload-imagekit", picForm);
         profilePictureUrl = picRes.data.url;
@@ -120,8 +121,7 @@ const ProfileBuilder = () => {
         const resumeRes = await axios.post("/api/upload-imagekit", resumeForm);
         resumeUrl = resumeRes.data.url;
       }
-      console.log("resume", resumeUrl);
-      // Save all profile data to Firestore
+
       await setDoc(
         doc(db, "users", currentUser.uid),
         {
@@ -133,8 +133,8 @@ const ProfileBuilder = () => {
           pronouns: formData.pronouns,
           website: formData.website,
           calendar: formData.calendar,
-          profilePicture: profilePictureUrl || user?.resume || formData.resume,
-          resume: resumeUrl || user?.resume || formData.resume,
+          profilePicture: profilePictureUrl || user?.profilePicture,
+          resume: resumeUrl || user?.resume,
           tags: formData.tags,
           socialLinks: formData.socialLinks,
           email: currentUser.email,
@@ -144,6 +144,25 @@ const ProfileBuilder = () => {
 
       const userData = await getUserDocument(currentUser.uid);
       setUser(userData as UserProfile);
+      setFormData({
+        firstName: userData?.firstName || "",
+        lastName: userData?.lastName || "",
+        bio: userData?.bio || "",
+        location: userData?.location || "",
+        pronouns: userData?.pronouns || "",
+        website: userData?.website || "",
+        calendar: userData?.calendar || "",
+        profilePicture: userData?.profilePicture || "",
+        resume: userData?.resume || "",
+        tags: userData?.tags || [],
+        socialLinks: {
+          twitter: userData?.socialLinks?.twitter || "",
+          linkedin: userData?.socialLinks?.linkedin || "",
+          instagram: userData?.socialLinks?.instagram || "",
+          github: userData?.socialLinks?.github || "",
+        },
+      });
+      toast.message("Profile updated");
     } catch (error) {
       console.error("Error occured while saving profile", error);
     } finally {
@@ -261,9 +280,9 @@ const ProfileBuilder = () => {
                   <SelectValue placeholder="Select pronouns" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="he-him">He/Him</SelectItem>
-                  <SelectItem value="she-her">She/Her</SelectItem>
-                  <SelectItem value="they-them">They/Them</SelectItem>
+                  <SelectItem value="he/him">He/Him</SelectItem>
+                  <SelectItem value="she/her">She/Her</SelectItem>
+                  <SelectItem value="they/them">They/Them</SelectItem>
                   <SelectItem value="prefer-not-to-say">
                     Prefer not to say
                   </SelectItem>
@@ -314,10 +333,9 @@ const ProfileBuilder = () => {
             onFileChange={(file) => handleFileUpload("resume", file)}
             currentFile={formData.resume}
             resumeUrl={
-              typeof formData.resume == "string"
-                ? formData.resume
-                : user?.resume || ""
+              typeof formData.resume == "string" ? formData.resume : ""
             }
+            onResumeRemove={() => handleFileUpload("resume", null)}
           />
         </CardContent>
       </Card>

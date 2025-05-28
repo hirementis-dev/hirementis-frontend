@@ -3,7 +3,7 @@ import { create } from "zustand";
 
 interface userState {
   user: UserProfile | null;
-  setUser: (userData: UserProfile) => void;
+  setUser: (userData: UserProfile | null) => void;
   isAuthenticated: boolean;
   setIsAuthenticated: () => void;
 }

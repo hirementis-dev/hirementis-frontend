@@ -14,41 +14,42 @@ import { useUserStore } from "@/hooks/userUser";
 
 const Navbar: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [user, setUser] = useState<User | null>(null);
-  const [userDoc, setUserDoc] = useState<UserProfile | null>();
+  // const [user, setUser] = useState<User | null>(null);
   const pathname = usePathname();
   const isInterviewPage = pathname?.startsWith("/interview");
   const router = useRouter();
-  const { setUser: setUserState, setIsAuthenticated } = useUserStore();
+  const {
+    setUser: setUserState,
+    setIsAuthenticated,
+    user: userState,
+  } = useUserStore();
+
+  async function getUserDoc() {
+    const currUser = auth.currentUser;
+    if (!currUser?.uid) return;
+    const userDoc = await getUserDocument(currUser.uid);
+    if (userDoc) {
+      setUserState(userDoc as UserProfile);
+      setIsAuthenticated();
+    } else {
+      setUserState(null);
+    }
+  }
 
   useEffect(() => {
     let unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
       if (firebaseUser && firebaseUser.emailVerified) {
-        setUser(firebaseUser);
-      } else {
-        setUser(null);
+        // setUser(firebaseUser);
+        getUserDoc();
       }
     });
 
     return () => unsubscribe();
   }, []);
 
-  useEffect(() => {
-    async function getUserDoc() {
-      const currUser = auth.currentUser;
-      if (!currUser?.uid) return;
-      const userDoc = await getUserDocument(currUser.uid);
-      if (user) {
-        setUserDoc(userDoc as UserProfile);
-        setUserState(userDoc as UserProfile);
-        setIsAuthenticated();
-      } else {
-        setUserDoc(null);
-      }
-    }
+  // useEffect(() => {
 
-    getUserDoc();
-  }, [user]);
+  // }, []);
 
   const handleNavlinkClick = () => {
     setIsMenuOpen(false);
@@ -129,7 +130,7 @@ const Navbar: React.FC = () => {
 
           {/* CTA Buttons and User Profile */}
           <div className="hidden md:flex items-center gap-4">
-            {!user ? (
+            {!userState ? (
               <>
                 <Link onClick={handleNavlinkClick} href="/login">
                   <Button variant="ghost">Login</Button>
@@ -156,24 +157,24 @@ const Navbar: React.FC = () => {
                   title="Profile"
                 >
                   <div className="w-10 h-10 select-none rounded-full text-xs bg-emerald-100 flex items-center justify-center text-emerald-700 font-bold border border-emerald-300 hover:bg-emerald-200 transition">
-                    {user?.photoURL || userDoc?.profilePicture ? (
+                    {userState?.profilePicture ? (
                       <div>
                         <Image
-                          src={userDoc?.profilePicture || user.photoURL || ""}
+                          src={userState?.profilePicture || ""}
                           alt="User Avatar"
                           className="w-full h-full rounded-full object-cover"
                           width={100}
                           height={100}
                         />
                       </div>
-                    ) : user.displayName ? (
-                      user.displayName
+                    ) : userState.displayName ? (
+                      userState.displayName
                         .split(" ")
                         .map((n) => n[0])
                         .join("")
                         .toUpperCase()
                     ) : (
-                      user.email?.[0]?.toUpperCase() || "U"
+                      userState.email?.[0]?.toUpperCase() || "U"
                     )}
                   </div>
                 </div>
@@ -240,7 +241,7 @@ const Navbar: React.FC = () => {
                 Testimonials
               </Link>
               <div className="flex flex-col gap-2 pt-4 border-t border-gray-100">
-                {!user ? (
+                {!userState ? (
                   <>
                     <Link
                       onClick={handleNavlinkClick}
@@ -285,28 +286,24 @@ const Navbar: React.FC = () => {
                         className="w-10 h-10 select-none rounded-full bg-emerald-100 flex items-center justify-center text-emerald-700 font-bold text-xs border border-emerald-300 hover:bg-emerald-200 transition cursor-pointer"
                         title="Profile"
                       >
-                        {user?.photoURL || userDoc?.profilePicture ? (
+                        {userState?.profilePicture ? (
                           <div>
                             <Image
-                              src={
-                                userDoc?.profilePicture || user?.photoURL || ""
-                              }
-                              alt={
-                                userDoc?.displayName || user.displayName || ""
-                              }
+                              src={userState?.profilePicture || ""}
+                              alt={userState?.displayName || "User avatar"}
                               width={100}
                               height={100}
                               className="w-full h-full rounded-full object-cover"
                             />
                           </div>
-                        ) : user.displayName ? (
-                          user.displayName
+                        ) : userState.displayName ? (
+                          userState.displayName
                             .split(" ")
                             .map((n) => n[0])
                             .join("")
                             .toUpperCase()
                         ) : (
-                          user.email?.[0]?.toUpperCase() || "U"
+                          userState.email?.[0]?.toUpperCase() || "U"
                         )}
                       </div>
                     </div>

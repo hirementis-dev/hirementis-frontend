@@ -8,16 +8,18 @@ interface ResumeUploadProps {
   onFileChange: (file: File | null) => void;
   currentFile?: File | string | null;
   resumeUrl?: string | null | "";
+  onResumeRemove: () => void;
 }
 
 const ResumeUpload = ({
   onFileChange,
   currentFile,
   resumeUrl,
+  onResumeRemove,
 }: ResumeUploadProps) => {
   const [dragActive, setDragActive] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  console.log("resumeUrl", resumeUrl);
+
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file && file.type === "application/pdf") {
@@ -56,6 +58,7 @@ const ResumeUpload = ({
 
   const handleRemoveFile = () => {
     onFileChange(null);
+    onResumeRemove();
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
     }
