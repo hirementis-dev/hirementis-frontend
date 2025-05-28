@@ -62,7 +62,7 @@ const ProfileView = () => {
   }, [user, isAuthenticated]);
 
   if (!profileData) {
-    return <div>Loading...</div>;
+    return <div>⏳ Loading...</div>;
   }
 
   const socialPlatforms = [
@@ -71,6 +71,7 @@ const ProfileView = () => {
       label: "Twitter",
       icon: TwitterIcon,
       color: "text-blue-500",
+      emoji: "🐦",
       url: profileData.socialLinks?.twitter || user?.socialLinks?.twitter || "",
     },
     {
@@ -78,6 +79,7 @@ const ProfileView = () => {
       label: "LinkedIn",
       icon: ExternalLink,
       color: "text-blue-600",
+      emoji: "💼",
       url:
         profileData.socialLinks?.linkedin || user?.socialLinks?.linkedin || "",
     },
@@ -86,6 +88,7 @@ const ProfileView = () => {
       label: "GitHub",
       icon: ExternalLink,
       color: "text-gray-800",
+      emoji: "💻",
       url: profileData.socialLinks?.github || user?.socialLinks?.github || "",
     },
     {
@@ -93,6 +96,7 @@ const ProfileView = () => {
       label: "Instagram",
       icon: ExternalLink,
       color: "text-pink-500",
+      emoji: "📸",
       url:
         profileData.socialLinks?.instagram ||
         user?.socialLinks?.instagram ||
@@ -125,16 +129,13 @@ const ProfileView = () => {
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div>
                   <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-                    {profileData.displayName ||
+                    👋 {profileData.displayName ||
                       user?.displayName ||
                       user?.firstName}
                   </h1>
-                  {/* {profileData.pronouns || */}
-                  {/* // (user?.pronouns && ( */}
                   <p className="text-gray-600 dark:text-gray-400 font-medium">
-                    {profileData.pronouns || user?.pronouns || "he/him"}
+                    👤 {profileData.pronouns || user?.pronouns || "he/him"}
                   </p>
-                  {/* ))} */}
                 </div>
                 <Link href={"/profile/settings"} className="flex-shrink-0">
                   <Button
@@ -142,24 +143,23 @@ const ProfileView = () => {
                     className="rounded-lg hover:bg-green-50 dark:hover:bg-teal-900/20 hover:border-green-300 dark:hover:border-teal-600"
                   >
                     <Edit className="h-4 w-4 mr-2" />
-                    Edit Profile
+                    ✏️ Edit Profile
                   </Button>
                 </Link>
               </div>
 
-              {/* {profileData.bio && ( */}
               <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
                 {profileData.bio || user?.bio || "No bio provided"}
               </p>
-              {/* )} */}
 
               {/* Quick Info */}
               <div className="flex flex-wrap gap-4 text-sm text-gray-600 dark:text-gray-400">
-                {profileData.location ||
+                📌{profileData.location ||
                   (user?.location && (
                     <div className="flex items-center gap-1">
+                      {/* <span>📌</span> */}
                       <MapPin className="h-4 w-4" />
-                      {profileData.location || user?.location}
+                      📌{profileData.location || user?.location}
                     </div>
                   ))}
                 {profileData.website && (
@@ -181,6 +181,7 @@ const ProfileView = () => {
                       rel="noopener noreferrer"
                       className="flex items-center gap-1 hover:text-green-600 dark:hover:text-teal-400 transition-colors"
                     >
+                      <span>📅</span>
                       <Calendar className="h-4 w-4" />
                       Schedule Meeting
                     </a>
@@ -195,7 +196,7 @@ const ProfileView = () => {
       <Card className="shadow-md border rounded-2xl dark:bg-gray-900/50 dark:border-gray-800">
         <CardContent className="p-6">
           <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
-            Skills & Interests
+            🎯 Skills & Interests
           </h2>
           <div className="flex flex-wrap gap-2">
             {(profileData.tags || user?.tags || []).map(
@@ -205,7 +206,7 @@ const ProfileView = () => {
                   variant="secondary"
                   className="bg-green-100 hover:bg-green-200 text-green-800 dark:bg-teal-900/50 dark:text-teal-300 dark:hover:bg-teal-900/70 rounded-full px-3 py-1"
                 >
-                  {tag}
+                  ⭐ {tag}
                 </Badge>
               )
             )}
@@ -217,7 +218,7 @@ const ProfileView = () => {
       <Card className="shadow-md border rounded-2xl dark:bg-gray-900/50 dark:border-gray-800">
         <CardContent className="p-6">
           <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
-            Resume
+            📄 Resume
           </h2>
           {user?.resume || profileData.resume ? (
             <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800/50 rounded-lg border border-gray-200 dark:border-gray-700">
@@ -237,13 +238,8 @@ const ProfileView = () => {
                 </div>
                 <div>
                   <p className="font-medium text-gray-900 dark:text-white">
-                    Resume
+                    📄 Resume
                   </p>
-                  {/* {profileData.resume.uploadDate && (
-                    <p className="text-sm text-gray-500 dark:text-gray-400">
-                      Uploaded on {profileData.resume.uploadDate}
-                    </p>
-                  )} */}
                 </div>
               </div>
               <Button
@@ -262,7 +258,7 @@ const ProfileView = () => {
                   rel="noopener noreferrer"
                 >
                   <Download className="h-4 w-4 mr-2" />
-                  Download
+                  📥 Download
                 </a>
               </Button>
             </div>
@@ -281,7 +277,7 @@ const ProfileView = () => {
                   d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
                 />
               </svg>
-              <p>No resume uploaded yet</p>
+              <p>📭 No resume uploaded yet</p>
             </div>
           )}
         </CardContent>
@@ -291,7 +287,7 @@ const ProfileView = () => {
       <Card className="shadow-md border rounded-2xl dark:bg-gray-900/50 dark:border-gray-800">
         <CardContent className="p-6">
           <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
-            Social Links
+            🔗 Social Links
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {socialPlatforms.map((platform) => {
@@ -302,6 +298,7 @@ const ProfileView = () => {
                   key={platform.name}
                   className="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-800/50 rounded-lg"
                 >
+                  <span className="text-lg">{platform.emoji}</span>
                   <IconComponent className={`h-5 w-5 ${platform.color}`} />
                   <span className="font-medium text-gray-900 dark:text-white">
                     {platform.label}
@@ -313,11 +310,11 @@ const ProfileView = () => {
                       rel="noopener noreferrer"
                       className="ml-auto text-sm text-green-600 dark:text-teal-400 hover:underline"
                     >
-                      View Profile
+                      👀 View Profile
                     </a>
                   ) : (
                     <span className="ml-auto text-sm text-gray-400 dark:text-gray-500">
-                      Not connected
+                      ❌ Not connected
                     </span>
                   )}
                 </div>
