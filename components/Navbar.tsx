@@ -58,6 +58,7 @@ const Navbar: React.FC = () => {
   const handleLogout = async () => {
     await signOut(auth);
     router.push("/");
+    setUserState(null);
     toast.success("Logged out successfully");
   };
 

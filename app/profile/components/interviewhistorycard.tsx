@@ -12,7 +12,7 @@ import { Badge } from "@/components/ui/badge";
 import { Briefcase, Calendar, ChevronRight, Star, Loader2 } from "lucide-react";
 import { auth, db } from "@/firebase/client";
 import { collection, getDocs } from "firebase/firestore";
-import { formatFirebaseTimestamp } from "@/utils/formatDate";
+import { formatFirebaseTimestamp, sortByTimestamp } from "@/utils/formatDate";
 
 interface Interview {
   id: string;
@@ -61,8 +61,8 @@ const InterviewHistoryCard = ({
             status: d.status || "pending",
           } as Interview;
         });
-
-        setInterviews(data);
+        const sortedInterviews = sortByTimestamp(data);
+        setInterviews(sortedInterviews);
       } catch (err) {
         console.error("Error fetching interviews:", err);
       } finally {
