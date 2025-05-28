@@ -9,10 +9,16 @@ import { Button } from "@/components/ui/button";
 
 interface ProfilePictureUploadProps {
   onImageChange: (file: File | null) => void;
+  defaultImage?: string | null;
 }
 
-const ProfilePictureUpload = ({ onImageChange }: ProfilePictureUploadProps) => {
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+const ProfilePictureUpload = ({
+  onImageChange,
+  defaultImage,
+}: ProfilePictureUploadProps) => {
+  const [previewUrl, setPreviewUrl] = useState<string | null>(
+    String(defaultImage) || null
+  );
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {

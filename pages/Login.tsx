@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
@@ -13,7 +13,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
-import { auth } from "@/firebase/client";
 import {
   signInWithEmailAndPassword,
   GoogleAuthProvider,
@@ -21,13 +20,16 @@ import {
   signInWithPopup,
 } from "firebase/auth";
 import { doc, getDoc, setDoc } from "firebase/firestore";
-import { db } from "@/firebase/client";
+import { db, auth } from "@/firebase/client";
 import { toast } from "sonner";
+import { useUserStore } from "@/hooks/userUser";
+
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
+  const { isAuthenticated } = useUserStore();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -56,13 +58,11 @@ const Login = () => {
           uid: user.uid,
           email: user.email,
           displayName: user.displayName || "",
-          // Add more fields if needed
         });
       }
       router.push("/");
       toast.success("Login successful!");
     } catch (err: any) {
-      // Handle Firebase Auth errors with user-friendly messages
       let message = "Please Signup first.";
       if (err.code === "auth/user-not-found") {
         message = "No user found with this email.";
@@ -119,7 +119,9 @@ const Login = () => {
       }
     }
   };
-
+  if (isAuthenticated) {
+    return router.replace("/");
+  }
   return (
     <div className="min-h-screen flex items-center justify-center bg-hero-gradient">
       <div className="container max-w-md mx-4 bg-white rounded-lg">

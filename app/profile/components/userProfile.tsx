@@ -1,5 +1,4 @@
 "use client";
-
 import { useEffect, useState } from "react";
 import { auth, db } from "@/firebase/client";
 import { doc, getDoc } from "firebase/firestore";
@@ -21,6 +20,8 @@ import {
 import { Badge } from "@/components/ui/badge";
 import SocialLinks from "./SocialLinks";
 import Link from "next/link";
+import { useUserStore } from "@/hooks/userUser";
+import { useRouter } from "next/navigation";
 
 // Twitter icon component since it's not in lucide-react
 const TwitterIcon = ({ className }: { className?: string }) => (
@@ -36,8 +37,19 @@ const TwitterIcon = ({ className }: { className?: string }) => (
 
 const ProfileView = () => {
   const [profileData, setProfileData] = useState<any>(null);
+  const { user, isAuthenticated } = useUserStore();
+  const router = useRouter();
+
+  if (!isAuthenticated) {
+    router.replace("/login");
+  }
 
   useEffect(() => {
+    console.log(isAuthenticated);
+    if (!isAuthenticated) {
+      router.replace("/login");
+    }
+
     const fetchProfile = async () => {
       const currentUser = auth.currentUser;
       if (!currentUser) return;
@@ -48,7 +60,7 @@ const ProfileView = () => {
       }
     };
     fetchProfile();
-  }, []);
+  }, [user, isAuthenticated]);
 
   if (!profileData) {
     return <div>Loading...</div>;
@@ -60,31 +72,35 @@ const ProfileView = () => {
       label: "Twitter",
       icon: TwitterIcon,
       color: "text-blue-500",
-      url: profileData.socialLinks?.twitter || "",
+      url: profileData.socialLinks?.twitter || user?.socialLinks?.twitter || "",
     },
     {
       name: "linkedin",
       label: "LinkedIn",
       icon: ExternalLink,
       color: "text-blue-600",
-      url: profileData.socialLinks?.linkedin || "",
+      url:
+        profileData.socialLinks?.linkedin || user?.socialLinks?.linkedin || "",
     },
     {
       name: "github",
       label: "GitHub",
       icon: ExternalLink,
       color: "text-gray-800",
-      url: profileData.socialLinks?.GitHub || "",
+      url: profileData.socialLinks?.github || user?.socialLinks?.github || "",
     },
     {
       name: "instagram",
       label: "Instagram",
       icon: ExternalLink,
       color: "text-pink-500",
-      url: profileData.socialLinks?.instagram || "",
+      url:
+        profileData.socialLinks?.instagram ||
+        user?.socialLinks?.instagram ||
+        "",
     },
   ];
-
+  console.log("profileData", profileData, "user", user);
   return (
     <div className="space-y-6 pb-20 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 section-padding">
       <Card className="shadow-md border rounded-2xl dark:bg-gray-900/50 dark:border-gray-800">
@@ -95,8 +111,12 @@ const ProfileView = () => {
               <Avatar className="w-32 h-32 border-4 border-white dark:border-gray-800 shadow-lg">
                 <AvatarImage src={profileData.profilePicture || undefined} />
                 <AvatarFallback className="bg-gradient-to-br from-green-100 to-green-200 dark:from-teal-900 dark:to-blue-900 text-green-700 dark:text-teal-300 text-2xl font-semibold">
-                  {(profileData.firstName?.[0] || "") +
-                    (profileData.lastName?.[0] || "")}
+                  {(profileData.firstName?.[0] ||
+                    user?.displayName.split(" ")[0] ||
+                    "") +
+                    (profileData.lastName?.[0] ||
+                      user?.displayName.split(" ")[1] ||
+                      "")}
                 </AvatarFallback>
               </Avatar>
             </div>
@@ -106,14 +126,19 @@ const ProfileView = () => {
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div>
                   <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-                    {(profileData.firstName || "") +
-                      (profileData.lastName ? " " + profileData.lastName : "")}
+                    {(profileData.firstName?.[0] ||
+                      user?.displayName.split(" ")[0] ||
+                      "") +
+                      (profileData.lastName?.[0] ||
+                        user?.displayName.split(" ")[1] ||
+                        "")}
                   </h1>
-                  {profileData.pronouns && (
-                    <p className="text-gray-600 dark:text-gray-400 font-medium">
-                      {profileData.pronouns}
-                    </p>
-                  )}
+                  {/* {profileData.pronouns || */}
+                  {/* // (user?.pronouns && ( */}
+                  <p className="text-gray-600 dark:text-gray-400 font-medium">
+                    {profileData.pronouns || user?.pronouns || "he/him"}
+                  </p>
+                  {/* ))} */}
                 </div>
                 <Link href={"/profile/settings"} className="flex-shrink-0">
                   <Button
@@ -126,23 +151,24 @@ const ProfileView = () => {
                 </Link>
               </div>
 
-              {profileData.bio && (
-                <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
-                  {profileData.bio}
-                </p>
-              )}
+              {/* {profileData.bio && ( */}
+              <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
+                {profileData.bio || user?.bio || "No bio provided"}
+              </p>
+              {/* )} */}
 
               {/* Quick Info */}
               <div className="flex flex-wrap gap-4 text-sm text-gray-600 dark:text-gray-400">
-                {profileData.location && (
-                  <div className="flex items-center gap-1">
-                    <MapPin className="h-4 w-4" />
-                    {profileData.location}
-                  </div>
-                )}
+                {profileData.location ||
+                  (user?.location && (
+                    <div className="flex items-center gap-1">
+                      <MapPin className="h-4 w-4" />
+                      {profileData.location || user?.location}
+                    </div>
+                  ))}
                 {profileData.website && (
                   <a
-                    href={profileData.website}
+                    href={profileData.website || user?.website}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex items-center gap-1 hover:text-green-600 dark:hover:text-teal-400 transition-colors"
@@ -151,17 +177,18 @@ const ProfileView = () => {
                     Portfolio
                   </a>
                 )}
-                {profileData.calendar && (
-                  <a
-                    href={profileData.calendar}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-1 hover:text-green-600 dark:hover:text-teal-400 transition-colors"
-                  >
-                    <Calendar className="h-4 w-4" />
-                    Schedule Meeting
-                  </a>
-                )}
+                {profileData.calendar ||
+                  (user?.calendar && (
+                    <a
+                      href={profileData.calendar || user.calendar}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-1 hover:text-green-600 dark:hover:text-teal-400 transition-colors"
+                    >
+                      <Calendar className="h-4 w-4" />
+                      Schedule Meeting
+                    </a>
+                  ))}
               </div>
             </div>
           </div>
@@ -175,15 +202,17 @@ const ProfileView = () => {
             Skills & Interests
           </h2>
           <div className="flex flex-wrap gap-2">
-            {(profileData.tags || []).map((tag: string, index: number) => (
-              <Badge
-                key={index}
-                variant="secondary"
-                className="bg-green-100 hover:bg-green-200 text-green-800 dark:bg-teal-900/50 dark:text-teal-300 dark:hover:bg-teal-900/70 rounded-full px-3 py-1"
-              >
-                {tag}
-              </Badge>
-            ))}
+            {(profileData.tags || user?.tags || []).map(
+              (tag: string, index: number) => (
+                <Badge
+                  key={index}
+                  variant="secondary"
+                  className="bg-green-100 hover:bg-green-200 text-green-800 dark:bg-teal-900/50 dark:text-teal-300 dark:hover:bg-teal-900/70 rounded-full px-3 py-1"
+                >
+                  {tag}
+                </Badge>
+              )
+            )}
           </div>
         </CardContent>
       </Card>
@@ -194,7 +223,7 @@ const ProfileView = () => {
           <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
             Resume
           </h2>
-          {profileData.resume ? (
+          {profileData.resume || user?.resume ? (
             <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800/50 rounded-lg border border-gray-200 dark:border-gray-700">
               <div className="flex items-center gap-3">
                 <div className="p-2 bg-red-100 dark:bg-red-900/30 rounded-lg">
@@ -212,13 +241,13 @@ const ProfileView = () => {
                 </div>
                 <div>
                   <p className="font-medium text-gray-900 dark:text-white">
-                    {profileData.resume.fileName || "Resume"}
+                    Resume
                   </p>
-                  {profileData.resume.uploadDate && (
+                  {/* {profileData.resume.uploadDate && (
                     <p className="text-sm text-gray-500 dark:text-gray-400">
                       Uploaded on {profileData.resume.uploadDate}
                     </p>
-                  )}
+                  )} */}
                 </div>
               </div>
               <Button
@@ -229,8 +258,8 @@ const ProfileView = () => {
               >
                 <a
                   href={
-                    typeof profileData.resume === "string"
-                      ? profileData.resume
+                    typeof profileData.resume || user?.resume === "string"
+                      ? profileData.resume || user?.resume
                       : "#"
                   }
                   target="_blank"

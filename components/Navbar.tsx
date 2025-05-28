@@ -8,23 +8,46 @@ import { onAuthStateChanged, signOut, User } from "firebase/auth";
 import { usePathname, useRouter } from "next/navigation";
 import { toast } from "sonner";
 import Image from "next/image";
+import { getUserDocument } from "@/firebase/actions";
+import { UserProfile } from "@/types";
+import { useUserStore } from "@/hooks/userUser";
 
 const Navbar: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [user, setUser] = useState<User | null>(null);
+  const [userDoc, setUserDoc] = useState<UserProfile | null>();
   const pathname = usePathname();
   const isInterviewPage = pathname?.startsWith("/interview");
   const router = useRouter();
+  const { setUser: setUserState, setIsAuthenticated } = useUserStore();
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
+    let unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
       if (firebaseUser && firebaseUser.emailVerified) {
         setUser(firebaseUser);
       } else {
         setUser(null);
       }
     });
+
     return () => unsubscribe();
+  }, []);
+
+  useEffect(() => {
+    async function getUserDoc() {
+      const currUser = auth.currentUser;
+      if (!currUser?.uid) return;
+      const userDoc = await getUserDocument(currUser.uid);
+      if (user) {
+        setUserDoc(userDoc as UserProfile);
+        setUserState(userDoc as UserProfile);
+        setIsAuthenticated();
+      } else {
+        setUserDoc(null);
+      }
+    }
+
+    getUserDoc();
   }, [user]);
 
   const handleNavlinkClick = () => {
@@ -133,12 +156,14 @@ const Navbar: React.FC = () => {
                   title="Profile"
                 >
                   <div className="w-10 h-10 select-none rounded-full text-xs bg-emerald-100 flex items-center justify-center text-emerald-700 font-bold border border-emerald-300 hover:bg-emerald-200 transition">
-                    {user?.photoURL ? (
+                    {user?.photoURL || userDoc?.profilePicture ? (
                       <div>
-                        <img
-                          src={user.photoURL}
+                        <Image
+                          src={userDoc?.profilePicture || user.photoURL || ""}
                           alt="User Avatar"
                           className="w-full h-full rounded-full object-cover"
+                          width={100}
+                          height={100}
                         />
                       </div>
                     ) : user.displayName ? (
@@ -188,28 +213,28 @@ const Navbar: React.FC = () => {
               </Link>
               <Link
                 onClick={handleNavlinkClick}
-                href="#features"
+                href="/#features"
                 className="text-gray-600 hover:text-emerald-600 transition-colors py-2"
               >
                 Features
               </Link>
               <Link
                 onClick={handleNavlinkClick}
-                href="#how-it-works"
+                href="/#how-it-works"
                 className="text-gray-600 hover:text-emerald-600 transition-colors py-2"
               >
                 How it works
               </Link>
               <Link
                 onClick={handleNavlinkClick}
-                href="#pricing"
+                href="/#pricing"
                 className="text-gray-600 hover:text-emerald-600 transition-colors py-2"
               >
                 Pricing
               </Link>
               <Link
                 onClick={handleNavlinkClick}
-                href="#testimonials"
+                href="/#testimonials"
                 className="text-gray-600 hover:text-emerald-600 transition-colors py-2"
               >
                 Testimonials
@@ -260,10 +285,17 @@ const Navbar: React.FC = () => {
                         className="w-10 h-10 select-none rounded-full bg-emerald-100 flex items-center justify-center text-emerald-700 font-bold text-xs border border-emerald-300 hover:bg-emerald-200 transition cursor-pointer"
                         title="Profile"
                       >
-                        {user?.photoURL ? (
+                        {user?.photoURL || userDoc?.profilePicture ? (
                           <div>
-                            <img
-                              src={user?.photoURL || ""}
+                            <Image
+                              src={
+                                userDoc?.profilePicture || user?.photoURL || ""
+                              }
+                              alt={
+                                userDoc?.displayName || user.displayName || ""
+                              }
+                              width={100}
+                              height={100}
                               className="w-full h-full rounded-full object-cover"
                             />
                           </div>

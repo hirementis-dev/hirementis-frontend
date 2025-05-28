@@ -21,8 +21,12 @@ import Link from "next/link";
 import { auth, db } from "@/firebase/client";
 import { doc, setDoc } from "firebase/firestore";
 import axios from "axios";
+import { useUserStore } from "@/hooks/userUser";
+import { getUserDocument } from "@/firebase/actions";
+import { UserProfile } from "@/types";
 
 const ProfileBuilder = () => {
+  const { user, isAuthenticated, setUser } = useUserStore();
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -75,20 +79,20 @@ const ProfileBuilder = () => {
     let resumeUrl = "";
 
     // Upload profile picture to ImageKit if selected
-    if (formData.profilePicture) {
+    if (formData.profilePicture instanceof File) {
       const picForm = new FormData();
       picForm.append("file", formData.profilePicture);
-      picForm.append("fileName", formData.profilePicture.name);
+      picForm.append("fileName", `${currentUser?.displayName}'s picture`);
       picForm.append("folder", `/profile-pictures/${currentUser.uid}`);
       const picRes = await axios.post("/api/upload-imagekit", picForm);
       profilePictureUrl = picRes.data.url;
     }
 
     // Upload resume to ImageKit if selected
-    if (formData.resume) {
+    if (formData.resume instanceof File) {
       const resumeForm = new FormData();
-      resumeForm.append("file", formData.resume);
-      resumeForm.append("fileName", formData.resume.name);
+      resumeForm.append("file", formData?.resume);
+      resumeForm.append("fileName", `${user?.displayName}'s resume`);
       resumeForm.append("folder", `/resumes/${currentUser.uid}`);
       const resumeRes = await axios.post("/api/upload-imagekit", resumeForm);
       resumeUrl = resumeRes.data.url;
@@ -114,6 +118,9 @@ const ProfileBuilder = () => {
       },
       { merge: true }
     );
+
+    const userData = await getUserDocument(currentUser.uid);
+    setUser(userData as UserProfile);
   };
 
   return (
@@ -133,6 +140,11 @@ const ProfileBuilder = () => {
               onImageChange={(file) =>
                 handleInputChange("profilePicture", file)
               }
+              defaultImage={
+                typeof formData.profilePicture == "string"
+                  ? formData.profilePicture
+                  : user?.profilePicture || ""
+              }
             />
           </div>
 
@@ -144,7 +156,12 @@ const ProfileBuilder = () => {
               <Input
                 id="firstName"
                 placeholder="Enter your first name"
-                value={formData.firstName}
+                value={
+                  formData.firstName ||
+                  user?.firstName ||
+                  user?.displayName.split(" ")[0] ||
+                  ""
+                }
                 onChange={(e) => handleInputChange("firstName", e.target.value)}
                 className="rounded-lg"
               />
@@ -156,7 +173,12 @@ const ProfileBuilder = () => {
               <Input
                 id="lastName"
                 placeholder="Enter your last name"
-                value={formData.lastName}
+                value={
+                  formData.lastName ||
+                  user?.lastName ||
+                  user?.displayName.split(" ")[1] ||
+                  ""
+                }
                 onChange={(e) => handleInputChange("lastName", e.target.value)}
                 className="rounded-lg"
               />
@@ -171,7 +193,7 @@ const ProfileBuilder = () => {
             <Textarea
               id="bio"
               placeholder="Tell us about yourself, your experience, and what you're passionate about..."
-              value={formData.bio}
+              value={formData.bio || user?.bio || ""}
               onChange={(e) => handleBioChange(e.target.value)}
               className="rounded-lg min-h-[120px] resize-none"
             />
@@ -187,6 +209,7 @@ const ProfileBuilder = () => {
                 Location
               </Label>
               <Select
+                value={formData.location || user?.location || ""}
                 onValueChange={(value) => handleInputChange("location", value)}
               >
                 <SelectTrigger className="rounded-lg w-full">
@@ -209,6 +232,7 @@ const ProfileBuilder = () => {
                 Pronouns
               </Label>
               <Select
+                value={formData.pronouns || user?.pronouns || ""}
                 onValueChange={(value) => handleInputChange("pronouns", value)}
               >
                 <SelectTrigger className="rounded-lg w-full">
@@ -235,7 +259,7 @@ const ProfileBuilder = () => {
               <Input
                 id="website"
                 placeholder="https://yourwebsite.com"
-                value={formData.website}
+                value={formData.website || user?.website || ""}
                 onChange={(e) => handleInputChange("website", e.target.value)}
                 className="rounded-lg"
               />
@@ -247,7 +271,7 @@ const ProfileBuilder = () => {
               <Input
                 id="calendar"
                 placeholder="https://calendly.com/yourusername"
-                value={formData.calendar}
+                value={formData.calendar || user?.location || ""}
                 onChange={(e) => handleInputChange("calendar", e.target.value)}
                 className="rounded-lg"
               />
@@ -266,7 +290,12 @@ const ProfileBuilder = () => {
         <CardContent>
           <ResumeUpload
             onFileChange={(file) => handleFileUpload("resume", file)}
-            currentFile={formData.resume}
+            currentFile={formData.resume || user?.resume || ""}
+            resumeUrl={
+              typeof formData.resume == "string"
+                ? formData.resume
+                : user?.resume || ""
+            }
           />
         </CardContent>
       </Card>
@@ -280,7 +309,7 @@ const ProfileBuilder = () => {
         </CardHeader>
         <CardContent>
           <TagSelector
-            selectedTags={formData.tags}
+            selectedTags={formData.tags || user?.tags}
             onTagsChange={(tags) => handleInputChange("tags", tags)}
           />
         </CardContent>
@@ -295,7 +324,7 @@ const ProfileBuilder = () => {
         </CardHeader>
         <CardContent>
           <SocialLinks
-            socialLinks={formData.socialLinks}
+            socialLinks={formData.socialLinks || user?.socialLinks}
             onSocialLinksChange={(links) =>
               handleInputChange("socialLinks", links)
             }

@@ -1,22 +1,29 @@
 import { useState, useRef } from "react";
 import { Upload, FileText, X, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
+import { toast } from "sonner";
 
 interface ResumeUploadProps {
   onFileChange: (file: File | null) => void;
-  currentFile?: File | null;
+  currentFile?: File | string | null;
+  resumeUrl?: string | null | "";
 }
 
-const ResumeUpload = ({ onFileChange, currentFile }: ResumeUploadProps) => {
+const ResumeUpload = ({
+  onFileChange,
+  currentFile,
+  resumeUrl,
+}: ResumeUploadProps) => {
   const [dragActive, setDragActive] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
-
+  console.log("resumeUrl", resumeUrl);
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file && file.type === "application/pdf") {
       onFileChange(file);
     } else {
-      alert("Please upload a PDF file only.");
+      toast.error("Please upload a PDF file only.");
     }
   };
 
@@ -64,7 +71,7 @@ const ResumeUpload = ({ onFileChange, currentFile }: ResumeUploadProps) => {
 
   return (
     <div className="space-y-4">
-      {currentFile ? (
+      {resumeUrl || currentFile ? (
         // File uploaded state
         <div className="p-4 bg-gray-50 dark:bg-gray-800/50 rounded-lg border border-gray-200 dark:border-gray-700">
           <div className="flex items-center justify-between">
@@ -74,24 +81,28 @@ const ResumeUpload = ({ onFileChange, currentFile }: ResumeUploadProps) => {
               </div>
               <div>
                 <p className="font-medium text-gray-900 dark:text-white">
-                  {currentFile.name}
+                  {currentFile instanceof File ? currentFile.name : "Resume"}
                 </p>
                 <p className="text-sm text-gray-500 dark:text-gray-400">
-                  {formatFileSize(currentFile.size)} • PDF
+                  {currentFile instanceof File
+                    ? formatFileSize(currentFile.size) + " • PDF"
+                    : "PDF"}
                 </p>
               </div>
             </div>
             <div className="flex items-center gap-2">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => {
-                  /* In a real app, this would download the file */
-                }}
-                className="rounded-lg"
-              >
-                <Download className="h-4 w-4" />
-              </Button>
+              <Link href={resumeUrl || ""} download={true}>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => {
+                    /* In a real app, this would download the file */
+                  }}
+                  className="rounded-lg"
+                >
+                  <Download className="h-4 w-4" />
+                </Button>
+              </Link>
               <Button
                 variant="outline"
                 size="sm"
