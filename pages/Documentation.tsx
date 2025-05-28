@@ -105,10 +105,12 @@ const DocumentationPage = () => (
                 <div>
                   <h3 className="text-lg font-medium mb-3 text-gray-800">9. User Profile Dashboard</h3>
                   <ul className="list-disc pl-6 space-y-2">
-                    <li>View personal information (name, email)</li>
-                    <li>Add a short bio</li>
-                    <li>List of completed interviews</li>
-                    <li>Click on any interview to view its detailed feedback page</li>
+                    <li>View and edit personal details like name, email, pronouns, and location</li>
+                    <li>Add a detailed bio and upload a professional profile picture</li>
+                    <li>Include your portfolio website and calendar scheduling link</li>
+                    <li>Select up to 10 skills, roles, or tools to highlight your expertise</li>
+                    <li>Add social media handles (LinkedIn, Twitter, Instagram, GitHub)</li>
+                    <li>View completed interviews and access detailed feedback for each</li>
                   </ul>
                 </div>
 
