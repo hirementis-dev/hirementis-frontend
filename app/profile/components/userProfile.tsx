@@ -126,12 +126,9 @@ const ProfileView = () => {
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div>
                   <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-                    {(profileData.firstName?.[0] ||
-                      user?.displayName.split(" ")[0] ||
-                      "") +
-                      (profileData.lastName?.[0] ||
-                        user?.displayName.split(" ")[1] ||
-                        "")}
+                    {profileData.displayName ||
+                      user?.displayName ||
+                      user?.firstName}
                   </h1>
                   {/* {profileData.pronouns || */}
                   {/* // (user?.pronouns && ( */}

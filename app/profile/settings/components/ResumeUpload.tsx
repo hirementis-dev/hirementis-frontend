@@ -91,7 +91,7 @@ const ResumeUpload = ({
               </div>
             </div>
             <div className="flex items-center gap-2">
-              <Link href={resumeUrl || ""} download={true}>
+              <Link target="_blank" href={resumeUrl || ""} download={true}>
                 <Button
                   variant="outline"
                   size="sm"

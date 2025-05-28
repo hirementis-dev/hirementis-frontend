@@ -1,6 +1,6 @@
 "use client";
-import { useState } from "react";
-import { Save } from "lucide-react";
+import { useEffect, useState } from "react";
+import { LoaderCircle, Save } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -24,30 +24,51 @@ import axios from "axios";
 import { useUserStore } from "@/hooks/userUser";
 import { getUserDocument } from "@/firebase/actions";
 import { UserProfile } from "@/types";
+import { useRouter } from "next/navigation";
+
+type FormDataType = {
+  firstName: string;
+  lastName: string;
+  bio: string;
+  location: string;
+  pronouns: string;
+  website: string;
+  calendar: string;
+  profilePicture: File | string;
+  resume: File | string;
+  tags: string[];
+  socialLinks: {
+    twitter: string;
+    linkedin: string;
+    instagram: string;
+    github: string;
+  };
+};
 
 const ProfileBuilder = () => {
   const { user, isAuthenticated, setUser } = useUserStore();
-  const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    bio: "",
-    location: "",
-    pronouns: "",
-    website: "",
-    calendar: "",
-    profilePicture: null as File | null,
-    resume: null as File | null,
-    tags: [] as string[],
+  const [formData, setFormData] = useState<FormDataType>({
+    firstName: user?.firstName || "",
+    lastName: user?.lastName || "",
+    bio: user?.bio || "",
+    location: user?.location || "",
+    pronouns: user?.pronouns || "",
+    website: user?.website || "",
+    calendar: user?.calendar || "",
+    profilePicture: user?.profilePicture || "",
+    resume: user?.resume || "",
+    tags: user?.tags || [],
     socialLinks: {
-      twitter: "",
-      linkedin: "",
-      instagram: "",
-      figma: "",
-      github: "",
+      twitter: user?.socialLinks?.twitter || "",
+      linkedin: user?.socialLinks?.linkedin || "",
+      instagram: user?.socialLinks?.instagram || "",
+      github: user?.socialLinks?.github || "",
     },
   });
+  const router = useRouter();
 
   const [bioCount, setBioCount] = useState(0);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const maxBioLength = 500;
 
   const handleInputChange = (field: string, value: any) => {
@@ -79,49 +100,60 @@ const ProfileBuilder = () => {
     let resumeUrl = "";
 
     // Upload profile picture to ImageKit if selected
-    if (formData.profilePicture instanceof File) {
-      const picForm = new FormData();
-      picForm.append("file", formData.profilePicture);
-      picForm.append("fileName", `${currentUser?.displayName}'s picture`);
-      picForm.append("folder", `/profile-pictures/${currentUser.uid}`);
-      const picRes = await axios.post("/api/upload-imagekit", picForm);
-      profilePictureUrl = picRes.data.url;
+    try {
+      setIsLoading(true);
+      if (formData?.profilePicture instanceof File) {
+        const picForm = new FormData();
+        picForm.append("file", formData.profilePicture);
+        picForm.append("fileName", `${currentUser?.displayName}'s picture`);
+        picForm.append("folder", `/profile-pictures/${currentUser.uid}`);
+        const picRes = await axios.post("/api/upload-imagekit", picForm);
+        profilePictureUrl = picRes.data.url;
+      }
+
+      // Upload resume to ImageKit if selected
+      if (formData.resume instanceof File) {
+        const resumeForm = new FormData();
+        resumeForm.append("file", formData?.resume);
+        resumeForm.append("fileName", `${user?.displayName}'s resume`);
+        resumeForm.append("folder", `/resumes/${currentUser.uid}`);
+        const resumeRes = await axios.post("/api/upload-imagekit", resumeForm);
+        resumeUrl = resumeRes.data.url;
+      }
+      console.log("resume", resumeUrl);
+      // Save all profile data to Firestore
+      await setDoc(
+        doc(db, "users", currentUser.uid),
+        {
+          displayName: `${formData.firstName} ${formData.lastName}`.trim(),
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+          bio: formData.bio,
+          location: formData.location,
+          pronouns: formData.pronouns,
+          website: formData.website,
+          calendar: formData.calendar,
+          profilePicture: profilePictureUrl || user?.resume || formData.resume,
+          resume: resumeUrl || user?.resume || formData.resume,
+          tags: formData.tags,
+          socialLinks: formData.socialLinks,
+          email: currentUser.email,
+        },
+        { merge: true }
+      );
+
+      const userData = await getUserDocument(currentUser.uid);
+      setUser(userData as UserProfile);
+    } catch (error) {
+      console.error("Error occured while saving profile", error);
+    } finally {
+      setIsLoading(false);
     }
-
-    // Upload resume to ImageKit if selected
-    if (formData.resume instanceof File) {
-      const resumeForm = new FormData();
-      resumeForm.append("file", formData?.resume);
-      resumeForm.append("fileName", `${user?.displayName}'s resume`);
-      resumeForm.append("folder", `/resumes/${currentUser.uid}`);
-      const resumeRes = await axios.post("/api/upload-imagekit", resumeForm);
-      resumeUrl = resumeRes.data.url;
-    }
-
-    // Save all profile data to Firestore
-    await setDoc(
-      doc(db, "users", currentUser.uid),
-      {
-        displayName: `${formData.firstName} ${formData.lastName}`.trim(),
-        firstName: formData.firstName,
-        lastName: formData.lastName,
-        bio: formData.bio,
-        location: formData.location,
-        pronouns: formData.pronouns,
-        website: formData.website,
-        calendar: formData.calendar,
-        profilePicture: profilePictureUrl,
-        resume: resumeUrl,
-        tags: formData.tags,
-        socialLinks: formData.socialLinks,
-        email: currentUser.email,
-      },
-      { merge: true }
-    );
-
-    const userData = await getUserDocument(currentUser.uid);
-    setUser(userData as UserProfile);
   };
+
+  useEffect(() => {
+    if (!isAuthenticated) return router.replace("/login");
+  }, []);
 
   return (
     <div className="space-y-6 pb-20 ">
@@ -156,12 +188,7 @@ const ProfileBuilder = () => {
               <Input
                 id="firstName"
                 placeholder="Enter your first name"
-                value={
-                  formData.firstName ||
-                  user?.firstName ||
-                  user?.displayName.split(" ")[0] ||
-                  ""
-                }
+                value={formData.firstName}
                 onChange={(e) => handleInputChange("firstName", e.target.value)}
                 className="rounded-lg"
               />
@@ -173,12 +200,7 @@ const ProfileBuilder = () => {
               <Input
                 id="lastName"
                 placeholder="Enter your last name"
-                value={
-                  formData.lastName ||
-                  user?.lastName ||
-                  user?.displayName.split(" ")[1] ||
-                  ""
-                }
+                value={formData.lastName}
                 onChange={(e) => handleInputChange("lastName", e.target.value)}
                 className="rounded-lg"
               />
@@ -193,7 +215,7 @@ const ProfileBuilder = () => {
             <Textarea
               id="bio"
               placeholder="Tell us about yourself, your experience, and what you're passionate about..."
-              value={formData.bio || user?.bio || ""}
+              value={formData.bio}
               onChange={(e) => handleBioChange(e.target.value)}
               className="rounded-lg min-h-[120px] resize-none"
             />
@@ -209,7 +231,7 @@ const ProfileBuilder = () => {
                 Location
               </Label>
               <Select
-                value={formData.location || user?.location || ""}
+                value={formData.location}
                 onValueChange={(value) => handleInputChange("location", value)}
               >
                 <SelectTrigger className="rounded-lg w-full">
@@ -232,7 +254,7 @@ const ProfileBuilder = () => {
                 Pronouns
               </Label>
               <Select
-                value={formData.pronouns || user?.pronouns || ""}
+                value={formData.pronouns}
                 onValueChange={(value) => handleInputChange("pronouns", value)}
               >
                 <SelectTrigger className="rounded-lg w-full">
@@ -259,7 +281,7 @@ const ProfileBuilder = () => {
               <Input
                 id="website"
                 placeholder="https://yourwebsite.com"
-                value={formData.website || user?.website || ""}
+                value={formData.website}
                 onChange={(e) => handleInputChange("website", e.target.value)}
                 className="rounded-lg"
               />
@@ -271,7 +293,7 @@ const ProfileBuilder = () => {
               <Input
                 id="calendar"
                 placeholder="https://calendly.com/yourusername"
-                value={formData.calendar || user?.location || ""}
+                value={formData.calendar}
                 onChange={(e) => handleInputChange("calendar", e.target.value)}
                 className="rounded-lg"
               />
@@ -290,7 +312,7 @@ const ProfileBuilder = () => {
         <CardContent>
           <ResumeUpload
             onFileChange={(file) => handleFileUpload("resume", file)}
-            currentFile={formData.resume || user?.resume || ""}
+            currentFile={formData.resume}
             resumeUrl={
               typeof formData.resume == "string"
                 ? formData.resume
@@ -309,7 +331,7 @@ const ProfileBuilder = () => {
         </CardHeader>
         <CardContent>
           <TagSelector
-            selectedTags={formData.tags || user?.tags}
+            selectedTags={formData.tags}
             onTagsChange={(tags) => handleInputChange("tags", tags)}
           />
         </CardContent>
@@ -324,7 +346,7 @@ const ProfileBuilder = () => {
         </CardHeader>
         <CardContent>
           <SocialLinks
-            socialLinks={formData.socialLinks || user?.socialLinks}
+            socialLinks={formData.socialLinks}
             onSocialLinksChange={(links) =>
               handleInputChange("socialLinks", links)
             }
@@ -338,8 +360,14 @@ const ProfileBuilder = () => {
           onClick={handleSaveProfile}
           className="shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-200 rounded-2xl px-6 py-3 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 dark:from-teal-500 dark:to-blue-600 dark:hover:from-teal-600 dark:hover:to-blue-700"
         >
-          <Save className="h-5 w-5 mr-2" />
-          Save Profile
+          {isLoading ? (
+            <LoaderCircle className="animate-spin" />
+          ) : (
+            <div className="flex gap-1">
+              <Save className="h-5 w-5 mr-2" />
+              Save Profile
+            </div>
+          )}
         </Button>
       </div>
     </div>
