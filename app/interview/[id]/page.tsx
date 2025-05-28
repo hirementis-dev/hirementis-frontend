@@ -20,6 +20,7 @@ import { auth } from "@/firebase/client";
 import { onAuthStateChanged, User } from "firebase/auth";
 import Image from "next/image";
 import ConfirmationDialog from "./components/ConfiramtionDialog";
+import { useUserStore } from "@/hooks/userUser";
 
 interface LoaderState {
   state: boolean;
@@ -57,6 +58,7 @@ const Page = () => {
   const [user, setUser] = useState<User | null>(null);
   const [showConfirmationDialog, setShowConfirmationDialog] =
     useState<boolean>(false);
+  const { user: userState } = useUserStore();
 
   const params = useParams();
   const id = params?.id;
@@ -372,11 +374,19 @@ const Page = () => {
                           You
                         </h3>
                         <div className="w-24 h-24 rounded-full bg-gray-100 flex items-center justify-center border border-gray-200 shadow-inner">
-                          {user?.photoURL ? (
+                          {userState?.profilePicture || user?.photoURL ? (
                             <div className="w-full h-full rounded-full overflow-hidden">
                               <Image
-                                src={user.photoURL}
-                                alt={user.displayName || "User Avatar"}
+                                src={
+                                  userState?.profilePicture ||
+                                  user?.photoURL ||
+                                  ""
+                                }
+                                alt={
+                                  userState?.displayName ||
+                                  user?.displayName ||
+                                  "User Avatar"
+                                }
                                 width={100}
                                 height={100}
                               />

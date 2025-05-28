@@ -120,8 +120,10 @@ const Login = () => {
     }
   };
   if (isAuthenticated) {
-    return router.replace("/");
+    router.push("/");
+    return;
   }
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-hero-gradient">
       <div className="container max-w-md mx-4 bg-white rounded-lg">
