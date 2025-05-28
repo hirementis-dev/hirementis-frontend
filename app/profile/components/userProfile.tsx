@@ -22,6 +22,7 @@ import SocialLinks from "./SocialLinks";
 import Link from "next/link";
 import { useUserStore } from "@/hooks/userUser";
 import { useRouter } from "next/navigation";
+import InterviewHistoryCard from "./InterviewHistoryCard";
 
 // Twitter icon component since it's not in lucide-react
 const TwitterIcon = ({ className }: { className?: string }) => (
@@ -154,12 +155,11 @@ const ProfileView = () => {
 
               {/* Quick Info */}
               <div className="flex flex-wrap gap-4 text-sm text-gray-600 dark:text-gray-400">
-                📌{profileData.location ||
+                📌 {profileData.location ||
                   (user?.location && (
                     <div className="flex items-center gap-1">
-                      {/* <span>📌</span> */}
                       <MapPin className="h-4 w-4" />
-                      📌{profileData.location || user?.location}
+                     📌 {profileData.location || user?.location}
                     </div>
                   ))}
                 {profileData.website && (
@@ -169,6 +169,7 @@ const ProfileView = () => {
                     rel="noopener noreferrer"
                     className="flex items-center gap-1 hover:text-green-600 dark:hover:text-teal-400 transition-colors"
                   >
+                    {/* <span>🌐</span> */}
                     <Globe className="h-4 w-4" />
                     Portfolio
                   </a>
@@ -323,6 +324,9 @@ const ProfileView = () => {
           </div>
         </CardContent>
       </Card>
+
+      {/* Interview History Card */}
+      <InterviewHistoryCard />
     </div>
   );
 };
