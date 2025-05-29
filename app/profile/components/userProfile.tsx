@@ -107,7 +107,7 @@ const ProfileView = () => {
 
   return (
     <div className="space-y-6 pb-20 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 section-padding">
-      <Card className="shadow-md border rounded-2xl dark:bg-gray-900/50 dark:border-gray-800">
+      <Card className="shadow-md border rounded-2xl dark:bg-gray-900/50 dark:border-gray-800 border-emerald-200">
         <CardContent className="p-8">
           <div className="flex flex-col md:flex-row items-start gap-6">
             {/* Profile Picture */}
@@ -194,7 +194,7 @@ const ProfileView = () => {
       </Card>
 
       {/* Skills & Interests Card */}
-      <Card className="shadow-md border rounded-2xl dark:bg-gray-900/50 dark:border-gray-800">
+      <Card className="shadow-md border rounded-2xl border-emerald-200">
         <CardContent className="p-6">
           <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
             🎯 Skills & Interests
@@ -216,7 +216,7 @@ const ProfileView = () => {
       </Card>
 
       {/* Resume Card */}
-      <Card className="shadow-md border rounded-2xl dark:bg-gray-900/50 dark:border-gray-800">
+      <Card className="shadow-md border rounded-2xl border-emerald-200">
         <CardContent className="p-6">
           <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
             📄 Resume
@@ -285,7 +285,7 @@ const ProfileView = () => {
       </Card>
 
       {/* Social Links Card */}
-      <Card className="shadow-md border rounded-2xl dark:bg-gray-900/50 dark:border-gray-800">
+      <Card className="shadow-md border rounded-2xl border-emerald-200">
         <CardContent className="p-6">
           <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
             🔗 Social Links

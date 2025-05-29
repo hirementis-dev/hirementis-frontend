@@ -32,8 +32,8 @@ const InterviewHistoryCard = ({
   formatDate = (dateString: string) =>
     new Date(dateString).toLocaleDateString(),
   getScoreColor = (score: number) => {
-    if (score >= 80) return "bg-green-100 text-green-800";
-    if (score >= 60) return "bg-yellow-100 text-yellow-800";
+    if (score >= 8) return "bg-green-100 text-green-800";
+    if (score >= 6) return "bg-yellow-100 text-yellow-800";
     return "bg-red-100 text-red-800";
   },
 }: InterviewHistoryCardProps = {}) => {
