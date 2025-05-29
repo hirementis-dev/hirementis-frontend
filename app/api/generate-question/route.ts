@@ -27,7 +27,7 @@ export async function POST(request: Request) {
         {
           role: "user",
           content: `
-You are an expert HR interviewer and assessment designer. Your task is to generate thoughtful, specific, and relevant interview questions based on a given job description and its structured details.
+You are an expert HR interviewer and assessment expert. Your task is to generate thoughtful, specific, and relevant interview questions based on a given job description and its structured details.
 
 Objective:
 Generate exactly ${question_amount} high-quality questions to evaluate a candidate’s readiness and fit for the role.
@@ -47,14 +47,15 @@ ${requirements.map((item: string) => `- ${item}`).join("\n")}
 ${responsibilities.map((item: string) => `- ${item}`).join("\n")} 
 
 Guidelines:
-- Use the provided job data to craft questions that assess:
+  - Start with basic question, and than rise the bar
+  - Use the provided job data to craft questions that assess:
   - Required technical skills and tools (from “requirements”)
   - Practical understanding of the role’s responsibilities
   - Candidate’s experience level and fit
   - Behavioral and situational responses relevant to the role
-- Questions should feel realistic, like those asked in actual interviews for this role.
-- Phrase questions professionally and clearly.
-- Do not include duplicate or generic questions.
+  - Questions should feel realistic, like those asked in actual interviews for this role.
+  - Phrase questions professionally and clearly.
+  - Do not include duplicate or generic questions.
 
 Avoid:
 - Vague or unrelated questions

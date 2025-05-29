@@ -128,8 +128,8 @@ const Footer: React.FC = () => {
                 </a>
               </li>
               <li>
-                <a href="#" className="text-gray-600 hover:text-emerald-600">
-                  Careers
+                <a href="/founders" className="text-gray-600 hover:text-emerald-600">
+                  Meet the Founders
                 </a>
               </li>
               <li>
