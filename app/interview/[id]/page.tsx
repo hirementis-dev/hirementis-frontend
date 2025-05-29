@@ -58,6 +58,7 @@ const Page = () => {
   const [user, setUser] = useState<User | null>(null);
   const [showConfirmationDialog, setShowConfirmationDialog] =
     useState<boolean>(false);
+  const [error, setError] = useState({ state: true, error: {} });
   const { user: userState } = useUserStore();
 
   const params = useParams();
@@ -99,9 +100,9 @@ const Page = () => {
       setIsSpeaking(false);
     };
 
-    const onError = (error: any) => {
-      console.log("Error:", error);
-      toast.info(error?.error?.msg || "intreview ended");
+    const onError = (err: any) => {
+      setError({ ...error, state: true, error: err });
+      toast.info(err?.err?.msg || "intreview ended");
     };
 
     vapi.on("call-start", onCallStart);
@@ -179,6 +180,9 @@ const Page = () => {
   const endInterview = async () => {
     setIsInterviewStarted(false);
     vapi.stop();
+    if (error.state) {
+      redirect("/profile");
+    }
     setLoading({
       state: true,
       message: "Generating feedback for you...",
@@ -250,7 +254,7 @@ const Page = () => {
 
       try {
         const stream = await navigator.mediaDevices.getUserMedia({
-          audio: true,
+          audio: micActive,
         });
         audioStreamRef.current = stream;
 
@@ -273,6 +277,9 @@ const Page = () => {
 
   const toggleMic = () => {
     setMicActive(!micActive);
+    if (isInterviewStarted) {
+      vapi.setMuted(micActive);
+    }
   };
 
   const toggleCamera = () => {

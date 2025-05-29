@@ -171,7 +171,7 @@ const ProfileBuilder = () => {
   };
 
   useEffect(() => {
-    if (!isAuthenticated) return router.replace("/login");
+    if (!isAuthenticated) router.replace("/login");
   }, []);
 
   return (
@@ -249,13 +249,13 @@ const ProfileBuilder = () => {
               <Label htmlFor="location" className="text-sm font-medium">
                 Location
               </Label>
-            <input
-              type="text"
-              className="rounded-lg w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="Enter your location"
-              value={formData.location}
-              onChange={(e) => handleInputChange("location", e.target.value)}
-            />
+              <input
+                type="text"
+                className="rounded-lg w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="Enter your location"
+                value={formData.location}
+                onChange={(e) => handleInputChange("location", e.target.value)}
+              />
             </div>
             <div className="space-y-2">
               <Label htmlFor="pronouns" className="text-sm font-medium">

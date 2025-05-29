@@ -1,7 +1,5 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -22,14 +20,16 @@ import {
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { db, auth } from "@/firebase/client";
 import { toast } from "sonner";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useUserStore } from "@/hooks/userUser";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
-  const router = useRouter();
   const { isAuthenticated } = useUserStore();
+  const router = useRouter();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -88,8 +88,21 @@ const Login = () => {
       const result = await signInWithPopup(auth, provider);
       const user = result.user;
 
-      // Save user info to Firestore if not exists
       const userRef = doc(db, "users", user.uid);
+      const userSnap = await getDoc(userRef);
+
+      let finalProfilePicture = user.photoURL || "";
+
+      if (userSnap.exists()) {
+        const existingData = userSnap.data();
+
+        if (
+          existingData.profilePicture &&
+          existingData.profilePicture !== user.photoURL
+        ) {
+          finalProfilePicture = existingData.profilePicture;
+        }
+      }
 
       await setDoc(
         userRef,
@@ -98,7 +111,7 @@ const Login = () => {
           email: user.email,
           displayName: user.displayName || "",
           provider: providerType,
-          profilePicture: user.photoURL || "",
+          profilePicture: finalProfilePicture,
         },
         { merge: true }
       );
@@ -119,10 +132,12 @@ const Login = () => {
       }
     }
   };
-  if (isAuthenticated) {
-    router.push("/");
-    return;
-  }
+  useEffect(() => {
+    if (isAuthenticated) {
+      router.push("/");
+      return;
+    }
+  }, [router]);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-hero-gradient">

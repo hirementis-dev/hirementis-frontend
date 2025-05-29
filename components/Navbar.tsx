@@ -47,10 +47,6 @@ const Navbar: React.FC = () => {
     return () => unsubscribe();
   }, []);
 
-  // useEffect(() => {
-
-  // }, []);
-
   const handleNavlinkClick = () => {
     setIsMenuOpen(false);
   };
@@ -59,6 +55,7 @@ const Navbar: React.FC = () => {
     await signOut(auth);
     router.push("/");
     setUserState(null);
+    setIsAuthenticated();
     toast.success("Logged out successfully");
   };
 
@@ -249,12 +246,7 @@ const Navbar: React.FC = () => {
                       href="/login"
                       className="w-full"
                     >
-                      <Button
-                        variant="outline"
-                        className="w-full justify-center"
-                      >
-                        Login
-                      </Button>
+                      Login
                     </Link>
                     <Link
                       onClick={handleNavlinkClick}
