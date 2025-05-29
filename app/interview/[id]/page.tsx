@@ -1,5 +1,4 @@
 "use client";
-import { Loader } from "@/components/Loader";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { jobs } from "@/data/jobs";
@@ -21,6 +20,7 @@ import { onAuthStateChanged, User } from "firebase/auth";
 import Image from "next/image";
 import ConfirmationDialog from "./components/ConfiramtionDialog";
 import { useUserStore } from "@/hooks/userUser";
+import FullScreenLoader from "@/components/FullScreenLoader";
 
 interface LoaderState {
   state: boolean;
@@ -153,9 +153,9 @@ const Page = () => {
       state: true,
       message: "Reva is getting ready to take your interview..",
     });
-  
+
     const VAPI_ASSISTANT_ID = process.env.NEXT_PUBLIC_VAPI_ASSISTANT_ID!;
-console.log(VAPI_ASSISTANT_ID,VAPI_PUBLIC_KEY)
+    console.log(VAPI_ASSISTANT_ID, VAPI_PUBLIC_KEY);
     const interviewQs = interviewQuestions
       .map((item: string) => `- ${item}`)
       .join("\n");
@@ -319,7 +319,7 @@ console.log(VAPI_ASSISTANT_ID,VAPI_PUBLIC_KEY)
   }
 
   return loading.state ? (
-    <Loader loading={loading.state} message={loading.message} />
+    <FullScreenLoader isLoading={loading.state} text={loading.message} />
   ) : (
     <div className="min-h-screen bg-gradient-to-br from-emerald-50/50 to-white">
       <div>

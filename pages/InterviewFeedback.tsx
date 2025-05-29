@@ -4,7 +4,6 @@ import Link from "next/link";
 import { redirect, useParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
-import { Loader } from "@/components/Loader";
 import InterviewSummary from "@/components/interview-feedback/InterviewSummary";
 import ScorecardSection from "@/components/interview-feedback/ScorecardSection";
 import QuestionFeedbackAccordion from "@/components/interview-feedback/QuestionFeedbackAccordion";
@@ -13,6 +12,7 @@ import FeedbackActions from "@/components/interview-feedback/FeedbackActions";
 import { Badge } from "@/components/ui/badge";
 import { useFeedback } from "@/hooks/useFeedback";
 import { useRouter } from "next/navigation";
+import FullScreenLoader from "@/components/FullScreenLoader";
 
 const InterviewFeedback = ({ id }: { id: string }) => {
   const router = useRouter();
@@ -27,7 +27,9 @@ const InterviewFeedback = ({ id }: { id: string }) => {
     useFeedback(id);
 
   if (isLoading) {
-    return <Loader loading={true} message="Loading interview feedback..." />;
+    return (
+      <FullScreenLoader isLoading={true} text="Loading interview feedback..." />
+    );
   }
   if (!feedbackData || !feedbackData.success) {
     return (
