@@ -3,15 +3,14 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { jobs } from "@/data/jobs";
 import { Camera, CameraOff, CircleUserRound, Mic, MicOff } from "lucide-react";
-import { redirect } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import { useParams } from "next/navigation";
 import React, { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import JobNotFound from "./components/JobNotFound";
 import axios from "axios";
 import Vapi from "@vapi-ai/web";
-const VAPI_PUBLIC_KEY = process.env.NEXT_PUBLIC_VAPI_PUBLIC_KEY;
-const vapi = new Vapi(VAPI_PUBLIC_KEY!);
+import { vapi } from "@/lib/vapi.sdk";
 import { interviewer } from "@/utils/vapi/prompt";
 import { toast } from "sonner";
 import { nanoid } from "nanoid";
@@ -58,8 +57,8 @@ const Page = () => {
   const [user, setUser] = useState<User | null>(null);
   const [showConfirmationDialog, setShowConfirmationDialog] =
     useState<boolean>(false);
-  const [error, setError] = useState({ state: false, error: {} });
   const { user: userState } = useUserStore();
+  const router = useRouter();
 
   const params = useParams();
   const id = params?.id;
@@ -79,8 +78,10 @@ const Page = () => {
       setMicActive(true);
     };
 
-    const onCallEnd = () => {
+    const onCallEnd = async () => {
       setCallStatus(CallStatus.FINISHED);
+      toast.message("Interview ended");
+      await endInterview();
     };
 
     const onMessage = (message: any) => {
@@ -91,6 +92,7 @@ const Page = () => {
     };
 
     const onSpeechStart = () => {
+      setCallStatus(CallStatus.ACTIVE);
       console.log("speech start");
       setIsSpeaking(true);
     };
@@ -101,7 +103,6 @@ const Page = () => {
     };
 
     const onError = (err: any) => {
-      setError({ ...error, state: true, error: err });
       toast.info(err?.err?.msg || "intreview ended");
     };
 
@@ -178,12 +179,9 @@ const Page = () => {
     setIsInterviewStarted(true);
   };
 
-  const endInterview = async () => {
+  async function endInterview() {
     setIsInterviewStarted(false);
     vapi.stop();
-    if (error.state) {
-      redirect("/profile");
-    }
     setLoading({
       state: true,
       message: "Generating feedback for you...",
@@ -200,8 +198,8 @@ const Page = () => {
     setLoading({
       state: false,
     });
-    redirect(`/feedback/${interviewId}`);
-  };
+    router.replace(`/feedback/${interviewId}`);
+  }
 
   useEffect(() => {
     const setupCamera = async () => {
@@ -294,7 +292,8 @@ const Page = () => {
     const lastMessage = messages[messages.length - 1];
     if (lastMessage.role === "assistant") {
       if (
-        lastMessage.content.includes("I'll go ahead and end the interview now.")
+        lastMessage.content.includes("end the interview.") ||
+        lastMessage.content.includes("end the session.")
       ) {
         setShowConfirmationDialog(true);
       }
@@ -353,70 +352,70 @@ const Page = () => {
           <div className="flex-1">
             <Card className="shadow-lg border border-emerald-100 overflow-hidden max-h-screen">
               <CardContent className="p-6">
-              <div className="flex flex-col md:flex-row gap-6">
-                <div className="h-[350px] flex-1 flex flex-col items-center justify-center border border-gray-200 rounded-lg p-4 bg-white shadow-sm">
-                  <h3 className="text-xl mb-4 text-center font-medium">
-                    Reva
-                  </h3>
-                  <div className="flex items-center justify-center relative w-28 h-28">
-                    {isSpeaking && (
-                      <div className="absolute inset-0 rounded-full bg-emerald-400 opacity-75 animate-ping"></div>
-                    )}
-                    <div className="relative w-24 h-24 rounded-full bg-emerald-50 flex items-center justify-center border border-emerald-200 shadow-inner overflow-hidden">
-                      <Image
-                        src="/Reva_profile.png"
-                        alt="Reva AI Avatar"
-                        width={96}
-                        height={96}
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                  </div>
-                </div>
-                <div className="flex-1 flex flex-col items-center justify-center border border-gray-200 rounded-lg p-4 bg-white shadow-sm">
-                  {cameraActive ? (
-                    <div>
-                      <video
-                        ref={videoRef}
-                        autoPlay
-                        muted
-                        className="w-full h-full rounded-lg object-cover"
-                      />
-                    </div>
-                  ) : (
-                    <div>
-                      <h3 className="text-xl mb-4 text-center font-medium">
-                        You
-                      </h3>
-                      <div className="w-24 h-24 rounded-full bg-gray-100 flex items-center justify-center border border-gray-200 shadow-inner">
-                        {userState?.profilePicture || user?.photoURL ? (
-                          <div className="w-full h-full rounded-full overflow-hidden">
-                            <Image
-                              src={
-                                userState?.profilePicture ||
-                                user?.photoURL ||
-                                ""
-                              }
-                              alt={
-                                userState?.displayName ||
-                                user?.displayName ||
-                                "User Avatar"
-                              }
-                              width={100}
-                              height={100}
-                            />
-                          </div>
-                        ) : (
-                          <CircleUserRound
-                            size={"54"}
-                            className="text-zinc-500"
-                          />
-                        )}
+                <div className="flex flex-col md:flex-row gap-6">
+                  <div className="h-[350px] flex-1 flex flex-col items-center justify-center border border-gray-200 rounded-lg p-4 bg-white shadow-sm">
+                    <h3 className="text-xl mb-4 text-center font-medium">
+                      Reva
+                    </h3>
+                    <div className="flex items-center justify-center relative w-28 h-28">
+                      {isSpeaking && (
+                        <div className="absolute inset-0 rounded-full bg-emerald-400 opacity-75 animate-ping"></div>
+                      )}
+                      <div className="relative w-24 h-24 rounded-full bg-emerald-50 flex items-center justify-center border border-emerald-200 shadow-inner overflow-hidden">
+                        <Image
+                          src="/Reva_profile.png"
+                          alt="Reva AI Avatar"
+                          width={96}
+                          height={96}
+                          className="w-full h-full object-cover"
+                        />
                       </div>
                     </div>
-                  )}
+                  </div>
+                  <div className="flex-1 flex flex-col items-center justify-center border border-gray-200 rounded-lg p-4 bg-white shadow-sm">
+                    {cameraActive ? (
+                      <div>
+                        <video
+                          ref={videoRef}
+                          autoPlay
+                          muted
+                          className="w-full h-full rounded-lg object-cover"
+                        />
+                      </div>
+                    ) : (
+                      <div>
+                        <h3 className="text-xl mb-4 text-center font-medium">
+                          You
+                        </h3>
+                        <div className="w-24 h-24 rounded-full bg-gray-100 flex items-center justify-center border border-gray-200 shadow-inner">
+                          {userState?.profilePicture || user?.photoURL ? (
+                            <div className="w-full h-full rounded-full overflow-hidden">
+                              <Image
+                                src={
+                                  userState?.profilePicture ||
+                                  user?.photoURL ||
+                                  ""
+                                }
+                                alt={
+                                  userState?.displayName ||
+                                  user?.displayName ||
+                                  "User Avatar"
+                                }
+                                width={100}
+                                height={100}
+                              />
+                            </div>
+                          ) : (
+                            <CircleUserRound
+                              size={"54"}
+                              className="text-zinc-500"
+                            />
+                          )}
+                        </div>
+                      </div>
+                    )}
+                  </div>
                 </div>
-              </div>
               </CardContent>
 
               <CardFooter className="border-t bg-gray-50 p-4 flex justify-center gap-4">
@@ -444,7 +443,7 @@ const Page = () => {
                   {!cameraActive ? <CameraOff /> : <Camera />}
                 </Button>
 
-                {isInterviewStarted ? (
+                {isInterviewStarted || callStatus == "ACTIVE" ? (
                   <Button
                     variant="destructive"
                     size="lg"
