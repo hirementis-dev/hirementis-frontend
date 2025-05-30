@@ -1,6 +1,5 @@
 import axios from "axios";
-import { auth, db } from "./client";
-import { onAuthStateChanged, User } from "firebase/auth";
+import { db } from "./client";
 import { doc, getDoc } from "firebase/firestore";
 
 export async function getInterviewById(

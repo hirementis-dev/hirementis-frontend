@@ -1,6 +1,7 @@
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { FinalRecommendations as FinalRecommendationsType } from "@/types/feedback";
+import { Star, Target, TrendingUp } from "lucide-react";
 
 interface FinalRecommendationsProps {
   recommendations: FinalRecommendationsType;
@@ -10,43 +11,59 @@ const FinalRecommendations: React.FC<FinalRecommendationsProps> = ({
   recommendations,
 }) => {
   return (
-    <Card className="mb-6 overflow-hidden shadow-md border-emerald-100">
-      <CardHeader className="bg-gray-50 border-b p-6">
-        <CardTitle className="text-xl">Next Steps & Recommendations</CardTitle>
-      </CardHeader>
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center text-emerald-700">
+            <Target className="w-5 h-5 mr-2" />
+            Practice Focus Areas
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <ul className="space-y-3">
+            {recommendations.practice_focus_areas.map((area, index) => (
+              <li key={index} className="flex items-start">
+                <div className="w-6 h-6 bg-emerald-100 text-emerald-700 rounded-full flex items-center justify-center text-xs font-bold mr-3 mt-0.5 flex-shrink-0">
+                  {index + 1}
+                </div>
+                <span className="text-sm text-gray-700">{area}</span>
+              </li>
+            ))}
+          </ul>
+        </CardContent>
+      </Card>
 
-      <CardContent className="p-6">
-        <div className="space-y-6">
-          <div>
-            <h3 className="font-semibold text-lg mb-3">Practice Focus Areas</h3>
-            <ul className="space-y-2">
-              {recommendations.practice_focus_areas.map((area, i) => (
-                <li key={i} className="flex items-center gap-3">
-                  <div className="h-8 w-8 text-sm font-semibold rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center flex-shrink-0 mt-0.5">
-                    {i + 1}
-                  </div>
-                  <span className="text-gray-700">{area}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div>
-            <h3 className="font-semibold text-lg mb-3">Overall Impression</h3>
-            <p className="text-gray-700">
+      {/* Overall Impression & Final Tip */}
+      <div className="space-y-6">
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center text-blue-700">
+              <Star className="w-5 h-5 mr-2" />
+              Overall Impression
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-gray-700 leading-relaxed">
               {recommendations.overall_impression}
             </p>
-          </div>
+          </CardContent>
+        </Card>
 
-          <div className="bg-gradient-to-r from-emerald-100 to-emerald-50 p-4 rounded-lg border border-emerald-200">
-            <h3 className="font-semibold text-lg mb-2 text-emerald-800">
-              Key Takeaway
-            </h3>
-            <p className="text-emerald-700">{recommendations.final_tip}</p>
-          </div>
-        </div>
-      </CardContent>
-    </Card>
+        <Card className="bg-gradient-to-r from-emerald-50 to-blue-50 border-emerald-200 ">
+          <CardHeader>
+            <CardTitle className="flex items-center text-emerald-700">
+              <TrendingUp className="w-5 h-5 mr-2" />
+              Pro Tip
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-emerald-800 font-medium">
+              {recommendations.final_tip}
+            </p>
+          </CardContent>
+        </Card>
+      </div>
+    </div>
   );
 };
 

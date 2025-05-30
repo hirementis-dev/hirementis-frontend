@@ -15,20 +15,14 @@ import { db } from "@/firebase/admin";
 // }
 
 const client = new OpenAI({
-  apiKey: process.env.NEXT_PUBLIC_GEMINI_API_KEY,
-  baseURL: process.env.NEXT_PUBLIC_GEMINI_API_BASE_URL,
+  apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY,
+  // baseURL: process.env.NEXT_PUBLIC_GEMINI_API_BASE_URL,
 });
 
 export async function POST(request: Request) {
   const { transcript, job, userId, interviewId, interviewQs } =
     await request.json();
-  console.log("routes data", {
-    transcript,
-    job,
-    userId,
-    interviewId,
-    interviewQs,
-  });
+
   if (!transcript || !job || !interviewId) {
     return Response.json({
       success: false,
@@ -45,7 +39,7 @@ export async function POST(request: Request) {
       .join("");
 
     const result = await client.chat.completions.create({
-      model: "gemini-2.0-flash-001",
+      model: "gpt-4o-mini",
       messages: [
         {
           role: "system",
@@ -137,7 +131,7 @@ Generate your coaching feedback in this strict JSON format:
       "question_id": "number",
       "question": "Exact question from transcript (no paraphrasing)",
       "candidate_answer": "Exact answer from the transcript (verbatim, no rewriting)",
-      "actual_answer": "A strong, ideal response for this specific role",
+      "actual_answer": "A strong, ideal response for this specific question",
       "expected_ideal_points": ["Key things a great candidate would mention"],
       "evaluation": {
         "score": "number (0 to 10)",
@@ -156,10 +150,10 @@ Generate your coaching feedback in this strict JSON format:
 }
 `,
         },
-        {
-          role: "user",
-          content: "Go ahead and generate the relevant feedback",
-        },
+        // {
+        //   role: "user",
+        //   content: "Go ahead and generate the relevant feedback",
+        // },
       ],
       response_format: { type: "json_object" },
     });
@@ -200,7 +194,6 @@ Generate your coaching feedback in this strict JSON format:
 export async function GET() {
   return Response.json({ message: "All righty !!" });
 }
-
 `
 
 `;

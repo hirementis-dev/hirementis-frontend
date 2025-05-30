@@ -18,7 +18,7 @@ interface FeedbackActionsProps {
 
 const FeedbackActions: React.FC<FeedbackActionsProps> = ({ id, createdAt }) => {
   return (
-    <div className="flex flex-col md:flex-row gap-4 justify-between items-center">
+    <div className="flex flex-col md:flex-row gap-4 justify-between items-center my-3">
       <div className="text-sm text-gray-600">
         Interview date: {formatFirebaseTimestamp(createdAt)}
       </div>

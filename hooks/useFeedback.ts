@@ -159,8 +159,7 @@ export const useFeedback = (id: string | undefined) => {
 
   const scoreColor = (score: number): string => {
     if (score >= 8) return "bg-emerald-400";
-    if (score >= 6) return "bg-emerald-200";
-    if (score >= 4) return "bg-yellow-400";
+    if (score >= 6) return "bg-yellow-500";
     return "bg-red-500";
   };
 
