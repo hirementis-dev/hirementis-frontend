@@ -69,7 +69,7 @@ const PricingSection: React.FC = () => {
       price: "$99",
       period: "per month",
       features: [
-        "100 Candidate interview",
+        "50 Candidate interview",
         "Advanced analytics & insights",
         "Custom integrations",
         "White-label solution",

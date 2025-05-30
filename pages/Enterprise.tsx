@@ -148,7 +148,7 @@ const EnterprisePage = () => (
               <h2 className="text-xl font-semibold mb-4 text-gray-800">Pricing</h2>
               <div className="space-y-4 text-gray-700">
                 <div className="p-4 bg-emerald-50 border border-emerald-200 rounded-lg">
-                  <p><strong>Enterprise Job Posting Package:</strong> $99 for 100 interviews</p>
+                  <p><strong>Enterprise Job Posting Package:</strong> $99 for 50 interviews</p>
                   <p className="mt-2 text-sm">Ideal for companies looking to source and screen talent</p>
                 </div>
                 <p>Educational institutions and training providers can subscribe to the Enterprise plan for structured student preparation.</p>

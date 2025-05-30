@@ -147,7 +147,7 @@ const HelpCenterPage = () => (
                 <div>
                   <h3 className="text-lg font-medium mb-3 text-gray-800">How much does it cost?</h3>
                   <div className="p-4 bg-emerald-50 border border-emerald-200 rounded-lg">
-                    <p><strong>Enterprise Job Posting Package:</strong> $99 for 100 interviews</p>
+                    <p><strong>Enterprise Job Posting Package:</strong> $99 for 50 interviews</p>
                   </div>
                 </div>
 
