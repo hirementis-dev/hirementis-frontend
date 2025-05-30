@@ -353,64 +353,70 @@ const Page = () => {
           <div className="flex-1">
             <Card className="shadow-lg border border-emerald-100 overflow-hidden max-h-screen">
               <CardContent className="p-6">
-                <div className="flex flex-col md:flex-row gap-6">
-                  <div className="h-[350px] flex-1 flex flex-col items-center justify-center border border-gray-200 rounded-lg p-4 bg-white shadow-sm">
-                    <h3 className="text-xl mb-4 text-center font-medium">
-                      Reva
-                    </h3>
-                    <div className="flex items-center justify-center relative w-28 h-28">
-                      {isSpeaking && (
-                        <div className="absolute inset-0 rounded-full bg-emerald-400 opacity-75 animate-ping"></div>
-                      )}
-                      <div className="relative w-24 h-24 font-semibold rounded-full bg-emerald-50 flex items-center justify-center text-4xl border border-emerald-200 text-emerald-600 shadow-inner">
-                        AI
-                      </div>
+              <div className="flex flex-col md:flex-row gap-6">
+                <div className="h-[350px] flex-1 flex flex-col items-center justify-center border border-gray-200 rounded-lg p-4 bg-white shadow-sm">
+                  <h3 className="text-xl mb-4 text-center font-medium">
+                    Reva
+                  </h3>
+                  <div className="flex items-center justify-center relative w-28 h-28">
+                    {isSpeaking && (
+                      <div className="absolute inset-0 rounded-full bg-emerald-400 opacity-75 animate-ping"></div>
+                    )}
+                    <div className="relative w-24 h-24 rounded-full bg-emerald-50 flex items-center justify-center border border-emerald-200 shadow-inner overflow-hidden">
+                      <Image
+                        src="/Reva_profile.png"
+                        alt="Reva AI Avatar"
+                        width={96}
+                        height={96}
+                        className="w-full h-full object-cover"
+                      />
                     </div>
                   </div>
-                  <div className="flex-1 flex flex-col items-center justify-center border border-gray-200 rounded-lg p-4 bg-white shadow-sm">
-                    {cameraActive ? (
-                      <div>
-                        <video
-                          ref={videoRef}
-                          autoPlay
-                          muted
-                          className="w-full h-full rounded-lg object-cover"
-                        />
-                      </div>
-                    ) : (
-                      <div>
-                        <h3 className="text-xl mb-4 text-center font-medium">
-                          You
-                        </h3>
-                        <div className="w-24 h-24 rounded-full bg-gray-100 flex items-center justify-center border border-gray-200 shadow-inner">
-                          {userState?.profilePicture || user?.photoURL ? (
-                            <div className="w-full h-full rounded-full overflow-hidden">
-                              <Image
-                                src={
-                                  userState?.profilePicture ||
-                                  user?.photoURL ||
-                                  ""
-                                }
-                                alt={
-                                  userState?.displayName ||
-                                  user?.displayName ||
-                                  "User Avatar"
-                                }
-                                width={100}
-                                height={100}
-                              />
-                            </div>
-                          ) : (
-                            <CircleUserRound
-                              size={"54"}
-                              className="text-zinc-500"
-                            />
-                          )}
-                        </div>
-                      </div>
-                    )}
-                  </div>
                 </div>
+                <div className="flex-1 flex flex-col items-center justify-center border border-gray-200 rounded-lg p-4 bg-white shadow-sm">
+                  {cameraActive ? (
+                    <div>
+                      <video
+                        ref={videoRef}
+                        autoPlay
+                        muted
+                        className="w-full h-full rounded-lg object-cover"
+                      />
+                    </div>
+                  ) : (
+                    <div>
+                      <h3 className="text-xl mb-4 text-center font-medium">
+                        You
+                      </h3>
+                      <div className="w-24 h-24 rounded-full bg-gray-100 flex items-center justify-center border border-gray-200 shadow-inner">
+                        {userState?.profilePicture || user?.photoURL ? (
+                          <div className="w-full h-full rounded-full overflow-hidden">
+                            <Image
+                              src={
+                                userState?.profilePicture ||
+                                user?.photoURL ||
+                                ""
+                              }
+                              alt={
+                                userState?.displayName ||
+                                user?.displayName ||
+                                "User Avatar"
+                              }
+                              width={100}
+                              height={100}
+                            />
+                          </div>
+                        ) : (
+                          <CircleUserRound
+                            size={"54"}
+                            className="text-zinc-500"
+                          />
+                        )}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
               </CardContent>
 
               <CardFooter className="border-t bg-gray-50 p-4 flex justify-center gap-4">
