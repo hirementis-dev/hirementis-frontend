@@ -58,7 +58,7 @@ const Page = () => {
   const [user, setUser] = useState<User | null>(null);
   const [showConfirmationDialog, setShowConfirmationDialog] =
     useState<boolean>(false);
-  const [error, setError] = useState({ state: true, error: {} });
+  const [error, setError] = useState({ state: false, error: {} });
   const { user: userState } = useUserStore();
 
   const params = useParams();
@@ -194,8 +194,9 @@ const Page = () => {
       job,
       interviewQs: interviewQuestions,
       interviewId,
-      userId: user?.uid,
+      userId: user?.uid || user?.uid,
     });
+    console.log("result", result);
     setLoading({
       state: false,
     });

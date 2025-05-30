@@ -41,13 +41,13 @@ const ProfileView = () => {
   const { user, isAuthenticated } = useUserStore();
   const router = useRouter();
 
-  if (!isAuthenticated) {
-    router.replace("/login");
-  }
+  // if (!isAuthenticated) {
+  //   router.push("/login");
+  // }
 
   useEffect(() => {
     if (!isAuthenticated) {
-      router.replace("/login");
+      router.push("/login");
     }
 
     const fetchProfile = async () => {
@@ -60,7 +60,7 @@ const ProfileView = () => {
       }
     };
     fetchProfile();
-  }, [user, isAuthenticated]);
+  }, [user, isAuthenticated, router]);
 
   if (!profileData) {
     return <div>⏳ Loading...</div>;
@@ -130,8 +130,9 @@ const ProfileView = () => {
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div>
                   <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-                    👋 {profileData.displayName ||
-                      user?.displayName ||
+                    👋{" "}
+                    {user?.displayName ||
+                      profileData.displayName ||
                       user?.firstName}
                   </h1>
                   <p className="text-gray-600 dark:text-gray-400 font-medium">
@@ -155,11 +156,12 @@ const ProfileView = () => {
 
               {/* Quick Info */}
               <div className="flex flex-wrap gap-4 text-sm text-gray-600 dark:text-gray-400">
-                📌 {profileData.location ||
+                📌{" "}
+                {profileData.location ||
                   (user?.location && (
                     <div className="flex items-center gap-1">
                       <MapPin className="h-4 w-4" />
-                     📌 {profileData.location || user?.location}
+                      📌 {profileData.location || user?.location}
                     </div>
                   ))}
                 {profileData.website && (

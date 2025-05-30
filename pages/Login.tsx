@@ -137,7 +137,7 @@ const Login = () => {
       router.push("/");
       return;
     }
-  }, [router]);
+  }, [isAuthenticated, router]);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-hero-gradient">
