@@ -15,10 +15,10 @@ import InterviewFeedbackGenerator from "@/lib/generate-feedback";
 //   });
 // }
 
-const client = new OpenAI({
-  apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY,
-  // baseURL: process.env.NEXT_PUBLIC_GEMINI_API_BASE_URL,
-});
+// const client = new OpenAI({
+//   apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY,
+//   // baseURL: process.env.NEXT_PUBLIC_GEMINI_API_BASE_URL,
+// });
 
 export async function POST(request: Request) {
   const { transcript, job, userId, interviewId, interviewQs } =
