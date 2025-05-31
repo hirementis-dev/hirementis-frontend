@@ -41,13 +41,11 @@ const ProfileView = () => {
   const { user, isAuthenticated } = useUserStore();
   const router = useRouter();
 
-  // if (!isAuthenticated) {
-  //   router.push("/login");
-  // }
-
   useEffect(() => {
     if (!isAuthenticated) {
       router.push("/login");
+    } else {
+      router.push("/profile");
     }
 
     const fetchProfile = async () => {
@@ -63,7 +61,7 @@ const ProfileView = () => {
   }, [user, isAuthenticated, router]);
 
   if (!profileData) {
-    return <div>⏳ Loading...</div>;
+    return <div className="text-black">⏳ Loading...</div>;
   }
 
   const socialPlatforms = [

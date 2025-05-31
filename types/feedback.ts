@@ -26,7 +26,6 @@ export interface Scorecard {
   problem_solving: ScoreItem;
   communication: ScoreItem;
   confidence: ScoreItem;
-  jd_alignment: ScoreItem;
 }
 
 export interface InterviewSummary {
@@ -46,12 +45,7 @@ export interface FeedbackData {
   success: boolean;
   job: any;
   createdAt: any;
-  feedback: {
-    interview_summary: InterviewSummary;
-    scorecard: Scorecard;
-    per_question_feedback: QuestionFeedback[];
-    final_recommendations: FinalRecommendations;
-  };
+  feedback: InterviewFeedbackResult;
 }
 
 export interface LLMResponse {

@@ -23,10 +23,12 @@ const FinalRecommendations: React.FC<FinalRecommendationsProps> = ({
           <ul className="space-y-3">
             {recommendations.practice_focus_areas.map((area, index) => (
               <li key={index} className="flex items-start">
-                <div className="w-6 h-6 bg-emerald-100 text-emerald-700 rounded-full flex items-center justify-center text-xs font-bold mr-3 mt-0.5 flex-shrink-0">
+                <div className="w-6 h-6 bg-emerald-100 text-emerald-700 rounded-full flex items-center justify-center text-xs sm:text-sm font-bold mr-3 mt-0.5 flex-shrink-0">
                   {index + 1}
                 </div>
-                <span className="text-sm text-gray-700">{area}</span>
+                <span className="text-sm sm:text-base text-gray-700">
+                  {area}
+                </span>
               </li>
             ))}
           </ul>
