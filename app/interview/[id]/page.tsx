@@ -232,7 +232,7 @@ const Page = () => {
     const onCallEnd = async () => {
       setCallStatus(CallStatus.FINISHED);
       toast.message("Interview ended");
-      await endInterview();
+      // await endInterview();
     };
 
     const onMessage = (message: any) => {
@@ -300,7 +300,7 @@ const Page = () => {
   };
 
   const startInterview = async () => {
-    setInterviewId(nanoid());
+    setInterviewId(() => nanoid());
     const questions = await setupInterview();
     setInterviewQuestions(questions);
     setLoading({
@@ -351,17 +351,18 @@ const Page = () => {
         state: true,
         message: "It will take just 1 or 2 minutes more..",
       });
-      console.log("interviewId", interviewId);
-      setTimeout(() => {
+
+      if (result.data.success) {
         setLoading({ state: false });
         router.push(`/feedback/${interviewId}`);
-      }, 10000);
+      }
     } catch (error) {
       console.error("Error while generating feedback", error);
       router.push(`/jobs`);
       toast.info("Too short interview", {
         description: "Please give minimum of 5 minutes interview",
       });
+      setLoading({ state: false });
     }
   }
 
