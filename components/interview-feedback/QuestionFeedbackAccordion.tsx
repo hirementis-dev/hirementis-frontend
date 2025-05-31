@@ -7,16 +7,8 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { QuestionFeedback } from "@/types/feedback";
-import { Badge } from "@/components/ui/badge";
 import Markdown from "react-markdown";
-import {
-  AlertCircle,
-  Lightbulb,
-  MessageSquare,
-  Sparkle,
-  Target,
-  TriangleAlert,
-} from "lucide-react";
+import { AlertCircle, Lightbulb, MessageSquare, Target } from "lucide-react";
 
 interface QuestionFeedbackAccordionProps {
   questions: QuestionFeedback[];
@@ -28,7 +20,7 @@ const QuestionFeedbackAccordion: React.FC<QuestionFeedbackAccordionProps> = ({
   scoreColor,
 }) => {
   return (
-    <Card className="mb-6 overflow-hidden shadow-md border-emerald-100">
+    <Card className="mb-6 overflow-hidden shadow-md border-emerald-100 tracking-wider">
       <CardHeader className="bg-gray-50 border-b p-6">
         <CardTitle className="text-xl">Question Analysis</CardTitle>
       </CardHeader>
@@ -46,16 +38,16 @@ const QuestionFeedbackAccordion: React.FC<QuestionFeedbackAccordionProps> = ({
                   <div className="flex-1">
                     <div className="flex items-center space-x-2 mb-2">
                       <MessageSquare className="w-5 h-5 text-emerald-600" />
-                      <span className="font-semibold text-gray-900">
+                      <span className="font-extrabold text-gray-900">
                         Question {question.question_id}
                       </span>
                     </div>
-                    <p className="text-gray-700 font-medium mb-3">
+                    <p className="text-gray-700 font-semibold mb-3">
                       {question.question}
                     </p>
                   </div>
                   <div
-                    className={`px-3 py-1 rounded-full text-xs text-neutral-100 font-semibold ${scoreColor(
+                    className={`px-3 py-1 rounded-full text-xs text-white font-semibold ${scoreColor(
                       question.evaluation.score
                     )}`}
                   >
@@ -85,7 +77,7 @@ const QuestionFeedbackAccordion: React.FC<QuestionFeedbackAccordionProps> = ({
                         {question.actual_answer}
                       </p>
 
-                      <h5 className="font-medium text-emerald-900 mb-2">
+                      <h5 className="font-semibold text-emerald-900 mb-2">
                         Key Points to Cover:
                       </h5>
                       <ul className="space-y-1">
@@ -106,12 +98,14 @@ const QuestionFeedbackAccordion: React.FC<QuestionFeedbackAccordionProps> = ({
                       <h4 className="font-semibold text-gray-900 mb-2">
                         Coverage & Depth:
                       </h4>
-                      <p className="text-sm text-gray-700 mb-2">
-                        {question.evaluation.coverage}
-                      </p>
-                      <p className="text-sm text-gray-600">
-                        {question.evaluation.depth}
-                      </p>
+                      <div>
+                        <div className="text-sm text-gray-700 mb-2 ">
+                          <Markdown>{question.evaluation.coverage}</Markdown>
+                        </div>
+                        <div className="text-sm text-gray-600">
+                          <Markdown>{question.evaluation.depth}</Markdown>
+                        </div>
+                      </div>
                     </div>
 
                     <div className="space-y-1">

@@ -1,9 +1,8 @@
 "use client";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import { redirect, useParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, LoaderCircle } from "lucide-react";
 import InterviewSummary from "@/components/interview-feedback/InterviewSummary";
 import ScorecardSection from "@/components/interview-feedback/ScorecardSection";
 import QuestionFeedbackAccordion from "@/components/interview-feedback/QuestionFeedbackAccordion";
@@ -13,9 +12,11 @@ import { Badge } from "@/components/ui/badge";
 import { useFeedback } from "@/hooks/useFeedback";
 import { useRouter } from "next/navigation";
 import FullScreenLoader from "@/components/FullScreenLoader";
+import { flattenDataAndExportToCSV } from "@/utils/flattenDataAndExportToCSV";
 
 const InterviewFeedback = ({ id }: { id: string }) => {
   const router = useRouter();
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (!id) {
@@ -33,7 +34,7 @@ const InterviewFeedback = ({ id }: { id: string }) => {
   }
   if (!feedbackData || !feedbackData.success) {
     return (
-      <div className="min-h-screen flex flex-col justify-center bg-gradient-to-br from-emerald-50/50 to-white">
+      <div className="min-h-screen flex flex-col justify-center">
         <div className="container mx-auto px-4 py-24">
           <div className="text-center">
             <h1 className="text-2xl font-bold mb-4">Feedback Not Found</h1>
@@ -53,7 +54,7 @@ const InterviewFeedback = ({ id }: { id: string }) => {
 
   const { feedback, job, createdAt } = feedbackData;
   return (
-    <div className="min-h-screen bg-gradient-to-br from-emerald-50/50 to-white">
+    <div className="min-h-screen">
       <div className="container mx-auto px-4 py-16 md:py-24">
         <div className="mb-6">
           <Link
@@ -70,10 +71,28 @@ const InterviewFeedback = ({ id }: { id: string }) => {
               <p className="text-gray-600 mt-1">
                 {job?.title || "Position"} - Interview #{id}
               </p>
+              <Badge className="bg-emerald-500 hover:bg-emerald-600 text-white mt-3">
+                Completed
+              </Badge>
             </div>
-            <Badge className="bg-emerald-500 hover:bg-emerald-600 text-white">
-              Completed
-            </Badge>
+            <div>
+              <Button
+                onClick={() => {
+                  setLoading(true);
+                  flattenDataAndExportToCSV({ job, feedback });
+                  setLoading(false);
+                }}
+                disabled={loading}
+                className="bg-emerald-300 sm:font-semibold text-gray-900 hover:bg-emerald-400"
+                variant="default"
+              >
+                {loading ? (
+                  <LoaderCircle className="animate-spin" />
+                ) : (
+                  "Export as CSV"
+                )}
+              </Button>
+            </div>
           </div>
         </div>
 

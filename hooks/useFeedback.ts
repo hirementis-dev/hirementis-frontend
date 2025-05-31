@@ -5,6 +5,7 @@ import { getInterviewById } from "@/firebase/actions";
 import { auth } from "@/firebase/client";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { useUserStore } from "./userUser";
 
 // const mockFeedbackData: FeedbackData = {
 //   success: true,
@@ -119,6 +120,7 @@ export const useFeedback = (id: string | undefined) => {
   const [isLoading, setIsLoading] = useState(true);
   const [feedbackData, setFeedbackData] = useState<FeedbackData | null>(null);
   const router = useRouter();
+  const { user } = useUserStore();
 
   useEffect(() => {
     async function getFeedback() {
@@ -126,7 +128,7 @@ export const useFeedback = (id: string | undefined) => {
       try {
         const result = await getInterviewById(
           id || "",
-          auth.currentUser?.uid || ""
+          auth.currentUser?.uid || user?.uid || ""
         );
         if (!result.success) {
           setFeedbackData(null);
@@ -151,7 +153,7 @@ export const useFeedback = (id: string | undefined) => {
     }
 
     getFeedback();
-  }, [id]);
+  }, [id, user]);
 
   const getScoreValue = (score: number): number => {
     return (score / 10) * 100;
