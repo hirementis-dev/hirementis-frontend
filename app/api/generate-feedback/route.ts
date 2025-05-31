@@ -185,7 +185,6 @@ export async function POST(request: Request) {
     return Response.json({
       success: true,
       feedback: result,
-      // res,
     });
   } catch (error) {
     console.error("Error formatting transcript:", error);

@@ -187,7 +187,8 @@ const InstructionsPopup = ({
 
 const Page = () => {
   const [isInterviewStarted, setIsInterviewStarted] = useState(false);
-  const [interviewQuestions, setInterviewQuestions] = useState<string[]>([]);
+  const [interviewQuestions, setInterviewQuestions] = useState([]);
+  // const [interviewQuestions, setInterviewQuestions] = useState<string[]>([]);
   const [loading, setLoading] = useState<LoaderState>({
     state: false,
     message: "Setting up interview...",
@@ -231,7 +232,7 @@ const Page = () => {
     const onCallEnd = async () => {
       setCallStatus(CallStatus.FINISHED);
       toast.message("Interview ended");
-      await endInterview();
+      // await endInterview();
     };
 
     const onMessage = (message: any) => {
@@ -288,28 +289,27 @@ const Page = () => {
         responsibilities: job.responsibilities,
       };
       const result = await axios.post("/api/generate-question", body);
+      setLoading({ state: false });
       if (result.data?.success) {
         setInterviewQuestions(result.data?.questions);
+        return result.data?.questions;
       }
-      setLoading({ state: false });
     } catch (error) {
       setLoading({ state: false });
     }
   };
 
   const startInterview = async () => {
-    setInterviewId(nanoid());
-    await setupInterview();
+    setInterviewId(() => nanoid());
+    const questions = await setupInterview();
+    setInterviewQuestions(questions);
     setLoading({
       state: true,
       message: "Reva is getting ready to take your interview..",
     });
 
     const VAPI_ASSISTANT_ID = process.env.NEXT_PUBLIC_VAPI_ASSISTANT_ID!;
-
-    const interviewQs = interviewQuestions
-      .map((item: string) => `- ${item}`)
-      .join("\n");
+    const interviewQs = questions.map((item: string) => `- ${item}`).join("\n");
 
     await vapi.start(VAPI_ASSISTANT_ID, {
       ...interviewer,
@@ -339,18 +339,31 @@ const Page = () => {
       message: "Generating feedback for you...",
     });
     const currentUser = auth.currentUser;
-    const result = await axios.post("/api/generate-feedback", {
-      transcript: messages,
-      job,
-      interviewQs: interviewQuestions,
-      interviewId,
-      userId: currentUser?.uid || user?.uid,
-    });
-    console.log("result", result);
-    setLoading({
-      state: false,
-    });
-    router.replace(`/feedback/${interviewId}`);
+    try {
+      const result = await axios.post("/api/generate-feedback", {
+        transcript: messages,
+        job,
+        interviewQs: interviewQuestions,
+        interviewId,
+        userId: currentUser?.uid || user?.uid,
+      });
+      setLoading({
+        state: true,
+        message: "It will take just 1 or 2 minutes more..",
+      });
+
+      if (result.data.success) {
+        setLoading({ state: false });
+        router.push(`/feedback/${interviewId}`);
+      }
+    } catch (error) {
+      console.error("Error while generating feedback", error);
+      router.push(`/jobs`);
+      toast.info("Too short interview", {
+        description: "Please give minimum of 5 minutes interview",
+      });
+      setLoading({ state: false });
+    }
   }
 
   useEffect(() => {
@@ -597,7 +610,7 @@ const Page = () => {
                   ) : (
                     <div className="flex flex-col items-center">
                       <h3 className="text-3xl mb-8 text-center font-medium">
-                        User
+                        {userState?.firstName || user?.displayName || "You"}
                       </h3>
                       <div className="w-36 h-36 rounded-full bg-gray-100 flex items-center justify-center border border-gray-200 shadow-inner">
                         {userState?.profilePicture || user?.photoURL ? (
