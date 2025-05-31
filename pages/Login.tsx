@@ -226,7 +226,7 @@ const Login = () => {
               </svg>
               Continue with Google
             </Button>
-            <Button
+            {/* <Button
               type="button"
               variant="outline"
               className="w-full flex items-center justify-center gap-2"
@@ -239,7 +239,7 @@ const Login = () => {
                 />
               </svg>
               Continue with GitHub
-            </Button>
+            </Button> */}
           </CardContent>
           <CardFooter className="flex flex-col">
             <div className="text-sm text-center">
