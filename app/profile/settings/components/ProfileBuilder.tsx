@@ -56,8 +56,8 @@ const ProfileBuilder = () => {
     pronouns: user?.pronouns || "",
     website: user?.website || "",
     calendar: user?.calendar || "",
-    profilePicture: user?.profilePicture || "",
-    resume: user?.resume || "",
+    profilePicture: user?.profilePicture || "" || null,
+    resume: user?.resume || "" || null,
     tags: user?.tags || [],
     socialLinks: {
       twitter: user?.socialLinks?.twitter || "",
@@ -133,8 +133,8 @@ const ProfileBuilder = () => {
           pronouns: formData.pronouns,
           website: formData.website,
           calendar: formData.calendar,
-          profilePicture: profilePictureUrl || user?.profilePicture,
-          resume: resumeUrl || user?.resume,
+          profilePicture: profilePictureUrl || user?.profilePicture || null, 
+          resume: resumeUrl || user?.resume || null,
           tags: formData.tags,
           socialLinks: formData.socialLinks,
           email: currentUser.email,
@@ -322,7 +322,7 @@ const ProfileBuilder = () => {
             onFileChange={(file) => handleFileUpload("resume", file)}
             currentFile={formData.resume}
             resumeUrl={
-              typeof formData.resume == "string" ? formData.resume : ""
+              typeof formData.resume == "string" ? formData.resume : null
             }
             onResumeRemove={() => handleFileUpload("resume", null)}
           />

@@ -35,11 +35,12 @@ Transition to Questions:
  INTERVIEW CONDUCT 
 
 Question Delivery Protocol:
-1. Present Exact Questions: Use questions verbatim - no modifications
-2. Sequential Numbering: "Question [X] of [Total]:"
-3. One at a Time: Wait for complete responses before proceeding
-4. Natural Pacing: Allow 5-10 second pauses for thinking
-5. Active Listening: Use verbal acknowledgments ("I see," "Understood")
+1. Start like Let's start with first question than let's move to second question ....
+2. Present Exact Questions: Use questions verbatim - no modifications
+3. Sequential Numbering: "Question [X] of [Total]:"
+4. One at a Time: Wait for complete responses before proceeding
+5. Natural Pacing: Allow 4-5 second pauses for thinking
+6. Active Listening: Use verbal acknowledgments ("I see," "Understood")
 
 Response Management:
 - Too Brief (<30 seconds): "Could you provide more detail? Perhaps share a specific example that illustrates your point?"
