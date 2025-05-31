@@ -292,9 +292,8 @@ const Page = () => {
       setLoading({ state: false });
       if (result.data?.success) {
         setInterviewQuestions(result.data?.questions);
-        return result.data?.questions
+        return result.data?.questions;
       }
-    
     } catch (error) {
       setLoading({ state: false });
     }
@@ -302,18 +301,16 @@ const Page = () => {
 
   const startInterview = async () => {
     setInterviewId(nanoid());
-   const questions = await setupInterview();
+    const questions = await setupInterview();
+    setInterviewQuestions(questions);
     setLoading({
       state: true,
       message: "Reva is getting ready to take your interview..",
     });
 
-
     const VAPI_ASSISTANT_ID = process.env.NEXT_PUBLIC_VAPI_ASSISTANT_ID!;
-    const interviewQs = questions
-      .map((item: string) => `- ${item}`)
-      .join("\n");
-      
+    const interviewQs = questions.map((item: string) => `- ${item}`).join("\n");
+
     await vapi.start(VAPI_ASSISTANT_ID, {
       ...interviewer,
       variableValues: {
@@ -342,18 +339,30 @@ const Page = () => {
       message: "Generating feedback for you...",
     });
     const currentUser = auth.currentUser;
-    const result = await axios.post("/api/generate-feedback", {
-      transcript: messages,
-      job,
-      interviewQs: interviewQuestions,
-      interviewId,
-      userId: currentUser?.uid || user?.uid,
-    });
-    console.log("result", result);
-    setLoading({
-      state: false,
-    });
-    router.replace(`/feedback/${interviewId}`);
+    try {
+      const result = await axios.post("/api/generate-feedback", {
+        transcript: messages,
+        job,
+        interviewQs: interviewQuestions,
+        interviewId,
+        userId: currentUser?.uid || user?.uid,
+      });
+      setLoading({
+        state: true,
+        message: "It will take just 1 or 2 minutes more..",
+      });
+      console.log("interviewId", interviewId);
+      setTimeout(() => {
+        setLoading({ state: false });
+        router.push(`/feedback/${interviewId}`);
+      }, 10000);
+    } catch (error) {
+      console.error("Error while generating feedback", error);
+      router.push(`/jobs`);
+      toast.info("Too short interview", {
+        description: "Please give minimum of 5 minutes interview",
+      });
+    }
   }
 
   useEffect(() => {
@@ -600,7 +609,7 @@ const Page = () => {
                   ) : (
                     <div className="flex flex-col items-center">
                       <h3 className="text-3xl mb-8 text-center font-medium">
-                        User
+                        {userState?.firstName || user?.displayName || "You"}
                       </h3>
                       <div className="w-36 h-36 rounded-full bg-gray-100 flex items-center justify-center border border-gray-200 shadow-inner">
                         {userState?.profilePicture || user?.photoURL ? (
