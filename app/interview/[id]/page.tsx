@@ -444,8 +444,8 @@ const Page = () => {
     const lastMessage = messages[messages.length - 1];
     if (lastMessage.role === "assistant") {
       if (
-        lastMessage.content.includes("end the interview.") ||
-        lastMessage.content.includes("end the session.")
+        lastMessage.content.includes("end the interview") ||
+        lastMessage.content.includes("end the session")
       ) {
         setShowConfirmationDialog(true);
       }
@@ -480,6 +480,11 @@ const Page = () => {
           if (prev <= 1) {
             setTimerActive(false);
             toast.message("Interview time completed!");
+            vapi.say(
+              "That's the end of your 20-minute interview. Thank you for your time. We'll get back to you with feedback soon.",
+              true
+            );
+            clearInterval(interval);
             endInterview();
             return 0;
           }
