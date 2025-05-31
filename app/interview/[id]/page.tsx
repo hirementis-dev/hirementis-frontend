@@ -2,7 +2,15 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { jobs } from "@/data/jobs";
-import { Camera, CameraOff, CircleUserRound, Mic, MicOff, X, Info } from "lucide-react";
+import {
+  Camera,
+  CameraOff,
+  CircleUserRound,
+  Mic,
+  MicOff,
+  X,
+  Info,
+} from "lucide-react";
 import { redirect, useRouter } from "next/navigation";
 import { useParams } from "next/navigation";
 import React, { useEffect, useRef, useState } from "react";
@@ -39,14 +47,24 @@ interface SavedMessage {
 }
 
 // Instructions Popup Component
-const InstructionsPopup = ({ isOpen, onClose, job }: { isOpen: boolean; onClose: () => void; job: any }) => {
+const InstructionsPopup = ({
+  isOpen,
+  onClose,
+  job,
+}: {
+  isOpen: boolean;
+  onClose: () => void;
+  job: any;
+}) => {
   if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-white bg-opacity-95 backdrop-blur-sm p-4">
       <div className="bg-white rounded-lg shadow-xl max-w-2xl max-h-[90vh] overflow-y-auto">
         <div className="flex items-center justify-between p-6 border-b">
-          <h2 className="text-2xl font-bold text-gray-900">Interview Instructions</h2>
+          <h2 className="text-2xl font-bold text-gray-900">
+            Interview Instructions
+          </h2>
           <button
             onClick={onClose}
             className="text-gray-400 hover:text-gray-600 transition-colors"
@@ -54,21 +72,28 @@ const InstructionsPopup = ({ isOpen, onClose, job }: { isOpen: boolean; onClose:
             <X size={24} />
           </button>
         </div>
-        
+
         <div className="p-6 space-y-6">
           <div className="bg-emerald-50 border border-emerald-200 rounded-lg p-4">
-            <h3 className="font-semibold text-emerald-800 mb-2">Interview Details</h3>
+            <h3 className="font-semibold text-emerald-800 mb-2">
+              Interview Details
+            </h3>
             <p className="text-emerald-700">
-              Position: <strong>{job.title}</strong> at <strong>{job.company}</strong>
+              Position: <strong>{job.title}</strong> at{" "}
+              <strong>{job.company}</strong>
             </p>
             <p className="text-emerald-700">Industry: {job.industry}</p>
           </div>
 
           <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-            <h4 className="font-semibold text-yellow-800 mb-3">Before You Start:</h4>
+            <h4 className="font-semibold text-yellow-800 mb-3">
+              Before You Start:
+            </h4>
             <ol className="list-decimal pl-5 space-y-2 text-sm text-yellow-700">
               <li>Test your microphone and camera functionality</li>
-              <li>Find a quiet, well-lit space with stable internet connection</li>
+              <li>
+                Find a quiet, well-lit space with stable internet connection
+              </li>
               <li>Have your resume and job description readily available</li>
               <li>Prepare examples of your key achievements and experiences</li>
               <li>Research the company and role thoroughly</li>
@@ -76,25 +101,62 @@ const InstructionsPopup = ({ isOpen, onClose, job }: { isOpen: boolean; onClose:
           </div>
 
           <div>
-            <h4 className="font-semibold text-gray-800 mb-3">During the Interview:</h4>
+            <h4 className="font-semibold text-gray-800 mb-3">
+              During the Interview:
+            </h4>
             <ol className="list-decimal pl-5 space-y-2 text-gray-700">
-              <li>Ensure your device microphone and camera are working properly for clear audio and video quality.</li>
-              <li>Speak clearly and at a moderate pace, maintaining good eye contact with the camera.</li>
-              <li>Position yourself in a well-lit, quiet environment with minimal background distractions.</li>
-              <li>Have a glass of water nearby and take brief pauses if needed to collect your thoughts.</li>
-              <li>Listen carefully to each question and take a moment to think before responding.</li>
-              <li>Structure your answers using the STAR method (Situation, Task, Action, Result) for behavioral questions.</li>
-              <li>Emphasize skills and experiences directly relevant to the {job.title} role and {job.industry} industry.</li>
-              <li>Ask thoughtful questions about the company culture, team dynamics, and growth opportunities.</li>
-              <li>Maintain professional body language and dress appropriately for the role.</li>
-              <li>If you don't understand a question, politely ask for clarification rather than guessing.</li>
-              <li>End each answer with confidence and be prepared to elaborate if asked follow-up questions.</li>
+              <li>
+                Ensure your device microphone and camera are working properly
+                for clear audio and video quality.
+              </li>
+              <li>
+                Speak clearly and at a moderate pace, maintaining good eye
+                contact with the camera.
+              </li>
+              <li>
+                Position yourself in a well-lit, quiet environment with minimal
+                background distractions.
+              </li>
+              <li>
+                Have a glass of water nearby and take brief pauses if needed to
+                collect your thoughts.
+              </li>
+              <li>
+                Listen carefully to each question and take a moment to think
+                before responding.
+              </li>
+              <li>
+                Structure your answers using the STAR method (Situation, Task,
+                Action, Result) for behavioral questions.
+              </li>
+              <li>
+                Emphasize skills and experiences directly relevant to the{" "}
+                {job.title} role and {job.industry} industry.
+              </li>
+              <li>
+                Ask thoughtful questions about the company culture, team
+                dynamics, and growth opportunities.
+              </li>
+              <li>
+                Maintain professional body language and dress appropriately for
+                the role.
+              </li>
+              <li>
+                If you don't understand a question, politely ask for
+                clarification rather than guessing.
+              </li>
+              <li>
+                End each answer with confidence and be prepared to elaborate if
+                asked follow-up questions.
+              </li>
             </ol>
           </div>
 
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
             <p className="text-sm text-blue-800">
-              <strong>Remember:</strong> This is a practice session. Use it to refine your responses and build confidence for your actual interview.
+              <strong>Remember:</strong> This is a practice session. Use it to
+              refine your responses and build confidence for your actual
+              interview.
             </p>
           </div>
 
@@ -102,7 +164,9 @@ const InstructionsPopup = ({ isOpen, onClose, job }: { isOpen: boolean; onClose:
             <div className="flex items-center justify-center space-x-3">
               <p className="text-gray-700 font-medium">
                 All the best for your Interview.
-                <span className="text-gray-500 font-normal ml-2">by Team HireMentis</span>
+                <span className="text-gray-500 font-normal ml-2">
+                  by Team HireMentis
+                </span>
               </p>
             </div>
           </div>
@@ -138,7 +202,8 @@ const Page = () => {
   const audioStreamRef = useRef<MediaStream | null>(null);
   const [interviewId, setInterviewId] = useState<string | null>();
   const [user, setUser] = useState<User | null>(null);
-  const [showConfirmationDialog, setShowConfirmationDialog] = useState<boolean>(false);
+  const [showConfirmationDialog, setShowConfirmationDialog] =
+    useState<boolean>(false);
   const [showInstructions, setShowInstructions] = useState(true);
   const [timeRemaining, setTimeRemaining] = useState(20 * 60); // 20 minutes in seconds
   const [timerActive, setTimerActive] = useState(false);
@@ -273,13 +338,13 @@ const Page = () => {
       state: true,
       message: "Generating feedback for you...",
     });
-    const user = auth.currentUser;
+    const currentUser = auth.currentUser;
     const result = await axios.post("/api/generate-feedback", {
       transcript: messages,
       job,
       interviewQs: interviewQuestions,
       interviewId,
-      userId: user?.uid || user?.uid,
+      userId: currentUser?.uid || user?.uid,
     });
     console.log("result", result);
     setLoading({
@@ -408,7 +473,7 @@ const Page = () => {
   // Timer effect
   useEffect(() => {
     let interval: NodeJS.Timeout;
-    
+
     if (timerActive && timeRemaining > 0) {
       interval = setInterval(() => {
         setTimeRemaining((prev) => {
@@ -432,19 +497,21 @@ const Page = () => {
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
-    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+    return `${mins.toString().padStart(2, "0")}:${secs
+      .toString()
+      .padStart(2, "0")}`;
   };
 
   return loading.state ? (
     <FullScreenLoader isLoading={loading.state} text={loading.message} />
   ) : (
     <div className="min-h-screen bg-gradient-to-br from-emerald-50/50 to-white">
-      <InstructionsPopup 
-        isOpen={showInstructions} 
-        onClose={() => setShowInstructions(false)} 
+      <InstructionsPopup
+        isOpen={showInstructions}
+        onClose={() => setShowInstructions(false)}
         job={job}
       />
-      
+
       <div>
         <ConfirmationDialog
           open={showConfirmationDialog}
@@ -453,7 +520,7 @@ const Page = () => {
           onCancel={handleCancel}
         />
       </div>
-      
+
       <div className="container mx-auto px-6 py-8">
         {/* Header section with compact spacing */}
         <div className="mb-4 flex items-center justify-between">

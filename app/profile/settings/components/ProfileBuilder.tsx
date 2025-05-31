@@ -121,7 +121,7 @@ const ProfileBuilder = () => {
         const resumeRes = await axios.post("/api/upload-imagekit", resumeForm);
         resumeUrl = resumeRes.data.url;
       }
-
+      console.log("form data", formData);
       await setDoc(
         doc(db, "users", currentUser.uid),
         {

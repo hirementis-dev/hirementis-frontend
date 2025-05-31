@@ -23,12 +23,13 @@ import { toast } from "sonner";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useUserStore } from "@/hooks/userUser";
+import { UserProfile } from "@/types";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
-  const { isAuthenticated } = useUserStore();
+  const { isAuthenticated, setUser } = useUserStore();
   const router = useRouter();
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -60,6 +61,7 @@ const Login = () => {
           displayName: user.displayName || "",
         });
       }
+      setUser(userSnap.data() as UserProfile);
       router.push("/");
       toast.success("Login successful!");
     } catch (err: any) {
@@ -115,7 +117,7 @@ const Login = () => {
         },
         { merge: true }
       );
-
+      setUser(userSnap.data() as UserProfile);
       router.push("/");
       toast.success("Login successful!");
     } catch (err: any) {
