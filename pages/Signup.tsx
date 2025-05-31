@@ -20,7 +20,7 @@ import {
   GithubAuthProvider,
   signInWithPopup,
 } from "firebase/auth";
-import { doc, setDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc } from "firebase/firestore";
 import { db } from "@/firebase/client";
 import { useRouter } from "next/navigation";
 
@@ -87,8 +87,21 @@ const Signup = () => {
           : new GithubAuthProvider();
       const result = await signInWithPopup(auth, provider);
       const user = result.user;
-      // Save user info to Firestore if not exists
       const userRef = doc(db, "users", user.uid);
+      const userSnap = await getDoc(userRef);
+      let finalProfilePicture = user.photoURL || "";
+
+      if (userSnap.exists()) {
+        const existingData = userSnap.data();
+
+        if (
+          existingData.profilePicture &&
+          existingData.profilePicture !== user.photoURL
+        ) {
+          finalProfilePicture = existingData.profilePicture;
+        }
+      }
+      // Save user info to Firestore if not exists
       await setDoc(
         userRef,
         {
@@ -96,6 +109,7 @@ const Signup = () => {
           email: user.email,
           displayName: user.displayName || "",
           provider: providerType,
+          profilePicture: finalProfilePicture,
         },
         { merge: true }
       );
@@ -230,7 +244,7 @@ const Signup = () => {
               </svg>
               Continue with Google
             </Button>
-            <Button
+            {/* <Button
               type="button"
               variant="outline"
               className="w-full flex items-center justify-center gap-2"
@@ -248,7 +262,7 @@ const Signup = () => {
                 />
               </svg>
               Continue with GitHub
-            </Button>
+            </Button> */}
           </CardContent>
           <CardFooter className="flex flex-col">
             <div className="text-sm text-center">

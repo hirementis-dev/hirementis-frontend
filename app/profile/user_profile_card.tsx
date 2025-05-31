@@ -9,12 +9,14 @@ import {
 } from "@/components/ui/card";
 import { auth, db } from "@/firebase/client";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { User } from "firebase/auth";
 
-interface UserData {
+interface UserData extends User {
   displayName: string;
   email: string;
   bio: string;
-  resumeURL?: string;
+  profilePicture?: string;
+  resume?: string;
   interviews: any[];
 }
 
@@ -37,20 +39,19 @@ const UserProfileCard = () => {
           const data = userSnap.data() as UserData;
           setUser({
             ...data,
+            photoURL: data.photoURL || currentUser.photoURL || "",
             bio: typeof data.bio === "string" ? data.bio : "",
           });
           setBio(typeof data.bio === "string" ? data.bio : "");
         }
       } catch (err) {
         console.error("Error fetching user:", err);
-        // Handle error (e.g., show notification)
       }
     };
 
     fetchUser();
   }, []);
 
-  // Save bio to Firestore
   const handleSaveBio = async () => {
     const currentUser = auth.currentUser;
     if (!currentUser) return;
@@ -62,13 +63,12 @@ const UserProfileCard = () => {
       setUser((prev) => (prev ? { ...prev, bio } : prev));
     } catch (err) {
       console.error("Error updating bio:", err);
-      // Optionally show error to user
     }
   };
 
   if (!user) {
     return (
-      <Card className="lg:col-span-1 border-mint-100">
+      <Card className="lg:col-span-1 border-emerald-100">
         <CardHeader className="pb-2">
           <CardTitle>Profile Information</CardTitle>
           <CardDescription>Loading...</CardDescription>
@@ -78,18 +78,26 @@ const UserProfileCard = () => {
   }
 
   return (
-    <Card className="lg:col-span-1 border-mint-100">
+    <Card className="lg:col-span-1 border-emerald-100">
       <CardHeader className="pb-2">
         <CardTitle>Profile Information</CardTitle>
         <CardDescription>Your personal details</CardDescription>
       </CardHeader>
       <CardContent>
         <div className="flex flex-col items-center mb-6">
-          <div className="w-24 h-24 bg-emerald-100 rounded-full flex items-center justify-center text-3xl font-medium text-mint-600 mb-4">
-            {user.displayName
-              ?.split(" ")
-              .map((n) => n[0])
-              .join("")}
+          <div className="w-24 h-24 bg-emerald-100 rounded-full flex items-center justify-center text-3xl font-medium text-emerald-600 mb-4 overflow-hidden">
+            {user?.profilePicture ? (
+              <img
+                src={user.profilePicture}
+                alt="User Avatar"
+                className="w-full h-full rounded-full object-cover"
+              />
+            ) : (
+              user.displayName
+                ?.split(" ")
+                .map((n) => n[0])
+                .join("")
+            )}
           </div>
           <h2 className="text-xl font-semibold">{user.displayName}</h2>
           <p className="text-gray-500">{user.email}</p>
@@ -138,6 +146,19 @@ const UserProfileCard = () => {
               </div>
             )}
           </div>
+          {user.resume && (
+            <div>
+              <h3 className="text-sm font-medium text-gray-500">Resume</h3>
+              <a
+                href={user.resume}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-emerald-600 underline text-xs"
+              >
+                View Resume
+              </a>
+            </div>
+          )}
           {/* <div>
             <h3 className="text-sm font-medium text-gray-500">Stats</h3>
             <div className="mt-1 grid grid-cols-2 gap-2">

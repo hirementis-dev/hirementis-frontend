@@ -9,8 +9,45 @@ const outfit = Outfit({
 });
 
 export const metadata: Metadata = {
-  title: "HireMentis",
-  description: "AI powered platform for mock interviews",
+  title: "HireMentis – Ace Your Next Interview with AI-Powered Mock Practice",
+  description:
+    "HireMentis helps job seekers land their dream roles with personalized AI-driven mock interviews, real-time feedback, and a curated question bank tailored to your job role and industry.",
+  keywords: [
+    "AI mock interview",
+    "job interview practice",
+    "interview preparation",
+    "interview feedback",
+    "tech interview platform",
+    "HireMentis",
+    "mock interview tool",
+    "interview training",
+    "career preparation",
+    "job seekers tool",
+  ],
+  openGraph: {
+    title: "HireMentis – Ace Your Next Interview with AI",
+    description:
+      "Get ready for your dream job with HireMentis. Practice interviews with AI, receive instant feedback, and sharpen your communication skills with curated questions.",
+    url: "https://hirementis.site",
+    siteName: "HireMentis",
+    images: [
+      {
+        url: "/hero.png",
+        width: 1200,
+        height: 630,
+        alt: "HireMentis – AI-Powered Interview Practice",
+      },
+    ],
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "HireMentis – AI-Powered Mock Interviews for Job Seekers",
+    description:
+      "Practice mock interviews, get AI feedback, and gain confidence before your real job interview – all on one smart platform.",
+    images: ["/hero.png"],
+  },
+  metadataBase: new URL("https://hirementis.site"),
 };
 
 export default function RootLayout({
@@ -44,7 +81,7 @@ export default function RootLayout({
         <Navbar />
         <div>{children}</div>
 
-        <Toaster closeButton position="top-right" />
+        <Toaster richColors closeButton position="top-center" />
       </body>
     </html>
   );

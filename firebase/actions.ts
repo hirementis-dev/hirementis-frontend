@@ -1,5 +1,6 @@
 import axios from "axios";
-import { auth, db } from "./client";
+import { db } from "./client";
+import { doc, getDoc } from "firebase/firestore";
 
 export async function getInterviewById(
   id: string,
@@ -20,20 +21,20 @@ export async function getInterviewById(
   return { data: res.data, success: true };
 }
 
-// Get current user from session cookie
-export async function getCurrentUser() {
-  const user = auth.currentUser;
-  if (user !== null) {
-    // The user object has basic properties such as display name, email, etc.
-    const displayName = user.displayName;
-    const email = user.email;
-    const photoURL = user.photoURL;
-    const emailVerified = user.emailVerified;
+export async function getUserDocument(uid: string) {
+  try {
+    const userDocRef = doc(db, "users", uid); // Replace "users" with your collection name
+    const userDocSnap = await getDoc(userDocRef);
 
-    // The user's ID, unique to the Firebase project. Do NOT use
-    // this value to authenticate with your backend server, if
-    // you have one. Use User.getToken() instead.
-    const uid = user.uid;
+    if (userDocSnap.exists()) {
+      const userData = userDocSnap.data();
+      return userData;
+    } else {
+      console.log("User document not found");
+      return null;
+    }
+  } catch (error) {
+    console.error("Error getting user document:", error);
+    return null;
   }
-  return user;
 }

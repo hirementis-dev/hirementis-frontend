@@ -53,27 +53,29 @@ const InterviewSummary: React.FC<InterviewSummaryProps> = ({
           <div className="space-y-4">
             <h3 className="font-semibold text-lg">Notable Strengths</h3>
             <ul className="space-y-2">
-              {summary.notable_strengths.map((strength, i) => (
-                <li key={i} className="flex items-start gap-2">
-                  <span className="mt-1 text-green-500">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-4 w-4"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M5 13l4 4L19 7"
-                      />
-                    </svg>
-                  </span>
-                  <span className="text-gray-700">{strength}</span>
-                </li>
-              ))}
+              {summary?.notable_strengths?.length > 0
+                ? summary.notable_strengths.map((strength, i) => (
+                    <li key={i} className="flex items-start gap-2">
+                      <span className="mt-1 text-green-500">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="h-4 w-4"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M5 13l4 4L19 7"
+                          />
+                        </svg>
+                      </span>
+                      <span className="text-gray-700 text-sm">{strength}</span>
+                    </li>
+                  ))
+                : "N/A"}
             </ul>
           </div>
 
@@ -81,7 +83,7 @@ const InterviewSummary: React.FC<InterviewSummaryProps> = ({
             <h3 className="font-semibold text-lg">Areas for Improvement</h3>
             <ul className="space-y-2">
               {summary.areas_for_improvement.map((area, i) => (
-                <li key={i} className="flex items-start gap-2">
+                <li key={i} className="flex items-start gap-2 text-sm">
                   <span className="mt-1 text-amber-500">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"

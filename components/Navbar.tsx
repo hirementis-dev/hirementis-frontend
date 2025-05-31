@@ -6,25 +6,44 @@ import Link from "next/link";
 import { auth } from "@/firebase/client";
 import { onAuthStateChanged, signOut, User } from "firebase/auth";
 import { usePathname, useRouter } from "next/navigation";
+import { toast } from "sonner";
+import Image from "next/image";
+import { getUserDocument } from "@/firebase/actions";
+import { UserProfile } from "@/types";
+import { useUserStore } from "@/hooks/userUser";
 
 const Navbar: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [user, setUser] = useState<User | null>(null);
+  // const [user, setUser] = useState<User | null>(null);
   const pathname = usePathname();
   const isInterviewPage = pathname?.startsWith("/interview");
   const router = useRouter();
+  const {
+    setUser: setUserState,
+    setIsAuthenticated,
+    user: userState,
+  } = useUserStore();
+
+  async function getUserDoc() {
+    const currUser = auth.currentUser;
+    if (!currUser?.uid) return;
+    const userDoc = await getUserDocument(currUser.uid);
+    if (userDoc) {
+      setUserState(userDoc as UserProfile);
+      setIsAuthenticated();
+    } else {
+      setUserState(null);
+    }
+  }
 
   useEffect(() => {
-    // Only listen for auth state changes after the component mounts
-    // and do not update user state on sign up, only on successful login/provider login
-    const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
-      // Only set user if the user is actually logged in (not just registered)
+    let unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
       if (firebaseUser && firebaseUser.emailVerified) {
-        setUser(firebaseUser);
-      } else {
-        setUser(null);
+        // setUser(firebaseUser);
+        getUserDoc();
       }
     });
+
     return () => unsubscribe();
   }, []);
 
@@ -34,6 +53,10 @@ const Navbar: React.FC = () => {
 
   const handleLogout = async () => {
     await signOut(auth);
+    router.push("/");
+    setUserState(null);
+    setIsAuthenticated();
+    toast.success("Logged out successfully");
   };
 
   if (isInterviewPage) {
@@ -44,15 +67,14 @@ const Navbar: React.FC = () => {
     <nav className="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-sm border-b border-gray-100">
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
-          {/* Logo */}
-          <div className="flex items-center">
+          <div className="flex items-center select-none">
             <Link
               onClick={handleNavlinkClick}
               href="/"
               className="flex items-center gap-2"
             >
-              <div className="w-8 h-8 bg-gradient-to-r from-emerald-400 to-emerald-600 rounded-lg flex items-center justify-center text-white font-bold">
-                H
+              <div className="w-8 h-8 bg-gradient-to-r from-emerald-400 to-emerald-600 rounded-lg flex items-center justify-center text-white font-extrabold ">
+                <span className="inline-block">H</span>
               </div>
               <span className="text-lg font-bold">HireMentis</span>
             </Link>
@@ -106,7 +128,7 @@ const Navbar: React.FC = () => {
 
           {/* CTA Buttons and User Profile */}
           <div className="hidden md:flex items-center gap-4">
-            {!user ? (
+            {!userState ? (
               <>
                 <Link onClick={handleNavlinkClick} href="/login">
                   <Button variant="ghost">Login</Button>
@@ -132,14 +154,26 @@ const Navbar: React.FC = () => {
                   onClick={() => router.push("/profile")}
                   title="Profile"
                 >
-                  <div className="w-9 h-9 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-700 font-bold text-lg border border-emerald-300 hover:bg-emerald-200 transition">
-                    {user.displayName
-                      ? user.displayName
-                          .split(" ")
-                          .map((n) => n[0])
-                          .join("")
-                          .toUpperCase()
-                      : user.email?.[0]?.toUpperCase() || "U"}
+                  <div className="w-10 h-10 select-none rounded-full text-xs bg-emerald-100 flex items-center justify-center text-emerald-700 font-bold border border-emerald-300 hover:bg-emerald-200 transition">
+                    {userState?.profilePicture ? (
+                      <div>
+                        <Image
+                          src={userState?.profilePicture || ""}
+                          alt="User Avatar"
+                          className="w-full h-full rounded-full object-cover"
+                          width={100}
+                          height={100}
+                        />
+                      </div>
+                    ) : userState.displayName ? (
+                      userState.displayName
+                        .split(" ")
+                        .map((n) => n[0])
+                        .join("")
+                        .toUpperCase()
+                    ) : (
+                      userState.email?.[0]?.toUpperCase() || "U"
+                    )}
                   </div>
                 </div>
               </>
@@ -178,46 +212,41 @@ const Navbar: React.FC = () => {
               </Link>
               <Link
                 onClick={handleNavlinkClick}
-                href="#features"
+                href="/#features"
                 className="text-gray-600 hover:text-emerald-600 transition-colors py-2"
               >
                 Features
               </Link>
               <Link
                 onClick={handleNavlinkClick}
-                href="#how-it-works"
+                href="/#how-it-works"
                 className="text-gray-600 hover:text-emerald-600 transition-colors py-2"
               >
                 How it works
               </Link>
               <Link
                 onClick={handleNavlinkClick}
-                href="#pricing"
+                href="/#pricing"
                 className="text-gray-600 hover:text-emerald-600 transition-colors py-2"
               >
                 Pricing
               </Link>
               <Link
                 onClick={handleNavlinkClick}
-                href="#testimonials"
+                href="/#testimonials"
                 className="text-gray-600 hover:text-emerald-600 transition-colors py-2"
               >
                 Testimonials
               </Link>
               <div className="flex flex-col gap-2 pt-4 border-t border-gray-100">
-                {!user ? (
+                {!userState ? (
                   <>
                     <Link
                       onClick={handleNavlinkClick}
                       href="/login"
                       className="w-full"
                     >
-                      <Button
-                        variant="outline"
-                        className="w-full justify-center"
-                      >
-                        Login
-                      </Button>
+                      Login
                     </Link>
                     <Link
                       onClick={handleNavlinkClick}
@@ -247,16 +276,28 @@ const Navbar: React.FC = () => {
                       }}
                     >
                       <div
-                        className="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-700 font-bold text-lg border border-emerald-300 hover:bg-emerald-200 transition cursor-pointer"
+                        className="w-10 h-10 select-none rounded-full bg-emerald-100 flex items-center justify-center text-emerald-700 font-bold text-xs border border-emerald-300 hover:bg-emerald-200 transition cursor-pointer"
                         title="Profile"
                       >
-                        {user.displayName
-                          ? user.displayName
-                              .split(" ")
-                              .map((n) => n[0])
-                              .join("")
-                              .toUpperCase()
-                          : user.email?.[0]?.toUpperCase() || "U"}
+                        {userState?.profilePicture ? (
+                          <div>
+                            <Image
+                              src={userState?.profilePicture || ""}
+                              alt={userState?.displayName || "User avatar"}
+                              width={100}
+                              height={100}
+                              className="w-full h-full rounded-full object-cover"
+                            />
+                          </div>
+                        ) : userState.displayName ? (
+                          userState.displayName
+                            .split(" ")
+                            .map((n) => n[0])
+                            .join("")
+                            .toUpperCase()
+                        ) : (
+                          userState.email?.[0]?.toUpperCase() || "U"
+                        )}
                       </div>
                     </div>
                   </>

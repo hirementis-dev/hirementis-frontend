@@ -9,16 +9,18 @@ import {
 } from "@/components/ui/dialog";
 import { Download, Share2 } from "lucide-react";
 import Link from "next/link";
+import { formatFirebaseTimestamp } from "@/utils/formatDate";
 
 interface FeedbackActionsProps {
   id: string | undefined;
+  createdAt?: string;
 }
 
-const FeedbackActions: React.FC<FeedbackActionsProps> = ({ id }) => {
+const FeedbackActions: React.FC<FeedbackActionsProps> = ({ id, createdAt }) => {
   return (
-    <div className="flex flex-col md:flex-row gap-4 justify-between items-center">
+    <div className="flex flex-col md:flex-row gap-4 justify-between items-center my-3">
       <div className="text-sm text-gray-600">
-        Interview date: {new Date().toLocaleDateString()}
+        Interview date: {formatFirebaseTimestamp(createdAt)}
       </div>
 
       {/* <div className="flex gap-3">

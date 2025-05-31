@@ -86,7 +86,7 @@ const Footer: React.FC = () => {
                 </a>
               </li>
               <li>
-                <a href="#" className="text-gray-600 hover:text-emerald-600">
+                <a href="/enterprise" className="text-gray-600 hover:text-emerald-600">
                   Enterprise
                 </a>
               </li>
@@ -97,17 +97,17 @@ const Footer: React.FC = () => {
             <h3 className="font-semibold text-lg mb-4">Support</h3>
             <ul className="space-y-3">
               <li>
-                <a href="#" className="text-gray-600 hover:text-emerald-600">
+                <a href="/helpcenter" className="text-gray-600 hover:text-emerald-600">
                   Help Center
                 </a>
               </li>
               <li>
-                <a href="#" className="text-gray-600 hover:text-emerald-600">
+                <a href="/documentation" className="text-gray-600 hover:text-emerald-600">
                   Documentation
                 </a>
               </li>
               <li>
-                <a href="#" className="text-gray-600 hover:text-emerald-600">
+                <a href="mailto:suprabhat.work@gmail.com" className="text-gray-600 hover:text-emerald-600">
                   Contact Us
                 </a>
               </li>
@@ -123,13 +123,13 @@ const Footer: React.FC = () => {
             <h3 className="font-semibold text-lg mb-4">Company</h3>
             <ul className="space-y-3">
               <li>
-                <a href="#" className="text-gray-600 hover:text-emerald-600">
+                <a href="/documentation" className="text-gray-600 hover:text-emerald-600">
                   About Us
                 </a>
               </li>
               <li>
-                <a href="#" className="text-gray-600 hover:text-emerald-600">
-                  Careers
+                <a href="/founders" className="text-gray-600 hover:text-emerald-600">
+                  Meet the Founders
                 </a>
               </li>
               <li>

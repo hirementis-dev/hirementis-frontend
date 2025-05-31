@@ -1,7 +1,5 @@
 "use client";
-import React, { useState } from "react";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
+import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -13,7 +11,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
-import { auth } from "@/firebase/client";
 import {
   signInWithEmailAndPassword,
   GoogleAuthProvider,
@@ -21,11 +18,18 @@ import {
   signInWithPopup,
 } from "firebase/auth";
 import { doc, getDoc, setDoc } from "firebase/firestore";
-import { db } from "@/firebase/client";
+import { db, auth } from "@/firebase/client";
+import { toast } from "sonner";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useUserStore } from "@/hooks/userUser";
+import { UserProfile } from "@/types";
+
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const { isAuthenticated, setUser } = useUserStore();
   const router = useRouter();
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -55,12 +59,12 @@ const Login = () => {
           uid: user.uid,
           email: user.email,
           displayName: user.displayName || "",
-          // Add more fields if needed
         });
       }
+      setUser(userSnap.data() as UserProfile);
       router.push("/");
+      toast.success("Login successful!");
     } catch (err: any) {
-      // Handle Firebase Auth errors with user-friendly messages
       let message = "Please Signup first.";
       if (err.code === "auth/user-not-found") {
         message = "No user found with this email.";
@@ -72,6 +76,7 @@ const Login = () => {
         message = "Too many failed attempts. Please try again later.";
       }
       setError(message);
+      toast.error(message);
     }
   };
 
@@ -85,10 +90,22 @@ const Login = () => {
       const result = await signInWithPopup(auth, provider);
       const user = result.user;
 
-      // Save user info to Firestore if not exists
       const userRef = doc(db, "users", user.uid);
+      const userSnap = await getDoc(userRef);
 
-      // Fix: Use setDoc with { merge: true } to avoid permission errors on missing doc
+      let finalProfilePicture = user.photoURL || "";
+
+      if (userSnap.exists()) {
+        const existingData = userSnap.data();
+
+        if (
+          existingData.profilePicture &&
+          existingData.profilePicture !== user.photoURL
+        ) {
+          finalProfilePicture = existingData.profilePicture;
+        }
+      }
+
       await setDoc(
         userRef,
         {
@@ -96,11 +113,13 @@ const Login = () => {
           email: user.email,
           displayName: user.displayName || "",
           provider: providerType,
+          profilePicture: finalProfilePicture,
         },
         { merge: true }
       );
-
+      setUser(userSnap.data() as UserProfile);
       router.push("/");
+      toast.success("Login successful!");
     } catch (err: any) {
       // Show Firestore permission errors more clearly
       if (
@@ -115,6 +134,12 @@ const Login = () => {
       }
     }
   };
+  useEffect(() => {
+    if (isAuthenticated) {
+      router.push("/");
+      return;
+    }
+  }, [isAuthenticated, router]);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-hero-gradient">
@@ -203,7 +228,7 @@ const Login = () => {
               </svg>
               Continue with Google
             </Button>
-            <Button
+            {/* <Button
               type="button"
               variant="outline"
               className="w-full flex items-center justify-center gap-2"
@@ -216,7 +241,7 @@ const Login = () => {
                 />
               </svg>
               Continue with GitHub
-            </Button>
+            </Button> */}
           </CardContent>
           <CardFooter className="flex flex-col">
             <div className="text-sm text-center">

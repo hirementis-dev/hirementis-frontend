@@ -7,7 +7,7 @@ function page() {
   const params = useParams();
   const id = params?.id;
   return (
-    <div>
+    <div className="max-w-7xl mx-auto">
       <InterviewFeedback id={String(id)} />
     </div>
   );

@@ -1,5 +1,5 @@
 "use client";
-import UserProfile from "@/pages/userProfile";
+import UserProfile from "./components/userProfile";
 import React from "react";
 
 function page() {

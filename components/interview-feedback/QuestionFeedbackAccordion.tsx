@@ -7,8 +7,8 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { QuestionFeedback } from "@/types/feedback";
-import { Badge } from "@/components/ui/badge";
 import Markdown from "react-markdown";
+import { AlertCircle, Lightbulb, MessageSquare, Target } from "lucide-react";
 
 interface QuestionFeedbackAccordionProps {
   questions: QuestionFeedback[];
@@ -20,7 +20,7 @@ const QuestionFeedbackAccordion: React.FC<QuestionFeedbackAccordionProps> = ({
   scoreColor,
 }) => {
   return (
-    <Card className="mb-6 overflow-hidden shadow-md border-emerald-100">
+    <Card className="mb-6 overflow-hidden shadow-md border-emerald-100 tracking-wider">
       <CardHeader className="bg-gray-50 border-b p-6">
         <CardTitle className="text-xl">Question Analysis</CardTitle>
       </CardHeader>
@@ -33,68 +33,98 @@ const QuestionFeedbackAccordion: React.FC<QuestionFeedbackAccordionProps> = ({
               value={`question-${question.question_id}`}
               className="border border-gray-200 rounded-lg overflow-hidden"
             >
-              <AccordionTrigger className="px-4 py-3 bg-gray-50 hover:bg-gray-100 transition-colors">
-                <div className="flex items-center justify-between w-full text-left">
+              <AccordionTrigger className="px-4 py-3 bg-gray-50 hover:bg-gray-100 cursor-pointer transition-colors hover:no-underline">
+                <div className="flex items-start justify-between w-full">
                   <div className="flex-1">
-                    <h3 className="font-medium">{question.question}</h3>
+                    <div className="flex items-center space-x-2 mb-2">
+                      <MessageSquare className="w-5 h-5 text-emerald-600" />
+                      <span className="font-extrabold text-gray-900">
+                        Question {question.question_id}
+                      </span>
+                    </div>
+                    <p className="text-gray-700 font-semibold mb-3">
+                      {question.question}
+                    </p>
                   </div>
-                  <Badge
-                    className={`ml-4 ${
-                      question.evaluation.score >= 8
-                        ? "bg-green-100 text-green-800 hover:bg-green-100"
-                        : question.evaluation.score >= 6
-                        ? "bg-emerald-100 text-emerald-800 hover:bg-emerald-100"
-                        : question.evaluation.score >= 4
-                        ? "bg-yellow-100 text-yellow-800 hover:bg-yellow-100"
-                        : "bg-red-100 text-red-800 hover:bg-red-100"
-                    }`}
+                  <div
+                    className={`px-3 py-1 rounded-full text-xs text-white font-semibold ${scoreColor(
+                      question.evaluation.score
+                    )}`}
                   >
-                    Score: {question.evaluation.score}/10
-                  </Badge>
+                    {question.evaluation.score} / 10
+                  </div>
                 </div>
               </AccordionTrigger>
               <AccordionContent className="px-4 py-3 bg-white">
-                <div className="space-y-4">
-                  <div className="space-y-1">
-                    <h4 className="text-sm font-semibold text-gray-500">
-                      Your Answer Summary:
-                    </h4>
-                    <p className="text-gray-700 bg-gray-50 p-3 rounded-md border border-gray-100">
-                      {question.candidate_answer}
-                    </p>
-                    <h4 className="text-sm font-semibold text-gray-500">
-                      Actual Answer:
-                    </h4>
-                    <div className="text-gray-700 bg-gray-50 p-3 rounded-md border border-gray-100">
-                      <Markdown>{question.actual_answer}</Markdown>
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="space-y-1">
-                      <h4 className="text-sm font-semibold text-gray-500">
-                        Expected Points:
+                <div className="space-y-6">
+                  <div className="space-y-2">
+                    <div className="bg-gray-50 rounded-lg p-4">
+                      <h4 className="font-semibold text-gray-900 mb-2">
+                        Your Answer:
                       </h4>
-                      <ul className="list-disc list-inside text-gray-700 space-y-1">
-                        {question.expected_ideal_points.map((point, i) => (
-                          <li key={i} className="text-sm">
-                            {point}
+                      <p className="text-gray-700 italic">
+                        {question.candidate_answer
+                          ? `"${question.candidate_answer}"`
+                          : `"I didn't answer this question."`}
+                      </p>
+                    </div>
+                    <div className="bg-emerald-50 rounded-lg p-4">
+                      <h4 className="font-semibold text-emerald-900 mb-2 flex items-center">
+                        <Target className="w-4 h-4 mr-2" />
+                        Ideal Answer Approach:
+                      </h4>
+                      <p className="text-emerald-800 mb-3">
+                        {question.actual_answer}
+                      </p>
+
+                      <h5 className="font-semibold text-emerald-900 mb-2">
+                        Key Points to Cover:
+                      </h5>
+                      <ul className="space-y-1">
+                        {question.expected_ideal_points.map((point, index) => (
+                          <li key={index} className="flex items-start">
+                            <div className="w-2 h-2 bg-emerald-500 rounded-full mt-2 mr-3 flex-shrink-0"></div>
+                            <span className="text-sm text-emerald-800">
+                              {point}
+                            </span>
                           </li>
                         ))}
                       </ul>
                     </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div>
+                      <h4 className="font-semibold text-gray-900 mb-2">
+                        Coverage & Depth:
+                      </h4>
+                      <div>
+                        <div className="text-sm text-gray-700 mb-2 ">
+                          <Markdown>{question.evaluation.coverage}</Markdown>
+                        </div>
+                        <div className="text-sm text-gray-600">
+                          <Markdown>{question.evaluation.depth}</Markdown>
+                        </div>
+                      </div>
+                    </div>
 
                     <div className="space-y-1">
-                      <h4 className="text-sm font-semibold text-gray-500">
+                      <h4 className="font-semibold text-gray-900 mb-2 flex items-center">
+                        <AlertCircle className="w-4 h-4 mr-2 text-amber-500" />
                         Missed Points:
                       </h4>
                       {question.evaluation.missed_points.length > 0 ? (
-                        <ul className="list-disc list-inside text-gray-700 space-y-1">
-                          {question.evaluation.missed_points.map((point, i) => (
-                            <li key={i} className="text-sm">
-                              {point}
-                            </li>
-                          ))}
+                        <ul className="space-y-1">
+                          {question.evaluation.missed_points.map(
+                            (point, index) => (
+                              <li key={index} className="flex items-start">
+                                <div className="w-2 h-2 bg-amber-500 rounded-full mt-2 mr-3 flex-shrink-0"></div>
+                                <span className="text-sm text-gray-700">
+                                  {point}
+                                </span>
+                              </li>
+                            )
+                          )}
                         </ul>
                       ) : (
                         <p className="text-sm text-green-600">
@@ -104,25 +134,12 @@ const QuestionFeedbackAccordion: React.FC<QuestionFeedbackAccordionProps> = ({
                     </div>
                   </div>
 
-                  <div className="space-y-1">
-                    <h4 className="text-sm font-semibold text-gray-500">
-                      Coverage & Depth:
-                    </h4>
-                    <div className="flex space-x-4">
-                      <Badge className="bg-gray-100 text-gray-800 hover:bg-gray-200">
-                        {question.evaluation.coverage}
-                      </Badge>
-                      <p className="text-sm text-gray-600">
-                        {question.evaluation.depth}
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="space-y-1 bg-emerald-50 p-3 rounded-md border border-emerald-100">
-                    <h4 className="text-sm font-semibold text-emerald-700">
+                  <div className="bg-blue-50 rounded-lg p-4">
+                    <h4 className="font-semibold text-blue-900 mb-2 flex items-center">
+                      <Lightbulb className="w-4 h-4 mr-2" />
                       Recommendation:
                     </h4>
-                    <p className="text-emerald-700">
+                    <p className="text-blue-800 text-sm">
                       {question.recommendation}
                     </p>
                   </div>

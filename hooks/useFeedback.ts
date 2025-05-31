@@ -5,6 +5,7 @@ import { getInterviewById } from "@/firebase/actions";
 import { auth } from "@/firebase/client";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { useUserStore } from "./userUser";
 
 // const mockFeedbackData: FeedbackData = {
 //   success: true,
@@ -119,6 +120,7 @@ export const useFeedback = (id: string | undefined) => {
   const [isLoading, setIsLoading] = useState(true);
   const [feedbackData, setFeedbackData] = useState<FeedbackData | null>(null);
   const router = useRouter();
+  const { user } = useUserStore();
 
   useEffect(() => {
     async function getFeedback() {
@@ -126,7 +128,7 @@ export const useFeedback = (id: string | undefined) => {
       try {
         const result = await getInterviewById(
           id || "",
-          auth.currentUser?.uid || ""
+          auth.currentUser?.uid || user?.uid || ""
         );
         if (!result.success) {
           setFeedbackData(null);
@@ -134,13 +136,13 @@ export const useFeedback = (id: string | undefined) => {
           toast.success("You can see all your feedbacks on your profile");
           return;
         }
-        console.log(result.data);
+
         setFeedbackData({
           success: true,
           feedback: result.data?.data.feedback,
           job: result.data?.data.job,
+          createdAt: result.data?.data.createdAt,
         });
-        toast.success("You can see your feedbacks on your profile");
         setIsLoading(false);
       } catch (error) {
         console.error("Error fetching feedback:", error);
@@ -151,7 +153,7 @@ export const useFeedback = (id: string | undefined) => {
     }
 
     getFeedback();
-  }, [id]);
+  }, [id, user]);
 
   const getScoreValue = (score: number): number => {
     return (score / 10) * 100;
@@ -159,8 +161,7 @@ export const useFeedback = (id: string | undefined) => {
 
   const scoreColor = (score: number): string => {
     if (score >= 8) return "bg-emerald-400";
-    if (score >= 6) return "bg-emerald-200";
-    if (score >= 4) return "bg-yellow-400";
+    if (score >= 6) return "bg-yellow-500";
     return "bg-red-500";
   };
 

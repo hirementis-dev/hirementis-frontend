@@ -1,12 +1,20 @@
 export function formatFirebaseTimestamp(timestamp: any, format = "default") {
-  // Convert Firebase timestamp to JavaScript Date
-  const milliseconds =
-    timestamp.seconds * 1000 + Math.floor(timestamp.nanoseconds / 1000000);
+  if (!timestamp || typeof timestamp !== "object") {
+    return "Invalid timestamp";
+  }
+
+  const seconds = timestamp.seconds || timestamp._seconds || 0;
+  const nanoseconds = timestamp.nanoseconds || timestamp.nanoseconds || 0;
+
+  if (typeof seconds !== "number") {
+    return "Invalid timestamp format";
+  }
+
+  const milliseconds = seconds * 1000 + Math.floor(nanoseconds / 1000000);
   const date = new Date(milliseconds);
 
   switch (format) {
     case "short":
-      // MM/DD/YYYY HH:MM AM/PM
       return date.toLocaleString("en-US", {
         month: "2-digit",
         day: "2-digit",
@@ -17,7 +25,6 @@ export function formatFirebaseTimestamp(timestamp: any, format = "default") {
       });
 
     case "long":
-      // January 25, 2025 at 10:35:30 AM
       return date.toLocaleString("en-US", {
         month: "long",
         day: "numeric",
@@ -29,15 +36,12 @@ export function formatFirebaseTimestamp(timestamp: any, format = "default") {
       });
 
     case "iso":
-      // 2025-01-25T10:35:30.410Z
       return date.toISOString();
 
     case "relative":
-      // "2 hours ago", "yesterday", etc.
       return getRelativeTime(date);
 
     case "date-only":
-      // January 25, 2025
       return date.toLocaleDateString("en-US", {
         month: "long",
         day: "numeric",
@@ -45,7 +49,6 @@ export function formatFirebaseTimestamp(timestamp: any, format = "default") {
       });
 
     case "time-only":
-      // 10:35:30 AM
       return date.toLocaleTimeString("en-US", {
         hour: "numeric",
         minute: "2-digit",
@@ -54,7 +57,6 @@ export function formatFirebaseTimestamp(timestamp: any, format = "default") {
       });
 
     default:
-      // Jan 25, 2025, 10:35:30 AM
       return date.toLocaleString("en-US", {
         month: "short",
         day: "numeric",
@@ -102,4 +104,93 @@ export function getRelativeTime(date: any) {
 
   const diffInYears = Math.floor(diffInDays / 365);
   return `${diffInYears} year${diffInYears === 1 ? "" : "s"} ago`;
+}
+
+function getTimestampMilliseconds(timestamp: any) {
+  if (!timestamp || typeof timestamp !== "object") {
+    return 0;
+  }
+
+  const seconds = timestamp.seconds || timestamp._seconds || 0;
+  const nanoseconds = timestamp.nanoseconds || timestamp._nanoseconds || 0;
+
+  return seconds * 1000 + Math.floor(nanoseconds / 1000000);
+}
+
+export function sortByTimestamp(
+  array: any,
+  dateField = "date",
+  order = "desc"
+) {
+  if (!Array.isArray(array)) {
+    console.warn("sortByTimestamp: Input must be an array");
+    return [];
+  }
+
+  return [...array].sort((a, b) => {
+    // Get timestamps from objects
+    const timestampA = a[dateField];
+    const timestampB = b[dateField];
+
+    // Convert to milliseconds for comparison
+    const millisecondsA = getTimestampMilliseconds(timestampA);
+    const millisecondsB = getTimestampMilliseconds(timestampB);
+
+    // Sort based on order parameter
+    if (order === "asc") {
+      return millisecondsA - millisecondsB;
+    } else {
+      return millisecondsB - millisecondsA;
+    }
+  });
+}
+
+function sortByDate(array: any, options: any = {}) {
+  const { field = "createdAt", order = "desc", mutate = false } = options;
+
+  if (!Array.isArray(array)) {
+    console.warn("sortByDate: Input must be an array");
+    return [];
+  }
+
+  const targetArray = mutate ? array : [...array];
+
+  return targetArray.sort((a, b) => {
+    const timestampA = a[field];
+    const timestampB = b[field];
+
+    const millisecondsA = getTimestampMilliseconds(timestampA);
+    const millisecondsB = getTimestampMilliseconds(timestampB);
+
+    return order === "asc"
+      ? millisecondsA - millisecondsB
+      : millisecondsB - millisecondsA;
+  });
+}
+
+function groupByDate(array: any, field = "createdAt") {
+  if (!Array.isArray(array)) {
+    return {};
+  }
+
+  const grouped: any = {};
+
+  array.forEach((item) => {
+    const timestamp = item[field];
+    const date = new Date(getTimestampMilliseconds(timestamp));
+    const dateKey = date.toDateString(); // "Mon Jan 25 2025"
+
+    if (!grouped[dateKey]) {
+      grouped[dateKey] = [];
+    }
+
+    grouped[dateKey].push(item);
+  });
+
+  // Sort items within each group (latest first)
+  Object.keys(grouped).forEach((dateKey) => {
+    grouped[dateKey] = sortByTimestamp(grouped[dateKey], field, "desc");
+  });
+
+  return grouped;
 }
