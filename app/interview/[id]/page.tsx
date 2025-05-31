@@ -187,7 +187,8 @@ const InstructionsPopup = ({
 
 const Page = () => {
   const [isInterviewStarted, setIsInterviewStarted] = useState(false);
-  const [interviewQuestions, setInterviewQuestions] = useState<string[]>([]);
+  const [interviewQuestions, setInterviewQuestions] = useState([]);
+  // const [interviewQuestions, setInterviewQuestions] = useState<string[]>([]);
   const [loading, setLoading] = useState<LoaderState>({
     state: false,
     message: "Setting up interview...",
@@ -288,10 +289,12 @@ const Page = () => {
         responsibilities: job.responsibilities,
       };
       const result = await axios.post("/api/generate-question", body);
+      setLoading({ state: false });
       if (result.data?.success) {
         setInterviewQuestions(result.data?.questions);
+        return result.data?.questions
       }
-      setLoading({ state: false });
+    
     } catch (error) {
       setLoading({ state: false });
     }
@@ -299,18 +302,18 @@ const Page = () => {
 
   const startInterview = async () => {
     setInterviewId(nanoid());
-    await setupInterview();
+   const questions = await setupInterview();
     setLoading({
       state: true,
       message: "Reva is getting ready to take your interview..",
     });
 
-    const VAPI_ASSISTANT_ID = process.env.NEXT_PUBLIC_VAPI_ASSISTANT_ID!;
 
-    const interviewQs = interviewQuestions
+    const VAPI_ASSISTANT_ID = process.env.NEXT_PUBLIC_VAPI_ASSISTANT_ID!;
+    const interviewQs = questions
       .map((item: string) => `- ${item}`)
       .join("\n");
-
+      
     await vapi.start(VAPI_ASSISTANT_ID, {
       ...interviewer,
       variableValues: {
