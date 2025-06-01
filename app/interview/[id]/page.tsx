@@ -46,7 +46,6 @@ interface SavedMessage {
   content: string;
 }
 
-// Instructions Popup Component
 const InstructionsPopup = ({
   isOpen,
   onClose,
@@ -206,7 +205,7 @@ const Page = () => {
   const [showConfirmationDialog, setShowConfirmationDialog] =
     useState<boolean>(false);
   const [showInstructions, setShowInstructions] = useState(true);
-  const [timeRemaining, setTimeRemaining] = useState(20 * 60); // 20 minutes in seconds
+  const [timeRemaining, setTimeRemaining] = useState(20 * 60);
   const [timerActive, setTimerActive] = useState(false);
   const { user: userState } = useUserStore();
   const router = useRouter();
@@ -254,7 +253,7 @@ const Page = () => {
     };
 
     const onError = (err: any) => {
-      toast.info(err?.err?.msg || "intreview ended");
+      toast.info(err?.err?.msg || "Interview ended");
     };
 
     vapi.on("call-start", onCallStart);
@@ -300,6 +299,10 @@ const Page = () => {
   };
 
   const startInterview = async () => {
+    if (!micActive) {
+      toast.error("Microphone permission required.");
+      return;
+    }
     setInterviewId(() => nanoid());
     const questions = await setupInterview();
     setInterviewQuestions(questions);
@@ -390,6 +393,7 @@ const Page = () => {
         }
       } catch (err) {
         console.error("Error accessing camera:", err);
+        setCameraActive(false);
       }
     };
 
@@ -433,6 +437,7 @@ const Page = () => {
         }
       } catch (err) {
         console.error("Error accessing microphone:", err);
+        setMicActive(false);
       }
     };
 
@@ -516,7 +521,6 @@ const Page = () => {
     };
   }, [timerActive, timeRemaining]);
 
-  // Format time for display
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
@@ -528,7 +532,7 @@ const Page = () => {
   return loading.state ? (
     <FullScreenLoader isLoading={loading.state} text={loading.message} />
   ) : (
-    <div className="min-h-screen bg-gradient-to-br from-emerald-50/50 to-white">
+    <div className="min-h-screen bg-gradient-to-br from-emerald-50/50 via-blue-50/30 to-white">
       <InstructionsPopup
         isOpen={showInstructions}
         onClose={() => setShowInstructions(false)}
@@ -544,52 +548,96 @@ const Page = () => {
         />
       </div>
 
-      <div className="container mx-auto px-6 py-8">
-        {/* Header section with compact spacing */}
-        <div className="mb-4 flex items-center justify-between">
-          <div>
-            <Link
-              href={`/jobs/${job.id}`}
-              className="text-emerald-600 hover:underline flex items-center mb-1 text-sm"
-            >
-              ← back to jobs
-            </Link>
-            <h1 className="text-2xl font-bold">
-              Interview Practice: {job.title}
-            </h1>
-          </div>
-          <div className="flex items-center gap-4">
-            {timerActive && (
-              <div className="text-lg font-mono font-bold text-emerald-600 bg-emerald-50 px-4 py-2 rounded-lg border border-emerald-200">
-                {formatTime(timeRemaining)}
+      <div className="container mx-auto px-4 sm:px-6 py-4 sm:py-8">
+        <div className="mb-4 sm:mb-6">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div className="flex-1">
+              <Link
+                href={`/jobs/${job.id}`}
+                className="text-emerald-600 hover:underline flex items-center mb-2 text-sm font-medium transition-colors"
+              >
+                ← back to jobs
+              </Link>
+              <div className="space-y-1">
+                <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900">
+                  Interview Practice
+                </h1>
+                <p className="text-sm sm:text-base text-gray-600">
+                  {job.title} at {job.company}
+                </p>
               </div>
-            )}
-            <Button
-              variant="outline"
-              onClick={() => setShowInstructions(true)}
-              className="flex items-center gap-2 border-emerald-200 text-emerald-600 hover:bg-emerald-50"
-            >
-              view instructions
-            </Button>
+            </div>
+
+            <div className="flex items-center gap-3 sm:gap-4 flex-wrap">
+              {timerActive && (
+                <div className="text-base sm:text-lg font-mono font-bold text-emerald-600 bg-emerald-50 px-3 sm:px-4 py-2 rounded-lg border border-emerald-200 shadow-sm">
+                  {formatTime(timeRemaining)}
+                </div>
+              )}
+              <Button
+                variant="outline"
+                onClick={() => setShowInstructions(true)}
+                className="flex items-center gap-2 border-emerald-200 text-emerald-600 hover:bg-emerald-50 text-sm sm:text-base"
+              >
+                view instructions
+              </Button>
+            </div>
+          </div>
+
+          <div className="mt-4 sm:mt-6">
+            <Card className="border border-emerald-100 bg-white/80 backdrop-blur-sm">
+              <CardContent className="p-4 sm:p-6">
+                <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                  <div className="flex items-center gap-3 sm:gap-4">
+                    <div>
+                      <h2 className="font-semibold text-base sm:text-lg text-gray-900">
+                        {job.title}
+                      </h2>
+                      <p className="text-sm sm:text-base text-gray-600">
+                        {job.company} • {job.location}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex flex-wrap gap-2 sm:ml-auto">
+                    <span className="px-2 sm:px-3 py-1 bg-emerald-100 text-emerald-700 rounded-full text-xs sm:text-sm font-medium">
+                      {job.type}
+                    </span>
+                    <span className="px-2 sm:px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs sm:text-sm font-medium">
+                      {job.level}
+                    </span>
+                    <span className="px-2 sm:px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-xs sm:text-sm font-medium">
+                      {job.industry}
+                    </span>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
           </div>
         </div>
 
-        {/* Main content area - full width video section */}
         <div className="w-full">
-          <Card className="shadow-lg border border-emerald-100 overflow-hidden">
-            <CardContent className="p-8">
-              {/* Video sections - equal width side by side */}
-              <div className="flex gap-8 h-[500px]">
-                {/* Reva section - left half */}
-                <div className="flex-1 flex flex-col items-center justify-center border border-gray-200 rounded-lg p-8 bg-white shadow-sm">
-                  <h3 className="text-3xl mb-8 text-center font-medium">
-                    Reva(AI)
-                  </h3>
-                  <div className="flex items-center justify-center relative w-40 h-40">
+          <Card className="shadow-xl border border-emerald-100 overflow-hidden bg-white/95 backdrop-blur-sm">
+            <CardContent className="p-4 sm:p-6 lg:p-8">
+              <div className="flex flex-col lg:flex-row gap-4 sm:gap-6 lg:gap-8">
+                <div className="flex-1 flex flex-col items-center justify-center border border-gray-200 rounded-xl p-4 sm:p-6 lg:p-8 bg-gradient-to-br from-emerald-50 to-white shadow-sm min-h-[250px] sm:min-h-[300px] lg:min-h-[400px]">
+                  <div className="text-center mb-4 sm:mb-6 lg:mb-8">
+                    <h3 className="text-xl sm:text-2xl lg:text-3xl font-medium text-gray-800 mb-1">
+                      Reva (AI)
+                    </h3>
+                    <p className="text-xs sm:text-sm text-emerald-600 font-medium">
+                      AI Interviewer
+                    </p>
+                  </div>
+
+                  <div className="flex items-center justify-center relative">
                     {isSpeaking && (
-                      <div className="absolute inset-0 rounded-full bg-emerald-400 opacity-75 animate-ping"></div>
+                      <>
+                        <div className="absolute inset-0 w-24 h-24 sm:w-32 sm:h-32 lg:w-40 lg:h-40 rounded-full bg-emerald-400 opacity-20 animate-ping"></div>
+                        <div className="absolute inset-0 w-24 h-24 sm:w-32 sm:h-32 lg:w-40 lg:h-40 rounded-full bg-emerald-400 opacity-40 animate-ping animation-delay-75"></div>
+                      </>
                     )}
-                    <div className="relative w-36 h-36 rounded-full bg-emerald-50 flex items-center justify-center border border-emerald-200 shadow-inner overflow-hidden">
+                    <div className="relative w-20 h-20 sm:w-28 sm:h-28 lg:w-36 lg:h-36 rounded-full bg-emerald-50 flex items-center justify-center border-2 border-emerald-200 shadow-lg overflow-hidden">
                       <Image
                         src="/Reva_profile.png"
                         alt="Reva AI Avatar"
@@ -599,98 +647,158 @@ const Page = () => {
                       />
                     </div>
                   </div>
+
+                  <div className="mt-4 sm:mt-6 flex items-center gap-2">
+                    <div
+                      className={`w-2 h-2 rounded-full ${
+                        isSpeaking
+                          ? "bg-emerald-400 animate-pulse"
+                          : "bg-gray-300"
+                      }`}
+                    ></div>
+                    <span className="text-xs sm:text-sm text-gray-600">
+                      {isSpeaking ? "Speaking..." : ""}
+                    </span>
+                  </div>
                 </div>
 
-                {/* User section - right half */}
-                <div className="flex-1 flex flex-col items-center justify-center border border-gray-200 rounded-lg p-8 bg-white shadow-sm">
+                <div className="flex-1 flex flex-col items-center justify-center border border-gray-200 rounded-xl p-4 sm:p-6 lg:p-8 bg-gradient-to-br from-gray-50 to-white shadow-sm min-h-[250px] sm:min-h-[300px] lg:min-h-[400px]">
                   {cameraActive ? (
-                    <div className="w-full h-full">
+                    <div className="w-full h-full min-h-[200px] sm:min-h-[250px] lg:min-h-[350px] rounded-xl overflow-hidden shadow-inner">
                       <video
                         ref={videoRef}
                         autoPlay
                         muted
-                        className="w-full h-full rounded-lg object-cover"
+                        className="w-full h-full object-cover"
                       />
                     </div>
                   ) : (
-                    <div className="flex flex-col items-center">
-                      <h3 className="text-3xl mb-8 text-center font-medium">
-                        {userState?.firstName || user?.displayName || "You"}
-                      </h3>
-                      <div className="w-36 h-36 rounded-full bg-gray-100 flex items-center justify-center border border-gray-200 shadow-inner">
+                    <>
+                      <div className="text-center mb-4 sm:mb-6 lg:mb-8">
+                        <h3 className="text-xl sm:text-2xl lg:text-3xl font-medium text-gray-800 mb-1">
+                          {userState?.firstName || user?.displayName || "You"}
+                        </h3>
+                        <p className="text-xs sm:text-sm text-gray-600 font-medium">
+                          Candidate
+                        </p>
+                      </div>
+
+                      <div className="w-20 h-20 sm:w-28 sm:h-28 lg:w-36 lg:h-36 rounded-full bg-gray-100 flex items-center justify-center border-2 border-gray-200 shadow-inner overflow-hidden">
                         {userState?.profilePicture || user?.photoURL ? (
-                          <div className="w-full h-full rounded-full overflow-hidden">
-                            <Image
-                              src={
-                                userState?.profilePicture ||
-                                user?.photoURL ||
-                                ""
-                              }
-                              alt={
-                                userState?.displayName ||
-                                user?.displayName ||
-                                "User Avatar"
-                              }
-                              width={144}
-                              height={144}
-                              className="w-full h-full object-cover"
-                            />
-                          </div>
+                          <Image
+                            src={
+                              userState?.profilePicture || user?.photoURL || ""
+                            }
+                            alt={
+                              userState?.displayName ||
+                              user?.displayName ||
+                              "You"
+                            }
+                            width={144}
+                            height={144}
+                            className="w-full h-full object-cover"
+                          />
                         ) : (
                           <CircleUserRound
-                            size={"72"}
+                            size={
+                              window.innerWidth < 640
+                                ? "48"
+                                : window.innerWidth < 1024
+                                ? "56"
+                                : "72"
+                            }
                             className="text-zinc-500"
                           />
                         )}
                       </div>
-                    </div>
+
+                      <div className="mt-4 sm:mt-6 flex items-center gap-2">
+                        <div className="w-2 h-2 rounded-full bg-gray-400"></div>
+                        <span className="text-xs sm:text-sm text-gray-600">
+                          Camera off
+                        </span>
+                      </div>
+                    </>
                   )}
                 </div>
               </div>
             </CardContent>
 
-            {/* Footer with controls - centered layout */}
-            <CardFooter className="border-t bg-gray-50 p-6 flex justify-center gap-6 items-center">
-              <Button
-                className={`rounded-full w-14 h-14 ${
-                  micActive
-                    ? "bg-emerald-100 hover:bg-emerald-200 text-emerald-600"
-                    : "bg-red-500 hover:bg-red-600 text-white"
-                }`}
-                onClick={toggleMic}
-              >
-                {micActive ? <Mic size={20} /> : <MicOff size={20} />}
-              </Button>
-
-              <Button
-                className={`rounded-full w-14 h-14 ${
-                  cameraActive
-                    ? "bg-emerald-100 hover:bg-emerald-200 text-emerald-600"
-                    : "bg-red-500 hover:bg-red-600 text-white"
-                }`}
-                onClick={toggleCamera}
-              >
-                {cameraActive ? <Camera size={20} /> : <CameraOff size={20} />}
-              </Button>
-
-              {isInterviewStarted || callStatus == "ACTIVE" ? (
+            <CardFooter className="border-t bg-gradient-to-r from-gray-50 to-emerald-50/30 p-4 sm:p-6 flex flex-col sm:flex-row justify-center gap-4 sm:gap-6 items-center">
+              {/* Control buttons */}
+              <div className="flex gap-4 sm:gap-6 items-center">
                 <Button
-                  variant="destructive"
-                  size="lg"
-                  onClick={endInterview}
-                  className="px-8 bg-red-500 hover:bg-red-600"
+                  className={`rounded-full w-12 h-12 sm:w-14 sm:h-14 transition-all duration-200 ${
+                    micActive
+                      ? "bg-emerald-100 hover:bg-emerald-200 text-emerald-600 shadow-lg"
+                      : "bg-red-500 hover:bg-red-600 text-white shadow-lg"
+                  }`}
+                  onClick={toggleMic}
                 >
-                  end Interview
+                  {micActive ? (
+                    <Mic size={18} className="sm:w-5 sm:h-5" />
+                  ) : (
+                    <MicOff size={18} className="sm:w-5 sm:h-5" />
+                  )}
                 </Button>
-              ) : (
+
                 <Button
-                  onClick={startInterview}
-                  size="lg"
-                  className="bg-emerald-500 hover:bg-emerald-600 px-8"
+                  className={`rounded-full w-12 h-12 sm:w-14 sm:h-14 transition-all duration-200 ${
+                    cameraActive
+                      ? "bg-emerald-100 hover:bg-emerald-200 text-emerald-600 shadow-lg"
+                      : "bg-red-500 hover:bg-red-600 text-white shadow-lg"
+                  }`}
+                  onClick={toggleCamera}
                 >
-                  Start Interview
+                  {cameraActive ? (
+                    <Camera size={18} className="sm:w-5 sm:h-5" />
+                  ) : (
+                    <CameraOff size={18} className="sm:w-5 sm:h-5" />
+                  )}
                 </Button>
-              )}
+
+                {isInterviewStarted || callStatus == "ACTIVE" ? (
+                  <Button
+                    variant="destructive"
+                    size="lg"
+                    onClick={endInterview}
+                    className="px-6 sm:px-8 bg-red-500 hover:bg-red-600 shadow-lg transition-all duration-200 text-sm sm:text-base"
+                  >
+                    End Interview
+                  </Button>
+                ) : (
+                  <Button
+                    onClick={startInterview}
+                    size="lg"
+                    className="bg-emerald-500 hover:bg-emerald-600 px-6 sm:px-8 shadow-lg transition-all duration-200 text-sm sm:text-base"
+                  >
+                    Start Interview
+                  </Button>
+                )}
+              </div>
+
+              <div className="flex items-center gap-4 text-xs sm:text-sm text-gray-600 mt-2 sm:mt-0">
+                <div className="flex items-center gap-1">
+                  <div
+                    className={`w-2 h-2 rounded-full ${
+                      micActive ? "bg-green-400" : "bg-red-400"
+                    }`}
+                  ></div>
+                  <span className="hidden sm:inline">
+                    Mic {micActive ? "On" : "Off"}
+                  </span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <div
+                    className={`w-2 h-2 rounded-full ${
+                      cameraActive ? "bg-green-400" : "bg-red-400"
+                    }`}
+                  ></div>
+                  <span className="hidden sm:inline">
+                    Camera {cameraActive ? "On" : "Off"}
+                  </span>
+                </div>
+              </div>
             </CardFooter>
           </Card>
         </div>
