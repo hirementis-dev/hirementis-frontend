@@ -346,6 +346,11 @@ const Page = () => {
         interviewQs: interviewQuestions,
         interviewId,
         userId: currentUser?.uid || user?.uid,
+        userName:
+          user?.displayName ||
+          userState?.displayName ||
+          userState?.firstName ||
+          "",
       });
       setLoading({
         state: true,
