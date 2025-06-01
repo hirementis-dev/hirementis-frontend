@@ -64,7 +64,7 @@ const PricingSection: React.FC = () => {
       isContactSales: false,
     },
     {
-      name: "Enterprise",
+      name: "Enterprise (coming soon)",
       description: "For large organizations",
       price: "$99",
       period: "per month",

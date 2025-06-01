@@ -23,7 +23,7 @@ const HelpCenterPage = () => (
                     <li>Click on the <strong>Sign Up</strong> button on the homepage</li>
                     <li>Enter your name, email, and password</li>
                     <li>Confirm your email address and log in</li>
-                    <li>We also support <b>Google</b> & <b>GitHub</b> login</li>
+                    <li>We also support <b>Google</b> login</li>
                   </ul>
                 </div>
 

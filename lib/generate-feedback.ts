@@ -11,11 +11,18 @@ class InterviewFeedbackGenerator {
   private jobDetails: Job;
   private transcript: String;
   private questions: string[];
+  private userName: string;
 
-  constructor(jobDetails: Job, transcript: String, questions: string[]) {
+  constructor(
+    jobDetails: Job,
+    transcript: String,
+    questions: string[],
+    userName: string
+  ) {
     this.jobDetails = jobDetails;
     this.transcript = transcript;
     this.questions = questions;
+    this.userName = userName;
   }
 
   async generateInterviewSummary() {
@@ -28,6 +35,8 @@ class InterviewFeedbackGenerator {
     Experience Level: ${this.jobDetails.level}
     Industry: ${this.jobDetails.industry}
     Role Description: ${this.jobDetails.description}
+
+    Candidate's Name: ${this.userName}
 
     KEY REQUIREMENTS:
     ${
@@ -70,6 +79,8 @@ class InterviewFeedbackGenerator {
     Experience Level: ${this.jobDetails.level}
     Industry: ${this.jobDetails.industry}
     Role Description: ${this.jobDetails.description}
+
+    Candidate's Name: ${this.userName}
     
     KEY REQUIREMENTS:
     ${this.jobDetails.requirements
@@ -112,6 +123,8 @@ class InterviewFeedbackGenerator {
       Experience Level: ${this.jobDetails.level}
       Industry: ${this.jobDetails.industry}
       Role Description: ${this.jobDetails.description}
+
+      Candidate's Name: ${this.userName}
       
       Question: "${question}"
       Candidate Answer: "${candidateAnswer}"
@@ -159,6 +172,8 @@ class InterviewFeedbackGenerator {
     INDUSTRY: ${this.jobDetails.industry}
     LEVEL: ${this.jobDetails.level}
     Role Description: ${this.jobDetails.description}
+
+    Candidate's Name: ${this.userName}
 
     KEY REQUIREMENTS:
     ${this.jobDetails.requirements
