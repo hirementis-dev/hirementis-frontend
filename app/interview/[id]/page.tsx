@@ -185,6 +185,7 @@ const InstructionsPopup = ({
 };
 
 const Page = () => {
+  return <></>;
   const [isInterviewStarted, setIsInterviewStarted] = useState(false);
   const [interviewQuestions, setInterviewQuestions] = useState([]);
   // const [interviewQuestions, setInterviewQuestions] = useState<string[]>([]);
