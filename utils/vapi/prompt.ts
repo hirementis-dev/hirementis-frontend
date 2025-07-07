@@ -170,8 +170,8 @@ export const interviewer: AssistantOverrides = {
     useSpeakerBoost: true,
   },
   model: {
-    provider: "openai",
-    model: "gpt-4o-mini-2024-07-18",
+    provider: "google",
+    model: "gemini-2.5-flash-preview-04-17",
     messages: [
       {
         role: "system",
