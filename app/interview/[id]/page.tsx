@@ -9,7 +9,6 @@ import {
   Mic,
   MicOff,
   X,
-  Info,
 } from "lucide-react";
 import { redirect, useRouter } from "next/navigation";
 import { useParams } from "next/navigation";
@@ -17,7 +16,6 @@ import React, { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import JobNotFound from "./components/JobNotFound";
 import axios from "axios";
-import Vapi from "@vapi-ai/web";
 import { vapi } from "@/lib/vapi.sdk";
 import { interviewer } from "@/utils/vapi/prompt";
 import { toast } from "sonner";
@@ -185,10 +183,8 @@ const InstructionsPopup = ({
 };
 
 const Page = () => {
-  return <></>;
   const [isInterviewStarted, setIsInterviewStarted] = useState(false);
-  const [interviewQuestions, setInterviewQuestions] = useState([]);
-  // const [interviewQuestions, setInterviewQuestions] = useState<string[]>([]);
+  const [interviewQuestions, setInterviewQuestions] = useState<string[]>([]);
   const [loading, setLoading] = useState<LoaderState>({
     state: false,
     message: "Setting up interview...",
