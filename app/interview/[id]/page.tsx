@@ -212,6 +212,7 @@ const Page = () => {
   if (!id) {
     redirect("/jobs");
   }
+
   const jobId = Number(id);
   const job = jobs.find((job) => job.id === jobId);
 
@@ -228,6 +229,7 @@ const Page = () => {
     const onCallEnd = async () => {
       setCallStatus(CallStatus.FINISHED);
       toast.message("Interview ended");
+      localStorage.removeItem("interview-secret-key");
       // await endInterview();
     };
 
@@ -259,6 +261,13 @@ const Page = () => {
     vapi.on("speech-start", onSpeechStart);
     vapi.on("speech-end", onSpeechEnd);
     vapi.on("error", onError);
+
+    if (
+      !loading.state &&
+      !window.localStorage.getItem("interview-secret-key")
+    ) {
+      redirect(`/jobs/${id}`);
+    }
 
     return () => {
       vapi.off("call-start", onCallStart);
@@ -368,6 +377,8 @@ const Page = () => {
         description: "Please give minimum of 5 minutes interview",
       });
       setLoading({ state: false });
+    } finally {
+      localStorage.removeItem("interview-secret-key");
     }
   }
 

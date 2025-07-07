@@ -56,6 +56,7 @@ const JobDetails = () => {
     e.preventDefault();
     if (secretKey === process.env.NEXT_PUBLIC_SECRET_KEY) {
       setShowKeyPrompt(false);
+      localStorage.setItem("interview-secret-key", secretKey);
       router.push(`/interview/${job.id}`);
     } else {
       toast.error("Invalid secret key.");
