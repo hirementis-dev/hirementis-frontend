@@ -171,7 +171,7 @@ export const interviewer: AssistantOverrides = {
   },
   model: {
     provider: "openai",
-    model: "gpt-4",
+    model: "gpt-4.1-mini",
     messages: [
       {
         role: "system",

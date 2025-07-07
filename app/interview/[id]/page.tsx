@@ -9,7 +9,6 @@ import {
   Mic,
   MicOff,
   X,
-  Info,
 } from "lucide-react";
 import { redirect, useRouter } from "next/navigation";
 import { useParams } from "next/navigation";
@@ -17,7 +16,6 @@ import React, { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import JobNotFound from "./components/JobNotFound";
 import axios from "axios";
-import Vapi from "@vapi-ai/web";
 import { vapi } from "@/lib/vapi.sdk";
 import { interviewer } from "@/utils/vapi/prompt";
 import { toast } from "sonner";
@@ -185,10 +183,8 @@ const InstructionsPopup = ({
 };
 
 const Page = () => {
-  return <></>;
   const [isInterviewStarted, setIsInterviewStarted] = useState(false);
-  const [interviewQuestions, setInterviewQuestions] = useState([]);
-  // const [interviewQuestions, setInterviewQuestions] = useState<string[]>([]);
+  const [interviewQuestions, setInterviewQuestions] = useState<string[]>([]);
   const [loading, setLoading] = useState<LoaderState>({
     state: false,
     message: "Setting up interview...",
@@ -216,6 +212,7 @@ const Page = () => {
   if (!id) {
     redirect("/jobs");
   }
+
   const jobId = Number(id);
   const job = jobs.find((job) => job.id === jobId);
 
@@ -232,6 +229,7 @@ const Page = () => {
     const onCallEnd = async () => {
       setCallStatus(CallStatus.FINISHED);
       toast.message("Interview ended");
+      localStorage.removeItem("interview-secret-key");
       // await endInterview();
     };
 
@@ -263,6 +261,13 @@ const Page = () => {
     vapi.on("speech-start", onSpeechStart);
     vapi.on("speech-end", onSpeechEnd);
     vapi.on("error", onError);
+
+    if (
+      !loading.state &&
+      !window.localStorage.getItem("interview-secret-key")
+    ) {
+      redirect(`/jobs/${id}`);
+    }
 
     return () => {
       vapi.off("call-start", onCallStart);
@@ -372,6 +377,8 @@ const Page = () => {
         description: "Please give minimum of 5 minutes interview",
       });
       setLoading({ state: false });
+    } finally {
+      localStorage.removeItem("interview-secret-key");
     }
   }
 
