@@ -3,7 +3,7 @@ import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 
 const HelpCenterPage = () => (
-  <div className="min-h-screen bg-gray-50 py-8">
+  <div className="min-h-screen bg-gray-50 pb-10 pt-24">
     <div className="max-w-6xl mx-auto px-4">
       <Card className="bg-white shadow-md border border-gray-200">
         <CardContent className="p-8">
@@ -206,9 +206,9 @@ const HelpCenterPage = () => (
                     <li>All interview data is encrypted and stored securely</li>
                     <li>We follow GDPR-compliant data practices</li>
                     <li>Your personal information is never shared without consent</li>
-                    <li>For more details go on : <button className='bg-emerald-400 rounded-md p-18px m-10px'>
-                    <a href="/privacy" className="text-white-100 hover:text-emerald-600">
-                   Privacy & Security
+                    <li>For more details go on : <button className='rounded-md p-18px m-10px'>
+                    <a href="/links/privacy" className="text-white-100 hover:text-emerald-600">
+                   <b>Privacy & Security</b>
                 </a></button></li>
                   </ul>
                 </div>

@@ -3,7 +3,7 @@ import React from "react";
 import { Card, CardContent } from "@/components/ui/card";
 
 const DocumentationPage = () => (
-  <div className="min-h-screen bg-gray-50 py-8">
+  <div className="min-h-screen bg-gray-50 pb-10 pt-24">
     <div className="max-w-6xl mx-auto px-4">
       <Card className="bg-white shadow-md border border-gray-200">
         <CardContent className="p-8">
@@ -309,9 +309,10 @@ const DocumentationPage = () => (
                     platform, please contact us at:
                   </p>
                   <div className="mt-4 p-4 bg-gray-50 rounded-lg">
-                    <p>
-                      <strong>Email:</strong> suprabhat.work@gmail.com
-                    </p>
+                  <p>
+                    <strong>Email :</strong>
+                    <span className="hover:text-emerald-500"> suprabhat.work@gmail.com</span>
+                  </p>
                     <div className="flex gap-4 mt-4">
                       <a
                         href="https://x.com/HireMentis"

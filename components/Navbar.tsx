@@ -64,7 +64,7 @@ const Navbar: React.FC = () => {
   }
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-sm border-b border-gray-100">
+    <nav className="fixed top-0 left-0 right-0 z-50  backdrop-blur-sm border-b border-gray-100">
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center select-none">
@@ -85,42 +85,42 @@ const Navbar: React.FC = () => {
             <Link
               onClick={handleNavlinkClick}
               href="/"
-              className="text-gray-600 hover:text-emerald-600 transition-colors"
+              className="text-gray-900 hover:text-emerald-600 transition-colors"
             >
               Home
             </Link>
             <Link
               onClick={handleNavlinkClick}
               href="/jobs"
-              className="text-gray-600 hover:text-emerald-600 transition-colors"
+              className="text-gray-900 hover:text-emerald-600 transition-colors"
             >
               Jobs
             </Link>
             <Link
               onClick={handleNavlinkClick}
               href="/#features"
-              className="text-gray-600 hover:text-emerald-600 transition-colors"
+              className="text-gray-900 hover:text-emerald-600 transition-colors"
             >
               Features
             </Link>
             <Link
               onClick={handleNavlinkClick}
               href="/#how-it-works"
-              className="text-gray-600 hover:text-emerald-600 transition-colors"
+              className="text-gray-900 hover:text-emerald-600 transition-colors"
             >
               How it works
             </Link>
             <Link
               onClick={handleNavlinkClick}
               href="/#pricing"
-              className="text-gray-600 hover:text-emerald-600 transition-colors"
+              className="text-gray-900 hover:text-emerald-600 transition-colors"
             >
               Pricing
             </Link>
             <Link
               onClick={handleNavlinkClick}
               href="/#testimonials"
-              className="text-gray-600 hover:text-emerald-600 transition-colors"
+              className="text-gray-900 hover:text-emerald-600 transition-colors"
             >
               Testimonials
             </Link>

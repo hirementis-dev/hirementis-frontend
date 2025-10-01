@@ -3,9 +3,10 @@ import Footer from '@/components/Footer';
 import React from 'react';
 import Head from 'next/head';
 import Image from 'next/image';
-import { FaLinkedin, FaTwitter, FaGithub, FaEnvelope } from 'react-icons/fa';
+import { FaLinkedin, FaTwitter, FaGithub, FaEnvelope, FaGlobe } from 'react-icons/fa';
 
 interface SocialLinks {
+  portfolio?: string;
   linkedin?: string;
   twitter?: string;
   github?: string;
@@ -35,6 +36,7 @@ const MeetTheFounders: React.FC = () => {
       image: "/profile_img.png", // Put image in public/images/founders/
      bio: "𝗛𝗲𝘆 𝘁𝗵𝗲𝗿𝗲! 👋 I'm 𝗦𝘂𝗽𝗿𝗮𝗯𝗵𝗮𝘁 a passionate tech explorer who loves building on the web with 𝗛𝗧𝗠𝗟, 𝗖𝗦𝗦, 𝗝𝗮𝘃𝗮𝗦𝗰𝗿𝗶𝗽𝘁, 𝗥𝗲𝗮𝗰𝘁, 𝗡𝗲𝘅𝘁𝗝𝗦, 𝗡𝗼𝗱𝗲𝗝𝗦, 𝗘𝘅𝗽𝗿𝗲𝘀𝘀𝗝𝗦 & 𝗠𝗼𝗻𝗴𝗼𝗗𝗕. I'm also diving deep into the world of 𝗔𝗜 𝗔𝗴𝗲𝗻𝘁𝘀 and 𝗟𝗮𝗿𝗴𝗲 𝗟𝗮𝗻𝗴𝘂𝗮𝗴𝗲 𝗠𝗼𝗱𝗲𝗹𝘀 (𝗟𝗟𝗠𝘀) to build intelligent, interactive experiences I thrive on challenges, love turning ideas into impact, and enjoy connecting with our ever-growing 𝗱𝗲𝘃𝗲𝗹𝗼𝗽𝗲𝗿 𝗰𝗼𝗺𝗺𝘂𝗻𝗶𝘁𝘆 to learn, share, and grow together!",
       socialLinks: {
+        portfolio: "https://suprabhat.site/",
         linkedin: "https://linkedin.com/in/suprabhatt/",
         twitter: "https://twitter.com/suprabhat_3",
          github: "https://github.com/Suprabhat3/",
@@ -58,6 +60,7 @@ const MeetTheFounders: React.FC = () => {
 
   const SocialIcon: React.FC<SocialIconProps> = ({ platform, url }) => {
     const iconMap: Record<keyof SocialLinks, React.ComponentType> = {
+      portfolio: FaGlobe, // Placeholder icon for portfolio
       linkedin: FaLinkedin,
       twitter: FaTwitter,
       github: FaGithub,
@@ -88,29 +91,8 @@ const MeetTheFounders: React.FC = () => {
       </Head>
 
       <div className="min-h-screen bg-gradient-to-br from-emerald-50 to-teal-50">
-        {/* Header */}
-        <header className="bg-white shadow-sm">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex justify-between items-center py-4">
-              <div className="flex items-center space-x-2">
-                <div className="w-8 h-8 bg-emerald-500 rounded-lg flex items-center justify-center">
-                  <span className="text-white font-bold text-sm">H</span>
-                </div>
-                <span className="text-xl font-semibold text-gray-900">HireMentis</span>
-              </div>
-              <nav className="hidden md:flex space-x-8">
-                <a href="#" className="text-gray-600 hover:text-emerald-600 transition-colors">Home</a>
-                <a href="#" className="text-gray-600 hover:text-emerald-600 transition-colors">Jobs</a>
-                <a href="#" className="text-gray-600 hover:text-emerald-600 transition-colors">Features</a>
-                <a href="#" className="text-emerald-600 font-medium">About</a>
-                <a href="#" className="text-gray-600 hover:text-emerald-600 transition-colors">Pricing</a>
-              </nav>
-            </div>
-          </div>
-        </header>
-
         {/* Main Content */}
-        <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-26">
           {/* Hero Section */}
           <div className="text-center mb-16">
             <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
@@ -134,9 +116,9 @@ const MeetTheFounders: React.FC = () => {
                   <Image 
                     src={founder.image}
                     alt={founder.name}
-                    width={400}
-                    height={320}
-                    className="w-full h-80 object-cover group-hover:scale-105 transition-transform duration-300"
+                    width={500}
+                    height={400}
+                    className="w-125 h-125 object-cover group-hover:scale-105 transition-transform duration-300"
                     priority={founder.id <= 2} // Priority loading for first 2 images
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
