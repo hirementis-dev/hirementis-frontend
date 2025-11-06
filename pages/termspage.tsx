@@ -3,7 +3,7 @@ import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 
 const TermsPage = () => (
-  <div className="min-h-screen bg-gray-50 py-8">
+  <div className="min-h-screen bg-gray-50 pb-10 pt-24">
     <div className="max-w-6xl mx-auto px-4">
       <Card className="bg-white shadow-md border border-gray-200">
         <CardContent className="p-8">

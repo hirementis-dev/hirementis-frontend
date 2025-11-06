@@ -86,7 +86,7 @@ const Footer: React.FC = () => {
                 </a>
               </li>
               <li>
-                <a href="/enterprise" className="text-gray-600 hover:text-emerald-600">
+                <a href="/links/enterprise" className="text-gray-600 hover:text-emerald-600">
                   Enterprise
                 </a>
               </li>
@@ -97,12 +97,12 @@ const Footer: React.FC = () => {
             <h3 className="font-semibold text-lg mb-4">Support</h3>
             <ul className="space-y-3">
               <li>
-                <a href="/helpcenter" className="text-gray-600 hover:text-emerald-600">
+                <a href="/links/helpcenter" className="text-gray-600 hover:text-emerald-600">
                   Help Center
                 </a>
               </li>
               <li>
-                <a href="/documentation" className="text-gray-600 hover:text-emerald-600">
+                <a href="/links/documentation" className="text-gray-600 hover:text-emerald-600">
                   Documentation
                 </a>
               </li>
@@ -123,22 +123,22 @@ const Footer: React.FC = () => {
             <h3 className="font-semibold text-lg mb-4">Company</h3>
             <ul className="space-y-3">
               <li>
-                <a href="/documentation" className="text-gray-600 hover:text-emerald-600">
+                <a href="/links/documentation" className="text-gray-600 hover:text-emerald-600">
                   About Us
                 </a>
               </li>
               <li>
-                <a href="/founders" className="text-gray-600 hover:text-emerald-600">
+                <a href="/links/founders" className="text-gray-600 hover:text-emerald-600">
                   Meet the Founders
                 </a>
               </li>
               <li>
-                <a href="#" className="text-gray-600 hover:text-emerald-600">
+                <a href="https://suprabhat-genai.hashnode.dev/" className="text-gray-600 hover:text-emerald-600">
                   Blog
                 </a>
               </li>
               <li>
-                <a href="#" className="text-gray-600 hover:text-emerald-600">
+                <a href="/#how-it-works" className="text-gray-600 hover:text-emerald-600">
                   Press
                 </a>
               </li>
@@ -154,13 +154,13 @@ const Footer: React.FC = () => {
           </div>
           <div className="flex gap-6">
             <a
-              href="/privacy"
+              href="/links/privacy"
               className="text-gray-500 text-sm hover:text-emerald-600"
             >
               Privacy Policy
             </a>
             <a
-              href="/terms"
+              href="/links/terms"
               className="text-gray-500 text-sm hover:text-emerald-600"
             >
               Terms of Service
