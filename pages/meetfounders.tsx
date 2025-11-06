@@ -50,10 +50,11 @@ const MeetTheFounders: React.FC = () => {
       image: "/piyush_profile.png", // Put image in public/images/founders/
       bio: "𝗛𝗲𝘆 𝘁𝗵𝗲𝗿𝗲! 👋 I'm 𝗣𝗶𝘆𝘂𝘀𝗵, a tech enthusiast who loves playing with web technologies like 𝗛𝗧𝗠𝗟, 𝗖𝗦𝗦, 𝗥𝗲𝗮𝗰𝘁, 𝗡𝗼𝗱𝗲𝗝𝗦, 𝗘𝘅𝗽𝗿𝗲𝘀𝘀𝗝𝗦, 𝗠𝗼𝗻𝗴𝗼𝗗𝗕, and 𝗡𝗲𝘅𝘁𝗝𝗦 to create amazing things. Every challenge is an exciting opportunity for me, and I absolutely enjoy bringing creative ideas to life. When I'm not coding cool solutions, you'll find me sharing knowledge and 𝗰𝗼𝗻𝗻𝗲𝗰𝘁𝗶𝗻𝗴 with our awesome 𝗱𝗲𝘃𝗲𝗹𝗼𝗽𝗲𝗿 𝗰𝗼𝗺𝗺𝘂𝗻𝗶𝘁𝘆!",
       socialLinks: {
+        portfolio: "https://www.piyus.me/",
         linkedin: "https://www.linkedin.com/in/piyushh04/",
          twitter: "https://x.com/_PiyushDev",
         github: "https://github.com/PiyushRepos",
-        email: "suprabhat.work@gamil.com"
+        email: "piyush2004.dev@gmail.com"
       }
     }
   ];

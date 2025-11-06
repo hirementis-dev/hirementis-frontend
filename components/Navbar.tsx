@@ -1,7 +1,7 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Button } from "./ui/button";
-import { Menu } from "lucide-react";
+import { Menu, User as UserIcon, LogOut } from "lucide-react";
 import Link from "next/link";
 import { auth } from "@/firebase/client";
 import { onAuthStateChanged, signOut, User } from "firebase/auth";
@@ -14,7 +14,8 @@ import { useUserStore } from "@/hooks/userUser";
 
 const Navbar: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  // const [user, setUser] = useState<User | null>(null);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
   const isInterviewPage = pathname?.startsWith("/interview");
   const router = useRouter();
@@ -39,12 +40,25 @@ const Navbar: React.FC = () => {
   useEffect(() => {
     let unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
       if (firebaseUser && firebaseUser.emailVerified) {
-        // setUser(firebaseUser);
         getUserDoc();
       }
     });
 
     return () => unsubscribe();
+  }, []);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setIsDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   const handleNavlinkClick = () => {
@@ -64,7 +78,7 @@ const Navbar: React.FC = () => {
   }
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50  backdrop-blur-sm border-b border-gray-100">
+    <nav className="fixed top-0 left-0 right-0 z-50 backdrop-blur-md bg-white/40 border-b border-gray-100">
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center select-none">
@@ -140,19 +154,12 @@ const Navbar: React.FC = () => {
                 </Link>
               </>
             ) : (
-              <>
-                <Button
-                  variant="outline"
-                  onClick={handleLogout}
-                  className="border border-red-500 text-red-400 hover:bg-red-50 hover:text-red-300 hover:border-red-400"
-                >
-                  Logout
-                </Button>
+              <div className="relative" ref={dropdownRef}>
                 {/* User Profile Avatar */}
                 <div
-                  className="ml-2 cursor-pointer"
-                  onClick={() => router.push("/profile")}
-                  title="Profile"
+                  className="cursor-pointer"
+                  onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                  title="User Menu"
                 >
                   <div className="w-10 h-10 select-none rounded-full text-xs bg-emerald-100 flex items-center justify-center text-emerald-700 font-bold border border-emerald-300 hover:bg-emerald-200 transition">
                     {userState?.profilePicture ? (
@@ -176,7 +183,33 @@ const Navbar: React.FC = () => {
                     )}
                   </div>
                 </div>
-              </>
+
+                {/* Dropdown Menu */}
+                {isDropdownOpen && (
+                  <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-50">
+                    <button
+                      onClick={() => {
+                        setIsDropdownOpen(false);
+                        router.push("/profile");
+                      }}
+                      className="w-full px-4 py-2 text-left text-gray-700 hover:bg-emerald-50 flex items-center gap-2 transition-colors"
+                    >
+                      <UserIcon className="w-4 h-4" />
+                      Profile
+                    </button>
+                    <button
+                      onClick={() => {
+                        setIsDropdownOpen(false);
+                        handleLogout();
+                      }}
+                      className="w-full px-4 py-2 text-left text-red-600 hover:bg-red-50 flex items-center gap-2 transition-colors"
+                    >
+                      <LogOut className="w-4 h-4" />
+                      Logout
+                    </button>
+                  </div>
+                )}
+              </div>
             )}
           </div>
 
@@ -194,49 +227,49 @@ const Navbar: React.FC = () => {
 
         {/* Mobile Menu */}
         {isMenuOpen && (
-          <div className="md:hidden py-4 animate-fade-in">
+          <div className="md:hidden py-4 animate-fade-in text-center">
             <div className="flex flex-col gap-4">
               <Link
                 onClick={handleNavlinkClick}
                 href="/"
                 className="text-gray-600 hover:text-emerald-600 transition-colors py-2"
               >
-                Home
+                <b>Home</b>
               </Link>
               <Link
                 onClick={handleNavlinkClick}
                 href="/jobs"
                 className="text-gray-600 hover:text-emerald-600 transition-colors py-2"
               >
-                Jobs
+                <b>Jobs</b>
               </Link>
               <Link
                 onClick={handleNavlinkClick}
                 href="/#features"
                 className="text-gray-600 hover:text-emerald-600 transition-colors py-2"
               >
-                Features
+                <b>Features</b>
               </Link>
               <Link
                 onClick={handleNavlinkClick}
                 href="/#how-it-works"
                 className="text-gray-600 hover:text-emerald-600 transition-colors py-2"
               >
-                How it works
+                <b>How it works</b>
               </Link>
               <Link
                 onClick={handleNavlinkClick}
                 href="/#pricing"
                 className="text-gray-600 hover:text-emerald-600 transition-colors py-2"
               >
-                Pricing
+                <b>Pricing</b>
               </Link>
               <Link
                 onClick={handleNavlinkClick}
                 href="/#testimonials"
                 className="text-gray-600 hover:text-emerald-600 transition-colors py-2"
               >
-                Testimonials
+                <b>Testimonials</b>
               </Link>
               <div className="flex flex-col gap-2 pt-4 border-t border-gray-100">
                 {!userState ? (
@@ -260,21 +293,8 @@ const Navbar: React.FC = () => {
                   </>
                 ) : (
                   <>
-                    <Button
-                      variant="outline"
-                      className="w-full justify-center border-red-500 text-red-400 hover:bg-red-50 hover:text-red-300 hover:border-red-400"
-                      onClick={handleLogout}
-                    >
-                      Logout
-                    </Button>
                     {/* User Profile Avatar (Mobile) */}
-                    <div
-                      className="w-full flex justify-center mt-2"
-                      onClick={() => {
-                        setIsMenuOpen(false);
-                        router.push("/profile");
-                      }}
-                    >
+                    <div className="w-full flex justify-center">
                       <div
                         className="w-10 h-10 select-none rounded-full bg-emerald-100 flex items-center justify-center text-emerald-700 font-bold text-xs border border-emerald-300 hover:bg-emerald-200 transition cursor-pointer"
                         title="Profile"
@@ -300,6 +320,25 @@ const Navbar: React.FC = () => {
                         )}
                       </div>
                     </div>
+                    <Button
+                      variant="outline"
+                      className="w-full justify-center flex items-center gap-2"
+                      onClick={() => {
+                        setIsMenuOpen(false);
+                        router.push("/profile");
+                      }}
+                    >
+                      <UserIcon className="w-4 h-4" />
+                      Profile
+                    </Button>
+                    <Button
+                      variant="outline"
+                      className="w-full justify-center border-red-500 text-red-400 hover:bg-red-50 hover:text-red-300 hover:border-red-400 flex items-center gap-2"
+                      onClick={handleLogout}
+                    >
+                      <LogOut className="w-4 h-4" />
+                      Logout
+                    </Button>
                   </>
                 )}
               </div>
