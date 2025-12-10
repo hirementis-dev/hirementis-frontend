@@ -260,7 +260,7 @@ Return only a JSON:
   async callLLM(prompt: string): Promise<any> {
     try {
       const response = await client.chat.completions.create({
-        model: "gemini-2.0-flash",
+        model: "gemini-2.5-flash",
         messages: [
           { role: "system", content: prompt },
           { role: "user", content: "Complete the task" },
