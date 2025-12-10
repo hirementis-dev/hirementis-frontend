@@ -76,6 +76,11 @@ export default function RootLayout({
           href="/favicon-16x16.png"
         />
         <link rel="manifest" href="/site.webmanifest" />
+        <script
+          defer
+          src="https://cloud.umami.is/script.js"
+          data-website-id="b0cccf2a-a2e9-4ed1-94ba-a80f4e444861"
+        ></script>
       </head>
       <body suppressHydrationWarning className={`antialiased`}>
         <Navbar />
