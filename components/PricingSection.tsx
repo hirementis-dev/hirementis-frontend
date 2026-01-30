@@ -6,7 +6,7 @@ import {
   CardFooter,
   CardHeader,
 } from "@/components/ui/card";
-import { Check } from "lucide-react";
+import { Check, Info } from "lucide-react";
 import Link from "next/link";
 
 const PricingSection: React.FC = () => {
@@ -23,8 +23,8 @@ const PricingSection: React.FC = () => {
         "Limited question bank",
       ],
       buttonText: "Start Free",
-      buttonVariant: "default" as const,
-      popular: true,
+      buttonVariant: "outline" as const,
+      popular: false,
       isContactSales: false,
     },
     {
@@ -58,13 +58,13 @@ const PricingSection: React.FC = () => {
         "Complete question bank",
         "Progress tracking",
       ],
-      buttonText: "Get Pro",
-      buttonVariant: "default" as const,
-      popular: true,
+      buttonText: "Get Max",
+      buttonVariant: "outline" as const,
+      popular: false,
       isContactSales: false,
     },
     {
-      name: "Enterprise (coming soon)",
+      name: "Enterprise",
       description: "For large organizations",
       price: "$99",
       period: "per month",
@@ -79,59 +79,84 @@ const PricingSection: React.FC = () => {
       ],
       buttonText: "Contact Sales",
       buttonVariant: "secondary" as const,
-      popular: true,
+      popular: false,
       isContactSales: true,
     },
   ];
 
   return (
-    <section id="pricing" className="section-padding bg-white">
-      <div className="container mx-auto px-4">
-        <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            Simple, <span className="gradient-text">Transparent Pricing</span>
+    <section id="pricing" className="py-24 relative">
+      <div className="container mx-auto px-4 relative z-10">
+        <div className="text-center mb-20 animate-fade-in-up">
+          <div className="inline-block px-3 py-1 mb-4 text-xs font-semibold tracking-wider text-emerald-600 uppercase bg-emerald-100/50 rounded-full">
+            Flexible Plans
+          </div>
+          <h2 className="text-3xl md:text-5xl font-bold mb-6 text-slate-900">
+            Simple, <span className="text-emerald-600">Transparent</span>{" "}
+            Pricing
           </h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+          <p className="text-xl text-slate-600 max-w-3xl mx-auto">
             Choose the plan that fits your needs. All plans include core
-            features to help you ace your interviews
+            features to help you ace your interviews.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-7xl mx-auto ">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
           {pricingPlans.map((plan, index) => (
             <Card
               key={index}
-              className={`border ${
+              className={`relative flex flex-col rounded-3xl transition-all duration-300 animate-fade-in-up overflow-visible ${
                 plan.popular
-                  ? "border-emerald-400 shadow-lg scale-105"
-                  : "border-gray-200"
-              } rounded-xl relative flex flex-col hover:scale-[1.1] transition`}
+                  ? "border-2 border-emerald-500 shadow-xl scale-105 z-10 bg-white"
+                  : "border-none shadow-md hover:shadow-xl bg-white hover:-translate-y-1"
+              }`}
+              style={{ animationDelay: `${index * 100}ms` }}
             >
-
-              <CardHeader className="pt-8 pb-4">
-                <h3 className="text-2xl font-bold">{plan.name}</h3>
-                <p className="text-gray-600">{plan.description}</p>
-              </CardHeader>
-              <CardContent className="pb-4 flex-1">
-                <div className="mb-6">
-                  <span className="text-4xl font-bold">{plan.price}</span>
-                  <span className="text-gray-500 ml-2">{plan.period}</span>
+              {plan.popular && (
+                <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-emerald-500 text-white text-xs font-bold px-4 py-1.5 rounded-full uppercase tracking-wide shadow-lg border-2 border-white z-20">
+                  Most Popular
                 </div>
-                <ul className="space-y-3 mb-8">
+              )}
+
+              <CardHeader className="pt-8 pb-4 px-6">
+                <h3
+                  className={`text-xl font-bold ${plan.popular ? "text-emerald-600" : "text-slate-900"}`}
+                >
+                  {plan.name}
+                </h3>
+                <p className="text-sm text-slate-500">{plan.description}</p>
+              </CardHeader>
+              <CardContent className="pb-4 flex-1 px-6">
+                <div className="mb-6 flex items-baseline">
+                  <span className="text-4xl font-extrabold text-slate-900">
+                    {plan.price}
+                  </span>
+                  <span className="text-slate-500 ml-2 text-sm">
+                    {plan.period}
+                  </span>
+                </div>
+                <div className="h-px w-full bg-slate-100 mb-6"></div>
+                <ul className="space-y-4 mb-8">
                   {plan.features.map((feature, i) => (
                     <li key={i} className="flex items-start">
-                      <Check className="h-5 w-5 text-emerald-500 mr-2 shrink-0 mt-0.5" />
-                      <span className="text-gray-600">{feature}</span>
+                      <div
+                        className={`mt-0.5 mr-3 flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center ${plan.popular ? "bg-emerald-100 text-emerald-600" : "bg-slate-100 text-slate-500"}`}
+                      >
+                        <Check className="h-3 w-3" />
+                      </div>
+                      <span className="text-sm text-slate-600 leading-tight">
+                        {feature}
+                      </span>
                     </li>
                   ))}
                 </ul>
               </CardContent>
-              <CardFooter className="mt-auto">
+              <CardFooter className="mt-auto px-6 pb-8">
                 {plan.isContactSales ? (
                   <a href="mailto:suprabhat.work@gmail.com" className="w-full">
                     <Button
-                      variant={plan.buttonVariant}
-                      className="w-full bg-emerald-500 hover:bg-emerald-600 text-white"
+                      variant="ghost"
+                      className="w-full bg-slate-100 hover:bg-slate-200 text-slate-900 font-semibold h-12 rounded-xl"
                     >
                       {plan.buttonText}
                     </Button>
@@ -139,11 +164,11 @@ const PricingSection: React.FC = () => {
                 ) : (
                   <Link href="/jobs" className="w-full">
                     <Button
-                      variant={plan.buttonVariant}
-                      className={`w-full ${
+                      variant={plan.popular ? "default" : "outline"}
+                      className={`w-full h-12 rounded-xl font-bold transition-all duration-300 ${
                         plan.popular
-                          ? "bg-emerald-500 hover:bg-emerald-600 text-white"
-                          : ""
+                          ? "bg-emerald-600 hover:bg-emerald-700 text-white shadow-lg shadow-emerald-200 hover:shadow-emerald-300"
+                          : "border-2 border-slate-200 text-slate-700 hover:border-emerald-200 hover:text-emerald-600 hover:bg-emerald-50"
                       }`}
                     >
                       {plan.buttonText}
