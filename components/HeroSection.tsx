@@ -14,7 +14,7 @@ const HeroSection: React.FC = () => {
         </div>
 
         {/* Main Heading */}
-        <h1 className="animate-fade-in-up delay-100 text-4xl md:text-5xl lg:text-7xl font-bold tracking-tight text-slate-900 mb-6 max-w-4xl">
+        <h1 className="font-space animate-fade-in-up delay-100 text-4xl md:text-5xl lg:text-7xl font-bold tracking-tight text-slate-900 mb-6 max-w-4xl">
           Master Your Interview <br />
           <span className="relative inline-block mt-2">
             <span className="relative z-10">Before It Happens</span>
