@@ -2,11 +2,22 @@
 import React from "react";
 import Link from "next/link";
 import { Linkedin, Twitter } from "lucide-react";
+import Image from "next/image";
 
 const Footer: React.FC = () => {
   return (
-    <footer className="border-t border-slate-100 pt-16 pb-12">
-      <div className="container mx-auto px-4">
+    <footer className="relative border-t border-slate-100 pt-16 pb-12 overflow-hidden">
+      <div className="absolute inset-0 z-0 pointer-events-none">
+        <Image
+          src="/sucess.png"
+          alt="Footer Background"
+          fill
+          quality={100}
+          className="object-fill opacity-60"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-white/95 via-white/60 to-white/95"></div>
+      </div>
+      <div className="container mx-auto px-4 relative z-10">
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8 mb-16">
           <div className="col-span-2">
             <div className="flex items-center gap-2 mb-6">

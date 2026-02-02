@@ -2,6 +2,7 @@ import React from "react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { ArrowRight, Star, Users, Briefcase } from "lucide-react";
+import Image from "next/image";
 
 const HeroSection: React.FC = () => {
   return (
@@ -90,8 +91,22 @@ const HeroSection: React.FC = () => {
           </div>
         </div>
 
+        {/* Hero Image - Path to Grow */}
+        {/* Hero Image - Path to Grow */}
+        <div className="animate-fade-in-up delay-700 mt-12 md:mt-16 w-full max-w-5xl relative group">
+          <div className="absolute inset-0 bg-emerald-100/50 rounded-2xl blur-3xl -z-10 group-hover:bg-emerald-200/50 transition-colors duration-500"></div>
+          <Image
+            src="/sucess.png"
+            alt="Path to success"
+            width={1200}
+            height={600}
+            className="w-full h-auto object-contain rounded-2xl border border-slate-200/60 shadow-2xl"
+            priority
+          />
+        </div>
+
         {/* Floating cards visuals for decoration */}
-        <div className="absolute top-[20%] left-[5%] hidden 2xl:block animate-bounce duration-[4000ms]">
+        {/* <div className="absolute top-[20%] left-[5%] hidden 2xl:block animate-bounce duration-[4000ms]">
           <div className="bg-white p-4 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-slate-100 w-64 rotate-[-6deg]">
             <div className="flex items-center gap-3 mb-3">
               <div className="w-10 h-10 rounded-full bg-orange-100 flex items-center justify-center text-orange-600">
@@ -108,9 +123,9 @@ const HeroSection: React.FC = () => {
               <div className="h-full w-2/3 bg-orange-500"></div>
             </div>
           </div>
-        </div>
+        </div> */}
 
-        <div className="absolute bottom-[20%] right-[5%] hidden 2xl:block animate-bounce duration-[5000ms]">
+        {/* <div className="absolute bottom-[20%] right-[5%] hidden 2xl:block animate-bounce duration-[5000ms]">
           <div className="bg-white p-4 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-slate-100 w-64 rotate-[6deg]">
             <div className="flex items-center gap-3 mb-3">
               <div className="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600">
@@ -125,7 +140,7 @@ const HeroSection: React.FC = () => {
               Congratulations!
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
     </section>
   );

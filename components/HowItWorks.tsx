@@ -21,17 +21,21 @@ const HowItWorks: React.FC = () => {
 
         <div className="max-w-6xl mx-auto">
           {/* Main Video/Showcase Area */}
-          <div className="relative aspect-video rounded-3xl overflow-hidden shadow-2xl border border-slate-200 mb-24 bg-black animate-fade-in-up delay-100">
-            <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent z-10 pointer-events-none"></div>
-            <video
-              controls
-              autoPlay
-              loop
-              muted
-              playsInline
-              className="w-full h-full object-cover"
-              src={"/intro.mp4"}
-            />
+          {/* Main Video/Showcase Area */}
+          <div className="relative max-w-5xl mx-auto mb-24 group">
+            {/* Ambient Glow Effect */}
+            <div className="absolute -inset-1 bg-gradient-to-r from-emerald-400 to-cyan-400 rounded-[2rem] blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"></div>
+            <div className="relative aspect-video rounded-3xl overflow-hidden shadow-2xl border-[6px] border-white/20 bg-slate-950 animate-fade-in-up delay-100">
+              <video
+                controls
+                autoPlay
+                loop
+                muted
+                playsInline
+                className="w-full h-full object-cover"
+                src={"/intro.mp4"}
+              />
+            </div>
           </div>
 
           {/* Steps Grid */}
