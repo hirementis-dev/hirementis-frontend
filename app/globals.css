@@ -39,6 +39,7 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+  --font-space: var(--font-space-grotesk), sans-serif;
 }
 
 :root {
@@ -119,6 +120,7 @@
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
   }
@@ -128,12 +130,11 @@
   }
 
   .gradient-text {
-    background-image: linear-gradient(
-      to right,
-      var(--color-emerald-500),
-      var(--color-emerald-700)
-    );
+    background-image: linear-gradient(to right,
+        var(--color-emerald-500),
+        var(--color-emerald-700));
     -webkit-background-clip: text;
+    background-clip: text;
     color: transparent;
   }
 
@@ -150,15 +151,44 @@
   }
 
   .section-padding {
-    padding-top: 4rem; /* py-16 => 4rem */
+    padding-top: 4rem;
+    /* py-16 => 4rem */
     padding-bottom: 4rem;
   }
 
   @media (min-width: 768px) {
     .section-padding {
-      padding-top: 6rem; /* md:py-24 => 6rem */
+      padding-top: 6rem;
+      /* md:py-24 => 6rem */
       padding-bottom: 6rem;
     }
+  }
+
+  /* Custom Green Selection */
+  ::selection {
+    background-color: var(--color-emerald-500);
+    color: white;
+  }
+
+  /* Custom Green Scrollbar */
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: var(--color-emerald-500);
+    border-radius: 9999px;
+    border: 2px solid transparent;
+    background-clip: content-box;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: var(--color-emerald-700);
   }
 }
 
@@ -195,6 +225,7 @@
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
 }
+
 html {
   scroll-behavior: smooth;
 }

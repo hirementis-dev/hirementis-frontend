@@ -1,93 +1,146 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { ArrowRight, Star, Users, Briefcase } from "lucide-react";
+import Image from "next/image";
 
 const HeroSection: React.FC = () => {
   return (
-    <section className="bg-hero-gradient min-h-screen flex items-center justify-center section-padding pt-20">
-      <div className="max-w-[900px] mx-auto px-4">
-        <div className="flex flex-col items-center text-center pb-44 py-16">
-          <div className="mb-6 text-xs px-3 py-1 flex items-center justify-center gap-1 bg-emerald-100 rounded-full shadow-md">
-            <span>
-              <svg
-                width="24"
-                height="24"
-                viewBox="0 0 128 128"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M64 26C31.7271 47.0162 15.5202 101 64 101C112.48 101 96.2728 47.0162 64 26Z"
-                  fill="#FF9601"
-                />
-                <path
-                  d="M64.0001 96C38.5001 96 56.5001 64 64.0001 60C71.5 64 89.5001 96 64.0001 96Z"
-                  fill="#FFC803"
-                />
-                <path
-                  d="M64 96C49.5 96.5 45.3054 82.2617 49.5 74C52.4768 81.7736 65.919 88.6666 64 96Z"
-                  fill="#FFC803"
-                />
-                <path
-                  d="M69.1942 95.071C83.2743 91.5711 79.7736 78.7209 75.9297 68.4508C71.952 75.7088 65.3357 88.5461 69.1942 95.071Z"
-                  fill="#FFC803"
-                />
-              </svg>
-            </span>
-            <p className="text-sm text-emerald-700">
-              Practice. Improve. Crack It.
-            </p>
-          </div>
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
-            Ace Your Next Interview with{" "}
-            <span className="gradient-text">AI-Powered Practice</span>
-          </h1>
-          <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
-            Prepare for any job interview with personalized AI feedback,
-            realistic mock interviews, and expert curated questions tailored to
-            your industry.
-          </p>
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden text-slate-900 py-12 md:py-20 lg:py-24">
+      <div className="container relative z-10 mx-auto px-4 flex flex-col items-center text-center">
+        {/* Badge */}
+        <div className="animate-fade-in-up inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-100 text-emerald-600 text-xs md:text-sm font-semibold mb-2 md:mb-4 shadow-sm mt-12">
+          <span className="flex h-2 w-2 rounded-full bg-emerald-600"></span>
+          New Generation Interviewing
+        </div>
 
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/jobs">
-              <Button
-                size="lg"
-                className="bg-emerald-500 hover:bg-emerald-600 text-white font-medium px-8"
-              >
-                Start Practicing Free
-              </Button>
-            </Link>
-            <Link href="#how-it-works">
-              <Button
-                size="lg"
-                variant="outline"
-                className="border-emerald-300 text-emerald-700 hover:text-emerald-700 hover:bg-emerald-50"
-              >
-                Watch Demo
-              </Button>
-            </Link>
-          </div>
+        {/* Main Heading */}
+        <h1 className="font-space animate-fade-in-up delay-100 text-4xl md:text-5xl lg:text-7xl font-bold tracking-tight text-slate-900 mb-6 max-w-4xl">
+          Master Your Interview <br />
+          <span className="relative inline-block mt-2">
+            <span className="relative z-10">Before It Happens</span>
+            <span className="absolute bottom-2 left-0 w-full h-3 md:h-4 bg-emerald-200/60 -rotate-2 -z-0"></span>
+          </span>
+        </h1>
 
-          <div className="mt-8 flex items-center justify-center gap-2">
-            <div className="flex -space-x-4">
-              <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-gradient-to-r from-blue-400 to-blue-500 border-2 border-white flex items-center justify-center text-xs text-white font-medium">
-                JD
-              </div>
-              <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-gradient-to-r from-purple-400 to-purple-500 border-2 border-white flex items-center justify-center text-xs text-white font-medium">
-                SM
-              </div>
-              <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-gradient-to-r from-amber-400 to-amber-500 border-2 border-white flex items-center justify-center text-xs text-white font-medium">
-                KT
-              </div>
-              <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-gradient-to-r from-emerald-400 to-emerald-500 border-2 border-white flex items-center justify-center text-xs text-white font-medium">
-                +97
-              </div>
+        {/* Subheading */}
+        <p className="animate-fade-in-up delay-200 text-base md:text-xl text-slate-600 max-w-2xl mb-8 md:mb-10 leading-relaxed">
+          Join thousands of professionals who switched to AI-driven preparation.
+          Get instant feedback, confidence analysis, and curated industry
+          questions.
+        </p>
+
+        {/* Action Buttons */}
+        <div className="animate-fade-in-up delay-300 flex flex-col sm:flex-row gap-4 mb-12 md:mb-16 w-full justify-center px-4 md:px-0">
+          <Link href="/jobs" className="w-full sm:w-auto">
+            <Button
+              size="lg"
+              className="w-full sm:w-auto h-12 md:h-14 px-8 rounded-full text-lg bg-emerald-600 hover:bg-emerald-700 text-white shadow-lg hover:shadow-emerald-500/30 transition-all"
+            >
+              Start For Free
+            </Button>
+          </Link>
+          <Link href="#demo" className="w-full sm:w-auto">
+            <Button
+              size="lg"
+              variant="outline"
+              className="w-full sm:w-auto h-12 md:h-14 px-8 rounded-full text-lg border-2 border-slate-200 text-slate-700 hover:border-slate-300 hover:bg-slate-50"
+            >
+              View Job Library
+            </Button>
+          </Link>
+        </div>
+
+        {/* Stats / Social Proof */}
+        <div className="animate-fade-in-up delay-500 grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-16 border-t border-slate-200 pt-8 md:pt-10 w-full max-w-4xl">
+          <div className="flex flex-col items-center gap-1">
+            <div className="text-2xl md:text-3xl font-bold text-slate-900">
+              98%
             </div>
-            <p className="text-sm text-gray-500">
-              Trusted by <span className="font-semibold">100+</span> job seekers
-            </p>
+            <div className="text-xs md:text-sm font-medium text-slate-500 uppercase tracking-wide">
+              Success Rate
+            </div>
+          </div>
+          <div className="flex flex-col items-center gap-1">
+            <div className="text-2xl md:text-3xl font-bold text-slate-900">
+              50k+
+            </div>
+            <div className="text-xs md:text-sm font-medium text-slate-500 uppercase tracking-wide">
+              Active Users
+            </div>
+          </div>
+          <div className="flex flex-col items-center gap-1">
+            <div className="text-2xl md:text-3xl font-bold text-slate-900">
+              200+
+            </div>
+            <div className="text-xs md:text-sm font-medium text-slate-500 uppercase tracking-wide">
+              Companies
+            </div>
+          </div>
+          <div className="flex flex-col items-center gap-1">
+            <div className="text-2xl md:text-3xl font-bold text-slate-900">
+              4.9
+            </div>
+            <div className="flex items-center text-yellow-400 gap-1">
+              <Star className="fill-current w-4 h-4" />
+              <Star className="fill-current w-4 h-4" />
+              <Star className="fill-current w-4 h-4" />
+              <Star className="fill-current w-4 h-4" />
+              <Star className="fill-current w-4 h-4" />
+            </div>
           </div>
         </div>
+
+        {/* Hero Image - Path to Grow */}
+        {/* Hero Image - Path to Grow */}
+        <div className="animate-fade-in-up delay-700 mt-12 md:mt-16 w-full max-w-5xl relative group">
+          <div className="absolute inset-0 bg-emerald-100/50 rounded-2xl blur-3xl -z-10 group-hover:bg-emerald-200/50 transition-colors duration-500"></div>
+          <Image
+            src="/sucess.png"
+            alt="Path to success"
+            width={1200}
+            height={600}
+            className="w-full h-auto object-contain rounded-2xl border border-slate-200/60 shadow-2xl"
+            priority
+          />
+        </div>
+
+        {/* Floating cards visuals for decoration */}
+        {/* <div className="absolute top-[20%] left-[5%] hidden 2xl:block animate-bounce duration-[4000ms]">
+          <div className="bg-white p-4 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-slate-100 w-64 rotate-[-6deg]">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-10 h-10 rounded-full bg-orange-100 flex items-center justify-center text-orange-600">
+                <Users size={20} />
+              </div>
+              <div>
+                <div className="font-bold text-slate-800">Mock Interview</div>
+                <div className="text-xs text-slate-400">
+                  In Progress • 12:40
+                </div>
+              </div>
+            </div>
+            <div className="h-2 w-full bg-slate-100 rounded-full overflow-hidden">
+              <div className="h-full w-2/3 bg-orange-500"></div>
+            </div>
+          </div>
+        </div> */}
+
+        {/* <div className="absolute bottom-[20%] right-[5%] hidden 2xl:block animate-bounce duration-[5000ms]">
+          <div className="bg-white p-4 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-slate-100 w-64 rotate-[6deg]">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600">
+                <Briefcase size={20} />
+              </div>
+              <div>
+                <div className="font-bold text-slate-800">Job Offer</div>
+                <div className="text-xs text-slate-400">Google Inc.</div>
+              </div>
+            </div>
+            <div className="text-sm font-semibold text-emerald-600 bg-emerald-50 px-2 py-1 rounded inline-block">
+              Congratulations!
+            </div>
+          </div>
+        </div> */}
       </div>
     </section>
   );
