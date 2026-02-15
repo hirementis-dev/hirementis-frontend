@@ -9,7 +9,7 @@ const HeroSection: React.FC = () => {
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden text-slate-900 py-12 md:py-20 lg:py-24">
       <div className="container relative z-10 mx-auto px-4 flex flex-col items-center text-center">
         {/* Badge */}
-        <div className="animate-fade-in-up inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-100 text-emerald-600 text-xs md:text-sm font-semibold mb-6 md:mb-8 shadow-sm">
+        <div className="animate-fade-in-up inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-100 text-emerald-600 text-xs md:text-sm font-semibold mb-2 md:mb-4 shadow-sm mt-12">
           <span className="flex h-2 w-2 rounded-full bg-emerald-600"></span>
           New Generation Interviewing
         </div>
